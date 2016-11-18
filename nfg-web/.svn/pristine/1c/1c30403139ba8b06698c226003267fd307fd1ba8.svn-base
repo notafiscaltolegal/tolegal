@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2 :: site2">
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+    <div class="row" style="overflow-x:auto" id="divConsultaEmpresa">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="text-left col-lg-12">
+                    <label style="...">Reclama&ccedil;&atilde;o</label>
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <div class="text-left col-lg-12">
+                    <label style="...">CNPJ:</label>
+                    <p style="display: inline-block" th:text="${numeroCnpj}" class="textCnpj"/>
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="panel-body dadosMfd centralizado"  style=" background:whitesmoke; padding-bottom: 0">
+                <div  id="containerReclamacao" class="table-responsive"></div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="container" id="containerComplemento" style="display: none;">
+            <form>
+                <input type="hidden" id="inputIdReclamacao"/>
+                <div class="form-group">
+                    <label>Complementar:</label>
+                    <textarea id="descricaoComplemento" class="form-control" maxlength="200" rows="5"></textarea>
+                </div>
+
+                <label>*Status:</label>
+                <select class="form-control"  id="selectAcoesDisponiveisEmpresa" title="Selecione o status.">
+                    <option >Selecione</option>
+                    <option th:each="stdisp : ${statusDisponiveis}" th:value="${stdisp.codigo}" th:text="${stdisp.tipoSituacaoAcao}"></option>
+                </select>
+
+
+                <div class="row">&nbsp;</div>
+
+                <button id="btnComplemento" type="submit" class="btn btn-primary">Incluir Complemento</button>
+
+                <div class="row">&nbsp;</div>
+                <label>*Campo Obrigat&oacute;rio</label>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Padrao-->
+    <div class="modal fade" id="modalHome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true">
+        <div class="modal-dialog centralizado">
+            <div class="modal-content">
+                <div class="modal-header" style="
+                    background: #02397a; color:white;
+                        /*background: #fcf8e3;*/
+                        /*color:#8a6d3b;*/
+                        border-top-right-radius: 5px;
+                        border-top-left-radius: 5px; "
+                        >
+                    <button type="button" style="color:white;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalHomeTitle">...</h4>
+                </div>
+                <div class="centralizado" id="messagesContainerModal">
+                    <div th:if="${not #strings.isEmpty(errorModal)}" class="alert alert-danger" role="alert" th:text="${errorModal}" ></div>
+                </div>
+                <div class="modal-body" id="modalHomeBody" >
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/numericInput.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/reclamacao.js}" charset="utf-8"></script>
+    <script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>
+    <script th:src="@{/js/dialogs.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Reclamacao({
+            numeroCnpj: [[${numeroCnpj}]],
+            urlBase: [[${urlBase}]],
+            tela: 'consultar'
+        });
+    </script>
+</div>
+</html>

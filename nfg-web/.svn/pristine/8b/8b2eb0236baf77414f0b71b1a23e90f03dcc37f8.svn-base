@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/site2 :: site2">
+
+<div layout:fragment="msg"></div>
+
+<div layout:fragment="content">
+    <div class="centralizado">
+        <h1>Unauthorized 401 <br />
+            <small th:text="${message}"></small>
+        </h1>
+        <h1>(&#12494;&#3232;&#6493;&#3232;)&#12494;&#9180;&#9531;&#9473;&#9531;</h1>
+        <!--<img th:src="@{/images/homer.png}" height="250px">-->
+        <br />
+        <br />
+        <!--<small th:text="${message}"></small>-->
+    </div>
+</div>
+</html>

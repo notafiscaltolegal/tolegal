@@ -1,0 +1,58 @@
+//package gov.goias.config;
+//
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Profile;
+//
+//import javax.sql.DataSource;
+//
+///**
+// * @author henrique-rh
+// * @since 23/03/15.
+// */
+//@Configuration
+//@Profile("dev")
+//public class DataSourceConfigDev extends DataSourceConfig {
+//
+//    @Bean
+//    public DataSource dataSource() {
+//        String jdbcUrl, user, password;
+//        System.out.println("Configurado bean dev");
+//        boolean debug = false;
+//        if (debug) {
+//            jdbcUrl = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledesscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=SHARED)(SERVICE_NAME=orahom))))";
+//            user = "NFGUSER_DEBUG";
+//            password = "7qdd45V#";
+//        } else {
+//            user = "NFGUSER";
+//            jdbcUrl = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledesscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=SHARED)(SERVICE_NAME=orades))))";
+//            password = "NFG789user";
+//        }
+//        return getDefaultDataSource(jdbcUrl, user, password);
+//    }
+//
+//
+////
+////    @Bean
+////    public DataSource dataSource() {
+//////        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+////        BasicDataSource dataSource = new BasicDataSource();
+//////        dataSource.setDefaultAutoCommit(false);
+////        dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+////        dataSource.setUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledesscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=SHARED)(SERVICE_NAME=orades))))");
+////        dataSource.setUsername("NFGUSER_BATCH");
+////        dataSource.setPassword("nfg$4#5$6batch");
+////        return dataSource;
+////    }
+//
+//
+////    @Bean
+////    public DataSource dataSource() {
+////        BasicDataSource dataSource = new BasicDataSource();
+////        dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+////        dataSource.setUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledesscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=SHARED)(SERVICE_NAME=orahom))))");
+////        dataSource.setUsername("NFGUSER_DEBUG");
+////        dataSource.setPassword("7qdd45V#");
+////        return dataSource;
+////    }
+//}

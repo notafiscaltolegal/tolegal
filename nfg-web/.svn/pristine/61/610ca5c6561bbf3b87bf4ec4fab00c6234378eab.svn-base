@@ -1,0 +1,34 @@
+//package gov.goias.config;
+//
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Profile;
+//
+//import javax.sql.DataSource;
+//
+///**
+// * @author henrique-rh
+// * @since 26/03/15.
+// */
+//@Configuration
+//@Profile("prod")
+//public class DataSourceConfigProd extends DataSourceConfig {
+//
+//    @Bean
+//    public DataSource dataSource() {
+//        String jdbcUrl = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracletrscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORAPRD))))";
+//        String user = "NFGUSER_BATCH";
+//        String password = "feb$uWrA!zA#k6the";
+//        return getDefaultDataSource(jdbcUrl, user, password);
+//    }
+//
+////    @Bean
+////    public DataSource dataSource() {
+////        BasicDataSource dataSource = new BasicDataSource();
+////        dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+////        dataSource.setUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledesscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=SHARED)(SERVICE_NAME=oraprd))))");
+////        dataSource.setUsername("NFGUSER_BATCH");
+////        dataSource.setPassword("feb$uWrA!zA#k6the");
+////        return dataSource;
+////    }
+//}

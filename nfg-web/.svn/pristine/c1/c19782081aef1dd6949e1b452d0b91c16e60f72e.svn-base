@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+
+<form id="formNovaReclamacaoCidadao" enctype="multipart/form-data" name="formNovaReclamacaoCidadao" class="form-horizontal " >
+    <div class="row" id="motivoReclamacaoDiv">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Qual &eacute; o motivo da reclama&ccedil;&atilde;o?
+            </div>
+            <div class="panel-body">
+
+                <label><input class="radioMotivoReclamacao"   checked name="radioMotivoReclamacao" type="radio" value="0">
+                    N&atilde;o emitiu Cupom Fiscal/Nota Fiscal/Nota Fiscal de Consumidor Eletr&ocirc;nica, ou emitiu com informa&ccedil;&otilde;es erradas.
+                </label>
+                <br/>
+                <label><input class="radioMotivoReclamacao"  name="radioMotivoReclamacao" type="radio" value="1">
+                    Cupom Fiscal/Nota Fiscal/Nota Fiscal de Consumidor Eletr&ocirc;nica com meu CPF n&atilde;o consta no painel Minhas Notas do Portal do Cidad&atilde;o.
+                </label>
+                <br/>
+                <label><input class="radioMotivoReclamacao"   name="radioMotivoReclamacao" type="radio" value="2">
+                    Cupom Fiscal/Nota Fiscal/Nota Fiscal de Consumidor Eletr&ocirc;nica emitido sem CPF por problema com a empresa.
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="problemaEmpresaDiv" style="display: none">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Qual foi o problema com a empresa?
+            </div>
+            <div class="panel-body">
+                <label><input class="radioProblemaEmpresa" checked name="radioProblemaEmpresa" type="radio" value="2">
+                    N&atilde;o perguntou se eu desejava incluir o CPF na nota/cupom fiscal.
+                </label>
+                <br/>
+                <label><input class="radioProblemaEmpresa"  name="radioProblemaEmpresa" type="radio" value="3">
+                    Exigiu a elabora&ccedil;&atilde;o de um cadastro para a coloca&ccedil;&atilde;o do CPF.
+                </label>
+                <br/>
+                <label><input class="radioProblemaEmpresa"   name="radioProblemaEmpresa" type="radio" value="4">
+                    Alegou problema com equipamento ou sistema.
+                </label>
+                <br/>
+                <label><input class="radioProblemaEmpresa"   name="radioProblemaEmpresa" type="radio" value="5">
+                    Dificultou o fornecimento do documento fiscal com CPF.
+                </label>
+                <br/>
+                <label><input class="radioProblemaEmpresa"   name="radioProblemaEmpresa" type="radio" value="6">
+                    Alegou n&atilde;o participar do programa NFGoiana.
+                </label>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="linkDenunciaDiv" >
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <label style="font-size: larger">Clique <a target="_blank" href="http://aplicacao.sefaz.go.gov.br/index.php/post/ver/169336">AQUI</a>
+            para abrir uma den&uacute;ncia de infra&ccedil;&atilde;o tribut&aacute;ria (sonega&ccedil;&atilde;o).</label>
+        <br/>
+        <br/>
+        <br/>
+    </div>
+
+    <div class="row" id="tipoDocReclamacaoDiv" style="display: none">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Selecione o tipo de Documento Fiscal:
+            </div>
+            <div class="panel-body">
+                <label><input class="radioTipoDocReclamacao" checked name="radioTipoDocReclamacao" type="radio" value="1"> Nota Fiscal </label>
+                <br/>
+                <label><input class="radioTipoDocReclamacao"   name="radioTipoDocReclamacao" type="radio" value="2"> Nota Fiscal Eletr&ocirc;nica</label>
+                <br/>
+                <label><input class="radioTipoDocReclamacao"  name="radioTipoDocReclamacao" type="radio" value="3"> Cupom Fiscal</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="dadosDocReclamacaoDiv" style="display: none">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Dados do Documento Fiscal:
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <label class="col-md-3">*I.E:</label>
+                    <div class="col-md-4">
+                        <input type="text" id="ieDocFiscalReclamacao" class="inputIE" style="width: 100%" maxlength="50">
+                    </div>
+                    <div class="col-md-1">
+                        <a id="tooltipIEReclamacao" tabindex="-1" href="#" title="" ><img src="/nfg/images/info.png" width="20px;"></a>
+                    </div>
+                </div>
+
+                <div class="row">&nbsp;</div>
+
+                <div class="row">
+                    <label class="col-md-3">*Data de Emiss&atilde;o:</label>
+
+                    <div class="col-md-4">
+                        <input id="dataEmissaoDocFiscalReclamacao" type="text" class="datepicker " style="width: 100%" name="dataEmissaoDocFiscalReclamacao" placeholder="Ex: 01/01/2015" data-toggle="tooltip" data-placement="top" >
+                    </div>
+
+                    <div class="col-md-1">
+                        <a id="tooltipDataReclamacao" tabindex="-1" href="#" title="" ><img src="/nfg/images/info.png" width="20px;"></a>
+                    </div>
+                </div>
+
+                <div class="row">&nbsp;</div>
+
+                <div class="row">
+                    <label class="col-md-3" id="lblNumCooDoc">*N&uacute;mero:</label>
+                    <div class="col-md-4">
+                        <input type="number" min="0" step="1" id="numeroDocFiscalReclamacao" style="width: 100%" maxlength="20">
+                    </div>
+                    <div class="col-md-1">
+                        <a id="tooltipNumeroReclamacao" tabindex="-1" href="#" title=""><img src="/nfg/images/info.png" width="20px;"></a>
+                    </div>
+                </div>
+
+                <div class="row">&nbsp;</div>
+
+                <div class="row">
+                    <label class="col-md-3">*Valor:</label>
+                    <div class="col-md-4">
+                        <input type="text"
+                               class="mascaraValor" placeholder="R$ 9999999,99"
+                               data-thousands="." data-decimal="," data-prefix="R$ " maxlength="14"
+                               id="valorDocFiscalReclamacao" style="width: 100%" maxlength="50">
+                    </div>
+                    <div class="col-md-1">
+                        <a id="tooltipValorReclamacao" tabindex="-1" href="#" title=""><img src="/nfg/images/info.png" width="20px;"></a>
+                    </div>
+                </div>
+
+
+                <div class="row">&nbsp;</div>
+
+                <div class="row">
+                    <label class="col-md-3">Imagem do Documento<br/>(formato jpg, pdf ou png):</label>
+                    <div class="col-md-6">
+                        <input name="file" type="file" id="fileReclamacao"  >
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="conteudoInterno" id="divConfirmacaoReclamacaoNotasNoPainel" style="display: none">
+        <div class="texto">
+            <p>&nbsp;</p><p>&nbsp;</p>
+            <p> Eu, <span><a th:text="${cidadao.genPessoaFisica.nome}"/></span>, CPF: <span><a th:text="${cidadao.genPessoaFisica.cpf}"/></span>,
+                declaro que realizei a aquisi&ccedil;&atilde;o abaixo descrita do fornecedor, <span><a id="nomeFantasia1" th:text="${nomeFantasia}"/></span>,
+                IE: <span><a id="txtInscricaoEstadual1"/></span>, e que o Cupom Fiscal/Nota Fiscal/Nota Fiscal de
+                Consumidor Eletr&ocirc;nica com meu CPF n&atilde;o consta no painel Minhas Notas do Portal do Cidad&atilde;o..
+            </p>
+            <p>
+                <strong>Data da emiss&atilde;o do documento fiscal: </strong><span><a id="txtDataEmissao1"></a></span>
+            </p>
+            <p>
+                <strong> Valor da compra: </strong><span><a id="txtValorCompra1" /></span>
+            </p>
+            <p>
+                <strong>N&uacute;mero do documento/COO: </strong><span><a id="txtNumeroDocFiscalReclamacao1"/></span>
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                A c&oacute;pia do documento, que comprove a aquisi&ccedil;&atilde;o ou seu comprovante de pagamento, inserida para instruir a
+                Den&uacute;ncia deve ser leg&iacute;vel e &eacute; imprescind&iacute;vel que suas informa&ccedil;&otilde;es sejam perfeitamente identific&aacute;veis, isso &eacute;, n&atilde;o gerem d&uacute;vidas quanto as suas informa&ccedil;&otilde;es.
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                "Declaro que os dados constantes na presente reclama&ccedil;&atilde;o s&atilde;o verdadeiros e que estou ciente que a
+                apresenta&ccedil;&atilde;o de reclama&ccedil;&atilde;o falsa ou sabidamente incorreta pode resultar danos a terceiros e eventual
+                responsabiliza&ccedil;&atilde;o na forma da lei. Declaro ainda estar ciente de que o meu CPF e nome ser&atilde;o disponibilizados ao estabelecimento comercial objeto dessa reclama&ccedil;&atilde;o."
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                <strong>
+                    Obs: Informamos que o estabelecimento fornecedor ser&aacute; comunicado de todos os dados desta reclama&ccedil;&atilde;o.
+                </strong>
+            <p/>
+        </div>
+    </div>
+
+    <div class="conteudoInterno" id="divConfirmacaoReclamacaoProblemasComEmpresa" style="display: none">
+        <div class="texto">
+            <p>&nbsp;</p><p>&nbsp;</p>
+            <p> Eu, <span><a th:text="${cidadao.genPessoaFisica.nome}"/></span>, CPF: <span><a th:text="${cidadao.genPessoaFisica.cpf}"/></span>, declaro que realizei a aquisi&ccedil;&atilde;o abaixo descrita,
+                e que o fornecedor <span><a id="nomeFantasia2" th:text="${nomeFantasia}"/></span>, IE: <span><a id="txtInscricaoEstadual2"/></span>,  <span><a id="txtMotivoReclamacao"/></span>.
+            </p>
+            <p>
+                <strong>Data da emiss&atilde;o: </strong><span><a id="txtDataEmissao2"></a></span>
+            </p>
+            <p>
+                <strong> Valor da compra: </strong><span><a id="txtValorCompra2"/></span>
+            </p>
+            <p>
+                <strong>N&uacute;mero do documento/COO: </strong><span><a id="txtNumeroDocFiscalReclamacao2"/></span>
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                A c&oacute;pia do documento, que comprove a aquisi&ccedil;&atilde;o ou seu comprovante de pagamento, inserida para instruir a
+                Den&uacute;ncia deve ser leg&iacute;vel e &eacute; imprescind&iacute;vel que suas informa&ccedil;&otilde;es sejam perfeitamente identific&aacute;veis, isso &eacute;, n&atilde;o gerem d&uacute;vidas quanto as suas informa&ccedil;&otilde;es.
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                "Declaro que os dados constantes na presente reclama&ccedil;&atilde;o s&atilde;o verdadeiros e que estou ciente que a
+                apresenta&ccedil;&atilde;o de reclama&ccedil;&atilde;o falsa ou sabidamente incorreta pode resultar danos a terceiros e eventual
+                responsabiliza&ccedil;&atilde;o na forma da lei. Declaro ainda estar ciente de que o meu CPF e nome ser&atilde;o disponibilizados ao estabelecimento comercial objeto dessa reclama&ccedil;&atilde;o."
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                <strong>
+                    Obs: Informamos que o estabelecimento fornecedor ser&aacute; comunicado de todos os dados desta reclama&ccedil;&atilde;o.
+                </strong>
+            <p/>
+        </div>
+    </div>
+
+    <div id="divBtnSalvarNovaReclamacao" style="display: none">
+        <div>
+            <label>
+                <input type="checkbox" onchange="document.getElementById('btnSalvarNovaReclamacao').disabled = !this.checked;"> Confirmar reclama&ccedil;&atilde;o.
+            </label>
+        </div>
+
+        <div class="row centralizado">
+            <div class="col-md-12">
+                <button id="btnSalvarNovaReclamacao" class="btn btn-primary btn-submitform" type="button" disabled>Salvar</button>
+
+                <button id="btnVoltarReclamacao" class="btn btn-default" type="button">Voltar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row centralizado" id="divBtnCriaNovaReclamacao" style="display: none">
+        <div class="row" align="left">
+            <label class="col-md-3">&nbsp;&nbsp;&nbsp;*Campos obrigat&oacute;rios</label>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button id="btnCriaNovaReclamacao" class="btn btn-primary btn-submitform" type="button">Salvar</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap-filestyle.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+        });
+    </script>
+</div>
+</html>

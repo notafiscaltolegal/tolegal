@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="no-js ie ie6" dir="ltr" lang="pt-BR"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie ie7" dir="ltr" lang="pt-BR"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie ie8" dir="ltr" lang="pt-BR"> <![endif]-->
+<!--[if IE 9 ]>    <html class="no-js ie ie9" dir="ltr" lang="pt-BR"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="no-js no-ie" dir="ltr" lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:fragment="site2SemFrameLogin">
+<!--<![endif]-->
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Nota Fiscal Goiana</title>
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <link rel="icon" type="image/png"   th:href="@{/images/site2/nfg-transpbg.png}">
+
+    <link rel="stylesheet" th:href="@{/css/boilerplate/normalize.css}"/>
+    <link rel="stylesheet" th:href="@{/css/nfg.css}"/>
+    <link rel="stylesheet" th:href="@{/css/site/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery-ui.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery-ui.structure.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery-ui.theme.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/css/boilerplate/main.css}" />
+    <!--<link rel="stylesheet" th:href="@{/css/site2/css.css}"/>-->
+    <link rel="stylesheet" th:href="@{/css/site2/fonts.css}"/>
+    <link rel="stylesheet" th:href="@{/css/site2/estilo.css}"/>
+
+    <div layout:fragment="styles"></div>
+
+    <script th:src="@{/js/boilerplate/vendor/jquery-1.10.2.min.js}"></script>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="row" style="padding: 0 0 0px 0;">
+            <div class="col-md-4 col-sm-5 col-xs-12">
+                <div class="logo">
+                   <a th:href="@{/cidadao/redirecionarHome}"> <img th:src="@{/images/site2/logo.png}" /></a>
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-6 col-xs-6 relative" th:if="${nomeUsuario != null}">
+                <div style="float: left; padding-right: 10px;">
+                    <span class="login">&nbsp;</span><span>Olá, <strong><label th:text="${nomeUsuario}"></label></strong></span>
+                    <a class="btn btn-danger btn-sair-nfg" th:href="@{/cidadao/efetuarlogoutSite}">Sair</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu">
+            <ul>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/" target="_self">Home</a>
+                </li>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/site/pagina/ver/13588/institucional" target="_self">Institucional</a>
+                </li>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/site/menuempresa/empresa" target="_self">Empresa</a>
+                </li>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/nfg/cidadao/inicioSite" target="_self">Cidadão</a>
+                </li>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/site/pagina/ver/13590/sorteios" target="_self">Sorteios</a>
+                </li>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/site/pagina/ver/13594/legislacao" target="_self">Legislação</a>
+                </li>
+                <li>
+                    <a href="/site/contato/orgao" target="_self">Fale Conosco</a>
+                </li>
+                <li>
+                    <a href="https://nfgoiana.sefaz.go.gov.br/site/faq/ajuda" target="_self">Ajuda</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--<div class="menu" th:if="${listaMenu != null}">-->
+            <!--<ul>-->
+                <!--<li th:each="menu : ${listaMenu}">-->
+                    <!--<a th:href="${menu.url}" th:target="${menu.target}" th:text="${menu.titulo}"></a>-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+</header>
+
+<div class="space"></div>
+<div class='loading' style='display:none'><div class='circle'></div><div class='circle1'></div></div>
+<div layout:fragment="msg" id="messages">
+    <div class="centralizado" id="messagesContainer">
+        <div th:if="${not #strings.isEmpty(errorMessage)}" class="alert alert-danger" role="alert" th:text="${errorMessage}" ></div>
+        <div th:if="${not #strings.isEmpty(mensagemDeErro)}" class="alert alert-danger" role="alert" th:text="${mensagemDeErro}" ></div>
+        <div th:if="${not #strings.isEmpty(loginInvalido)}" class="alert alert-danger" role="alert" th:text="${loginInvalido}" ></div>
+        <div th:if="${not #strings.isEmpty(message)}" class="alert alert-warning" role="alert" th:text="${message}" ></div>
+        <div th:if="${not #strings.isEmpty(successMessage)}" class="alert alert-success" role="alert" th:text="${successMessage}" ></div>
+    </div>
+</div>
+
+
+<div layout:fragment="content" id="content" >
+</div>
+
+
+<div layout:fragment="templates">
+    <div layout:replace="templates/handlebars :: templatesHandlebars"></div>
+</div>
+
+<footer>
+    <div class="brands">
+        <div class="container text-center">
+            <a href="https://nfgoiana.sefaz.go.gov.br/site/" target="_self" title="Nota Fiscal Goiana" class="logo"><img src="http://www.projetos.goias.gov.br/notafiscalgoiana2015/layout/assets/img/notafiscal.png" border="0"></a>
+            <a href="http://www.sefaz.go.gov.br/" target="_blank" title="Secretaria da Fazenda do Estado de Goiás" class="sefaz"><img src="http://www.projetos.goias.gov.br/notafiscalgoiana2015/layout/assets/img/sefaz.png" border="0"></a>
+            <a href="http://www.goias.gov.br/" target="_blank" title="Estado de Goiás" class="goias"><img src="http://www.projetos.goias.gov.br/notafiscalgoiana2015/layout/assets/img/goias.png" border="0"></a>
+        </div>
+    </div>
+
+    <div class="credits">
+        <div class="container text-center">
+            © Copyright 2015. Todos os direitos reservados. Desenvolvido pela Secretaria de Estado de Gestão e Planejamento.
+        </div>
+    </div>
+
+    <div class="space"></div>
+    <div class="container footer">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="padding"></div>
+                <div class="menuRodape">
+                    <ul>
+                        <li>
+                            <a href="https://nfgoiana.sefaz.go.gov.br/site/pagina/ver/13596/termos-de-uso" target="_self">Termos de Uso</a>
+                        </li>
+                        <li>
+                            <a href="https://nfgoiana.sefaz.go.gov.br/site/faq/ajuda" target="_self">FAQ</a>
+                        </li>
+                        <li>
+                            <a href="https://nfgoiana.sefaz.go.gov.br/site/post/ver/198846/legislacao" target="_self">Regulamento</a>
+                        </li>
+                        <li>
+                            <a href="https://nfgoiana.sefaz.go.gov.br/site/contato/orgao" target="_self">Contato</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-7 text-right">
+                <!--<div class="mobile-links">
+                    Baixe o nosso aplicativo no seu smartphone
+                    <a href="#"><img src="layout/assets/img/apple-store.png" border="0"></a>
+                        <a href="#"><img src="layout/assets/img/google-play.png" border="0"></a>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="space"></div>
+    <div class="space"></div>
+
+    <script th:src="@{/js/globals.js}"></script>
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/js/boilerplate/vendor/modernizr-2.6.2.min.js}"></script>
+    <script th:src="@{/js/boilerplate/main.js}"></script>
+    <script th:src="@{/js/boilerplate/plugins.js}"></script>
+    <script th:src="@{/js/plugins/lodash.min.js}"></script>
+    <script th:src="@{/js/plugins/handlebars-v1.3.0.js}"></script>
+    <script th:src="@{/js/plugins/moment-with-locales.min.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskedinput.min.js}"></script>
+    <script th:src="@{/js/plugins/jquery-ui.js}"></script>
+    <script th:src="@{/js/helpers/handlebars.js}"></script>
+    <script th:src="@{/js/endereco-site.js}"></script>
+    <script th:src="@{/js/nfg-mensagens.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/nfg-modal.js}"></script>
+    <script th:src="@{/js/nfg-pagination.js}"></script>
+    <script th:src="@{/js/fixHeight.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/frameCidadao.js}" charset="utf-8"></script>
+    <script th:src="@{/js/js.js}"></script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-57628642-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new FrameCidadao();
+    </script>
+    <div layout:fragment="scripts"></div>
+</footer>
+</body>
+</html>

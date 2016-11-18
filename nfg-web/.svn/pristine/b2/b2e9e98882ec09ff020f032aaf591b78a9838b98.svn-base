@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<body>
+<div layout:fragment="templatesHandlebars">
+
+    <script id="message" type="text/x-handlebars-template">
+        <div class="alert alert-dismissible {{type}}" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            {{message}}
+        </div>
+    </script>
+
+    <script id="tabelaContribuintes" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover" style="text-align: left">
+                <thead>
+                {{#if contribuintes}}
+                <tr>
+                    <th>Inscrição</th>
+                    <th>Razão Social</th>
+                    <th>CNPJ</th>
+                    <th>Observações</th>
+                    <th>Data Início Vigência</th>
+                    <th>Ações</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each contribuintes}}
+
+                <tr>
+                    <td class="maskInscricao">{{numeroInscricao}}</td>
+                    <td>{{nomeEmpresa}}</td>
+                    <td class="maskCnpj">{{numeroCnpj}}</td>
+                    {{#if hasCnaeAutorizado}}
+                    {{#if isEmissorEFD}}
+                    <td>Cadastrado. (Emitente EFD)</td>
+                    <td>&nbsp;</td>
+                    <td class="padding-2"><a href="{{../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
+                    <td class="padding-2"><a href="{{../../../urlBase}}/mfd/consultar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Consultar MFD</a></td>
+           <!--         <td class="padding-2"><a href="{{../../../urlBase}}/ecf/importar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Importação ECF</a></td> -->
+                    <td>
+                        <a class="iconGlobe">
+                            {{#compare qtdReclamacoes 0 operator=">"}}
+                            <span class="notification-count" >{{qtdReclamacoes}}</span>
+                            {{/compare}}
+                        </a>
+                        <a href="{{../../../../urlBase}}/reclamacao/consultar/{{numeroCnpj}}" type="button" title="Reclamações"
+                           class="btn btn-danger btn-md btn-reclamacao" data-numcnpj="{{numeroCnpj}}"><span  class="glyphicon glyphicon-bullhorn"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="iconGlobe">
+                            {{#compare qtdMensagens 0 operator=">"}}
+                            <span class="notification-count" >{{qtdMensagens}}</span>
+                            {{/compare}}
+                        </a>
+                        <button type="button" class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span title="Mensagens" class="glyphicon glyphicon-envelope"></span></button>
+                    </td>
+                    {{else}} {{#if hasCnaeObrigatorio}}
+                    <td>Cadastrado. (CNAE Obrigatório)</td>
+                    <td>{{dataObrigatoriedadeCnaeFormatada}}</td>
+                    <td class="padding-4"><a href="{{../../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
+                    <td class="padding-4"><a href="{{../../../../urlBase}}/mfd/consultar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Consultar MFD</a></td>
+                    <!-- <td class="padding-2"><a href="{{../../../../urlBase}}/ecf/importar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Importação ECF</a></td> -->
+                    <td>
+                        <a class="iconGlobe">
+                            {{#compare qtdReclamacoes 0 operator=">"}}
+                            <span class="notification-count" >{{qtdReclamacoes}}</span>
+                            {{/compare}}
+                        </a>
+                        <a href="{{../../../../urlBase}}/reclamacao/consultar/{{numeroCnpj}}" type="button" title="Reclamações"
+                           class="btn btn-danger btn-md btn-reclamacao" data-numcnpj="{{numeroCnpj}}"><span  class="glyphicon glyphicon-bullhorn"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="iconGlobe">
+                            {{#compare qtdMensagens 0 operator=">"}}
+                            <span class="notification-count" >{{qtdMensagens}}</span>
+                            {{/compare}}
+                        </a>
+                        <button type="button"  class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span  class="glyphicon glyphicon-envelope"></span></button>
+                    </td>
+
+                    {{else}} {{#if isEmpresaParticipante}}
+                    {{#compare indiResponsavelAdesao 'C' operator='=='}}
+                    <td>Contribuinte cadastrado pelo contador.</td>
+                    {{else}}
+                    <td>Empresa já se cadastrou no NFG.</td>
+                    {{/compare}}
+                    <td class="col-md-2 padding-4">
+                        <div class="input-group col-md-10">
+                            <input type="text" class="form-control datepicker" data-pode-alterar="{{podeAlterar}}" data-limite="{{dataLimiteFormatada}}" name="dataInicio" value="{{dataEfetivaParticipacaoFormatada}}" placeholder="Ex: 01/01/2014" required>
+                            <span class="input-group-addon glyphicon glyphicon-calendar datepickerIcon"></span>
+                        </div>
+                    </td>
+                    {{#if podeAlterar}}
+                    <td class="padding-4"><button type="button" class="btn btn-default btn-sm btn-alterar" data-inscricao="{{numeroInscricao}}">Alterar Cadastro</button></td>
+                    {{else}}
+                    <td class="padding-4"><a href="{{../../../../../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
+                    {{/if}}
+                    {{else}}
+                    <td>&nbsp;</td>
+                    <td class="col-md-2 padding-4">
+                        <div class="input-group col-md-10">
+                            <input type="text" class="form-control datepicker" data-pode-alterar="{{podeAlterar}}" data-limite="{{dataLimiteFormatada}}" name="dataInicio" placeholder="Ex: 01/01/2014" required >
+                            <span class="input-group-addon glyphicon glyphicon-calendar datepickerIcon"></span>
+                        </div>
+                    </td>
+                    <td class="padding-4"><button type="button" class="btn btn-default btn-sm btn-cadastrar" data-inscricao="{{numeroInscricao}}">Cadastrar no NFG</button></td>
+                    <td>&nbsp;</td>
+                    <td><button type="button" class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span class="glyphicon glyphicon-envelope"></span></button></td>
+                    {{/if}}
+                    {{/if}}
+                    {{/if}}
+                    {{else}}
+                    <td>Contribuinte não possui CNAE autorizado para participar do NFG.</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    {{/if}}
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="9" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <thead>
+                <tr>
+                    <th class="centralizado">Nenhum contribuinte encontrado</th>
+                </tr>
+                </thead>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaCFOPs" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if cfopsAutorizados}}
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each cfopsAutorizados}}
+                <tr>
+                    <td>{{genCfop.codigoCFOP}}</td>
+                    <td>{{genCfop.descricaoCFOP}}</td>
+                    <td>
+                        <button class="btn btn-danger btn-cfop-confirm" data-id-cfop="{{idCfopeAutorizado}}" type="submit">Excluir</button>
+                    </td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <thead>
+                <tr>
+                    <th class="centralizado">Nenhum cfop encontrado</th>
+                </tr>
+                </thead>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaEmpresasParticipantes" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if empresas}}
+                <tr>
+                    <th>Inscrição</th>
+                    <th>CNPJ</th>
+                    <th>Nome Empresa</th>
+                    <th>Nome Fantasia</th>
+                    <th>Bairro</th>
+                    <th>Município</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each empresas}}
+                <tr>
+                    <td class="maskInscricao">{{numeroInscricao}}</td>
+                    <td class="maskCnpj">{{numeroCnpj}}</td>
+                    <td>{{nomeEmpresa}}</td>
+                    <td>{{nomeFantasia}}</td>
+                    <td>{{nomeBairro}}</td>
+                    <td>{{nomeMunicipio}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <thead>
+                <tr>
+                    <th class="centralizado">Nenhuma empresa encontrada</th>
+                </tr>
+                </thead>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaUltimasNotasInseridas" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if ultimasNotasInseridas}}
+                <tr>
+                    <th>Número do Documento</th>
+                    <th>Tipo de Documento</th>
+                    <th>Série</th>
+                    <th>Subsérie</th>
+                    <th>Data de Emissão</th>
+                    <th>CPF Destinatário</th>
+                    <th>Valor</th>
+                    <th>Editar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each ultimasNotasInseridas}}
+                <tr>
+                    <td class="nrDocList">{{numeroDocumentoFiscal}}</td>
+                    <td class="tipoDocList">
+                        {{#compare tipoDocumentoFiscal 1 operator="=="}}Modelo 1{{/compare}}
+                        {{#compare tipoDocumentoFiscal 2 operator="=="}}Modelo 2{{/compare}}
+                        {{#compare tipoDocumentoFiscal 3 operator="=="}}ECF - Antigo{{/compare}}
+                    </td>
+                    <td class="serieList">
+                        {{#compare serieNotaFiscal 1 operator="=="}}D{{/compare}}
+                        {{#compare serieNotaFiscal 2 operator="=="}}D - Única{{/compare}}
+                        {{#compare serieNotaFiscal 3 operator="=="}}Única{{/compare}}
+                    </td>
+                    <td class="subSerieList">{{subSerieNotaFiscal}}</td>
+                    <td class="dataEmissaoList">{{prettifyDate dataEmissao}}</td>
+                    <td >{{maskCpf cpf}}</td>
+                    <td >{{maskMoney valorTotal}}</td>
+                    <td><a href="#" class="editLink"><img src="/nfg/images/edit-small.png" width="20px;"></a></td>
+                </tr>
+                {{/each}}
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+
+                {{else}}
+                <thead>
+                <tr>
+                    <th class="centralizado">Nenhuma nota encontrada</th>
+                </tr>
+                </thead>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaReclamacaoEmpresaContador" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if listDocumentos}}
+                <tr>
+                    <th></th>
+                    <th>Data Registro</th>
+                    <th>Número</th>
+                    <th>Reclamante</th>
+                    <th>Nota</th>
+                    <th>Data Emissão</th>
+                    <th>Valor</th>
+                    <th style="text-align: center">Andamento</th>
+                    <th>Motivo</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listDocumentos}}
+                <tr>
+                    <td><input type="radio" {{disableRadioBtn}} id="idOptRadio" class="optradio-reclamacao" name="optradio" value="{{id}}" /></td>
+                    <td>{{prettifyDate dataReclamacao}}</td>
+                    <td>{{id}}</td>
+                    <td>{{pessoaParticipante.genPessoaFisica.nome}}</td>
+                    <td>{{numero}}</td>
+                    <td>{{prettifyDate dataDocumentoFiscal}}</td>
+                    <td>{{maskMoneyVirgula valor}}</td>
+                    <td style="text-align: center"><a href="#"><img src="/nfg/images/info.png" title="{{listaAndamentoStr}}" class="tooltip-info"width="20px;"></a></td>
+                    <td>{{motivoReclamacao.descricao}}</td>
+                    <td>{{statusAndamentoStr}}</td>
+                    <td>{{#compare tipoExtensao '0' operator=">"}}<a href="{{../../urlDownload}}{{id}}"><img src="/nfg/images/invoice2.png" title="Clique para baixar o anexo" class="tooltip-info"width="20px;"></a>{{/compare}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma Reclamação a ser mostrada.</th>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaMfd" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if listArquivoMemoriaFiscal}}
+                <tr>
+                    <th>Referência</th>
+                    <th>Nome do Arquivo</th>
+                    <th>Data Entrega Arquivo</th>
+                    <th >Data Início da Apuração</th>
+                    <th >Data Fim da Apuração</th>
+                    <th style="text-align: center">Status</th>
+                    <th>Info Erro</th>
+                    <th>CNPJ</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listArquivoMemoriaFiscal}}
+                <tr>
+                    <td>{{mesAnoDate referencia}}</td>
+                    <td>{{nome}}</td>
+                    <td>{{prettifyDate dataEntrega}}</td>
+                    <td >{{prettifyDate dataInicioApuracao}}</td>
+                    <td >{{prettifyDate dataFimApuracao}}</td>
+                    <td style="text-align: center">
+                        {{#compare statusProcessamento 'R' operator="=="}}Recebido{{/compare}}
+                        {{#compare statusProcessamento 'A' operator="=="}}Aguardando{{/compare}}
+                        {{#compare statusProcessamento 'P' operator="=="}}Em Processamento{{/compare}}
+                        {{#compare statusProcessamento 'S' operator="=="}}Processado com Sucesso{{/compare}}
+                        {{#compare statusProcessamento 'E' operator="=="}}Processado com Erro{{/compare}}
+                        {{#compare statusProcessamento 'C' operator="=="}}Corrigido{{/compare}}
+                    </td>
+                    <td>{{infoMensagemLog}}</td>
+                    <td>{{cnpjEstabelecimento}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="8" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma informação a ser mostrada.</th>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaPremiacao" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if listDtoPremiacao}}
+                <tr>
+                    <th>Sorteio</th>
+                    <th>NºBilhete</th>
+                    <th>Valor</th>
+                    <th>Dados Bancários</th>
+                    <th>Dt.Solicitação</th>
+                    <th>D.Resgate</th>
+
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+                    <th hidden="true"></th>
+
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listDtoPremiacao}}
+                <td class="sorteioPremio">{{sorteio}}</td>
+                <td class="numeroBilhetePremio">{{intSeparadoPorMilhar numeroBilhete}}</td>
+                <td class="valorPremio">{{maskMoneyVirgula valor}}</td>
+
+
+                {{#if tipoResgatePremio}}
+
+                {{#compare tipoResgatePremio 'C' operator="=="}}
+                <td > Pagamento com cheque</td>
+
+                {{/compare}}
+
+                {{#compare tipoResgatePremio 'T' operator="=="}}
+                {{#if numeroConta}}
+                <td >{{nomeBanco}}, Ag. {{codigoAgencia}}, Conta {{numeroConta}}-{{digito}}</td>
+                {{else}}
+                <td > </td>
+                {{/if}}
+                {{/compare}}
+
+                {{else}}
+                <td > </td>
+                {{/if}}
+
+
+                {{#if dataSolicitacaoResgate}}
+                <td >{{prettifyDateIfNotNull dataSolicitacaoResgate}}</td>
+                {{else}}
+                <td >Não Solicitado</td>
+                {{/if}}
+
+                {{#if dataResgate}}
+                <td >{{prettifyDateIfNotNull dataResgate}}</td>
+                {{else}}
+                <td >Não Resgatado</td>
+                {{/if}}
+
+                <!--CUIDADO - GAMBIEIRA ABAIXO PARA JOGAR OS VALORES PRO JS-->
+
+                <td class="idPremioBilhete" hidden="true">{{idPremioBilhete}}</td>
+                <td class="vlrTributoPremioBilhete" hidden="true">{{valorTributo}}</td>
+                <td class="vlrTaxasPremioBilhete" hidden="true">{{valorTaxasBancarias}}</td>
+                <td class="tipoResgatePremioBilhete" hidden="true">{{tipoResgatePremio}}</td>
+                <td class="dataResgatePremioBilhete" hidden="true">{{prettifyDateIfNotNull dataResgate}}</td>
+                <td class="dataLimitePremioBilhete" hidden="true">{{prettifyDateIfNotNull dataLimiteResgate}}</td>
+                <td class="dataSolicitacaoPremioBilhete" hidden="true">{{prettifyDateIfNotNull dataSolicitacaoResgate}}</td>
+                <td class="valorPremioCalc" hidden="true">{{valor}}</td>
+                <td class="vlrTributoParam" hidden="true">{{valorTributoParam}}</td>
+                <td class="valorTaxasChequeParam" hidden="true">{{valorTaxasChequeParam}}</td>
+                <td class="valorTaxasTransfParam" hidden="true">{{valorTaxasTransfParam}}</td>
+                <td class="codgBanco" hidden="true">{{codigoBanco}}</td>
+                <td class="codigoAgencia" hidden="true">{{codigoAgencia}}</td>
+                <td class="numeroConta" hidden="true">{{numeroConta}}</td>
+                <td class="tipoConta" hidden="true">{{tipoConta}}</td>
+                <td class="digito" hidden="true">{{digito}}</td>
+
+                {{#if dataResgate}}
+                    <td ><a class="btn btn-primary" id="linkResgatar" href="#" >Verificar</a></td>
+                {{else}}
+
+                    {{#if dataSolicitacaoResgate}}
+                        <td ><a class="btn btn-primary" id="linkResgatar" href="#" >Alterar</a></td>
+                    {{else}}
+                        {{#if estahNoPrazoParaResgate}}
+                            <td ><a class="btn btn-primary" id="linkResgatar" href="#" >Resgatar</a></td>
+                        {{else}}
+                            <td ><a class="btn btn-primary" id="linkResgatar" href="#" >Prazo expirado</a></td>
+                        {{/if}}
+                    {{/if}}
+
+
+                {{/if}}
+
+
+                </tr>
+                {{/each}}
+                </tbody>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaContatoDetalhe" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                <th>TELEFONE</th>
+                {{#if listTelefones}}
+                <tr>
+                    <th>Tipo</th>
+                    <th>DDD</th>
+                    <th>Número</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listTelefones}}
+                <tr>
+                    <td>
+                        {{#compare tipo '1' operator="=="}}Comercial{{/compare}}
+                        {{#compare tipo '2' operator="=="}}Residencial{{/compare}}
+                        {{#compare tipo '3' operator="=="}}Celular {{/compare}}
+                        {{#compare tipo '4' operator="=="}}Contato {{/compare}}
+                        {{#compare tipo '5' operator="=="}}Recado {{/compare}}
+                        {{#compare tipo '6' operator="=="}}Fax {{/compare}}
+                    </td>
+                    <td>{{ddd}}</td>
+                    <td>{{numero}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                {{else}}
+                <th class="centralizado">Nenhum telefone cadastrado.</th>
+                {{/if}}
+            </table>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                <th>EMAIL</th>
+                {{#if listEmails}}
+                <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listEmails}}
+                <tr>
+                    <td>
+                        {{#compare tipo '1' operator="=="}}Comercial{{/compare}}
+                        {{#compare tipo '2' operator="=="}}Pessoal{{/compare}}
+                        {{#compare tipo '3' operator="=="}}Cobrança {{/compare}}
+                    </td>
+                    <td>{{descricao}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                {{else}}
+                <th class="centralizado">Nenhum email cadastrado.</th>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaContatoGanhadoresRel" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if listContatos}}
+                </thead>
+                <tbody>
+                {{#each listContatos}}
+                <!-- espaço entre os nomes -->
+                <td colspan="11">&nbsp;</td>
+                <tr>
+                    <td ><strong>Nome:</strong> {{nome}}</td>
+                    <td><strong>CPF:</strong> {{maskCpf cpf}}</td>
+                    <td><strong>Sorteio:</strong> {{sorteio}}</td>
+                    <td><strong>Nº Bilhete:</strong> {{numeroBilhete}}</td>
+                    <td><strong>Valor:</strong> {{maskMoneyVirgula valor}}</td>
+                    {{#if contaBancaria}}
+                    <td><strong>Dados Bancários:</strong> Sim</td>
+                    {{else}}
+                    <td><strong>Dados Bancários:</strong> Não</td>
+                    {{/if}}
+
+                    <!-- listagem de email -->
+                    <thead>
+                    {{#if listEmails}}
+                <tr>
+                    <th colspan="11">Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listEmails}}
+                <tr>
+                    <td colspan="8">
+                        {{#compare tipo '1' operator="=="}}Comercial{{/compare}}
+                        {{#compare tipo '2' operator="=="}}Pessoal{{/compare}}
+                        {{#compare tipo '3' perator="=="}}Cobrança {{/compare}} - {{descricao}}
+                    </td>
+                </tr>
+                </tbody>
+                {{/each}}
+                {{/if}}
+
+                <!-- listagem de telefones -->
+                <thead >
+                {{#if listTelefones}}
+                <tr>
+                    <th>Telefone</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listTelefones}}
+                <tr>
+                    <td colspan="8">
+                        {{#compare tipo '1' operator="=="}}Comercial{{/compare}}
+                        {{#compare tipo '2' operator="=="}}Residencial{{/compare}}
+                        {{#compare tipo '3' operator="=="}}Celular {{/compare}}
+                        {{#compare tipo '4' operator="=="}}Contato {{/compare}}
+                        {{#compare tipo '5' operator="=="}}Recado {{/compare}}
+                        {{#compare tipo '6' operator="=="}}Fax {{/compare}}: ({{ddd}}) {{numero}}
+                    </td>
+                </tr>
+                </tbody>
+                {{/each}}
+                {{/if}}
+
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="8" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma informação disponível para este sorteio.</th>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaContatoGanhadores" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if listContatos}}
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Sorteio</th>
+                    <th>NºBilhete</th>
+                    <th>Valor</th>
+                    <th>Dados Bancários</th>
+                    <th>Contato</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listContatos}}
+                <tr>
+                    <td>{{nome}}</td>
+                    <td>{{maskCpf cpf}}</td>
+                    <td>{{sorteio}}</td>
+                    <td>{{numeroBilhete}}</td>
+                    <td>{{maskMoneyVirgula valor}}</td>
+                    {{#if contaBancaria}}
+                    <td>Sim</td>
+                    {{else}}
+                    <td>Não</td>
+                    {{/if}}
+                    <td class="btn-contato" data-idpessoa="{{idPessoa}}"><a href="#"><img src="/nfg/images/edit-small.png" title="Abrir detalhes do contato" class="tooltip-info" width="20px;"></a></td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="8" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma informação disponível para este sorteio.</th>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaPremiacaoPortal" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left">
+                <thead>
+                {{#if listPremiacoes}}
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Sorteio</th>
+                    <th>NºBilhete</th>
+                    <th>Valor</th>
+                    <th>Dados Bancários</th>
+                    <th>Tipo da Conta</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each listPremiacoes}}
+                <tr>
+                    <td>{{nome}}</td>
+                    <td>{{cpf}}</td>
+                    <td>{{sorteio}}</td>
+                    <td>{{numeroBilhete}}</td>
+                    <td>{{maskMoneyVirgula valor}}</td>
+                    {{#if nomeBanco}}
+                    <td>{{nomeBanco}}, Codg: {{codigoBanco}}, Agência: {{nomeAgencia}} Codg: {{codigoAgencia}}, Conta: {{numeroConta}} - {{digito}}</td>
+                    {{else}}
+                    <td></td>
+                    {{/if}}
+                    <td>
+                        {{#compare tipoConta '1' operator="=="}}Corrente{{/compare}}
+                        {{#compare tipoConta '2' operator="=="}}Poupança{{/compare}}
+                        {{#compare tipoConta '' operator="=="}} {{/compare}}
+                    </td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma premiação para este sorteio.</th>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+
+    <script id="tabelaMinhasNotas" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if minhasNotas}}
+                <tr>
+                    <th>Número</th>
+                    <th>Estabelecimento</th>
+
+                    <th></th>
+                    <th></th>
+                    <th>Dt.Emissão</th>
+                    <th style="text-align: right">Valor</th>
+                    <th style="text-align: right" title="Passe o mouse sobre os pontos para saber o status da pontuação. "><a>Pontos(?)</a></th>
+                    <th >Sorteio</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each minhasNotas}}
+
+                {{#compare infoSorteioParticipado '' operator='=='}}
+                <tr >
+                    {{else}}
+                <tr style="background:#EBDDE2; ">
+                    {{/compare}}
+
+                    <td>{{numero}} </td>
+                    <td width="30%">{{estabelecimento}}</td>
+
+
+                    <td><img src="/nfg/images/info.png" title="Nome Fantasia: {{fantasia}}" class="tooltip-info" width="20px;"></td>
+
+                    {{#compare empresaCadastrada 'S' operator='=='}}
+                    <td><img src="/nfg/images/ok.png" title="Estabelecimento cadastrado." class="tooltip-info" width="20px;"></td>
+                    {{else}}
+                    <td><img src="/nfg/images/problem.png" title="Estabelecimento não cadastrado. Esta nota não gerará pontuação." class="tooltip-info" width="20px;"></td>
+                    {{/compare}}
+
+
+                    <td>{{prettifyDate emissao}}</td>
+                    <td align="right">{{maskMoneyVirgula valor}}</td>
+
+
+                    {{#compare statusPontuacao '-1' operator="=="}}
+                    <td align="right"><p title="Essa nota ainda não participou de nenhum sorteio.">-</p></td>
+                    {{/compare}}
+
+                    {{#compare statusPontuacao '1' operator="=="}}
+                    <td align="right"><p title="Pontuado - {{detalhe}}.">{{qtdePontos}}</p></td>
+                    {{/compare}}
+
+
+                    {{#compare statusPontuacao '3' operator="=="}}
+                    <td align="right"><p title="Parcialmente Pontuado - {{detalhe}}.">{{qtdePontos}}</p></td>
+                    {{/compare}}
+
+
+                    {{#compare statusPontuacao '2' operator="=="}}
+                    <td align="right"><p title="Não Pontuado - {{detalhe}}.">{{qtdePontos}}</p></td>
+                    {{/compare}}
+
+
+                    {{#compare infoSorteioParticipado '' operator='=='}}
+                    <td align="center" title="Essa nota ainda não participou de nenhum sorteio."> - </td>
+                    {{else}}
+                    <td align="center" title="Essa nota participou do sorteio {{infoSorteioParticipado}}.">{{infoSorteioParticipado}}</td>
+                    {{/compare}}
+                </tr>
+                {{/each}}
+                </tbody>
+
+                {{else}}
+                <th class="centralizado">Nenhuma nota importada.</th>
+                {{/if}}
+            </table>
+
+            {{#if minhasNotas}}
+            <br/>
+            <legend style="font-size: small;  ">Legenda:</legend>
+            <canvas  class="legendaVermelhoTabelaNotas"></canvas>
+            <label >Notas que j&aacute; participaram de sorteio.</label>
+            {{/if}}
+        </div>
+    </script>
+
+    <script id="tabelaMensagens" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-condensed" style="text-align: left; margin-bottom: 0;">
+                {{#if mensagens}}
+
+                <tbody>
+                {{#each mensagens}}
+                <tr>
+                    <td style="color: black; overflow-x: hidden">
+                        <div class="row">
+                            <div align="left" class="col-sm-10"><label style="font-size: medium; color: #02397a"><b>{{titulo}}</b></label></div>
+                            <div align="right" class="col-sm-2">{{prettifyDate data}}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12"><p style="white-space: pre-wrap;">{{texto}}</p></div>
+                        </div>
+
+                    </td>
+
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <tr>
+                    <div class="centralizado">Nenhuma mensagem no momento<label> </label></div>
+                </tr>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaMinhasNotasEmDetalhe" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if minhasNotas}}
+                <tr>
+                    <th>Número</th>
+                    <th>CNPJ</th>
+                    <th>Estabelecimento</th>
+                    <th></th>
+                    <th></th>
+                    <th>Dt.Emissão</th>
+                    <th style="text-align: right">Valor</th>
+                    <th style="text-align: right" title="Passe o mouse sobre os pontos para saber o status da pontuação. "><a>Pontos(?)</a></th>
+                    <th  > Sorteio </th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each minhasNotas}}
+
+                {{#compare infoSorteioParticipado '' operator='=='}}
+                <tr >
+                    {{else}}
+                <tr style="background:#EBDDE2; ">
+                    {{/compare}}
+
+                    <td>{{numero}}</td>
+                    <td>{{maskCnpj cnpj}}</td>
+                    <td width="30%">{{estabelecimento}}</td>
+                    <td><img src="/nfg/images/info.png" title="Nome Fantasia: {{fantasia}}" class="tooltip-info" width="20px;"></td>
+
+                    {{#compare empresaCadastrada 'S' operator='=='}}
+                    <td><img src="/nfg/images/ok.png" title="Estabelecimento cadastrado." class="tooltip-info" width="20px;"></td>
+                    {{else}}
+                    <td><img src="/nfg/images/problem.png" title="Estabelecimento não cadastrado. Esta nota não gerará pontuação." class="tooltip-info" width="20px;"></td>
+                    {{/compare}}
+
+
+                    <td>{{prettifyDate emissao}}</td>
+
+
+                    <td align="right">{{maskMoneyVirgula valor}}</td>
+
+
+                    {{#compare statusPontuacao '-1' operator="=="}}
+                    <td align="right"><p title="Essa nota ainda não participou de nenhum sorteio.">-</p></td>
+                    {{/compare}}
+
+                    {{#compare statusPontuacao '1' operator="=="}}
+                    <td align="right"><p title="Pontuado - {{detalhe}}.">{{qtdePontos}}</p></td>
+                    {{/compare}}
+
+
+                    {{#compare statusPontuacao '3' operator="=="}}
+                    <td align="right"><p title="Parcialmente Pontuado - {{detalhe}}.">{{qtdePontos}}</p></td>
+                    {{/compare}}
+
+
+                    {{#compare statusPontuacao '2' operator="=="}}
+                    <td align="right"><p title="Não Pontuado - {{detalhe}}.">{{qtdePontos}}</p></td>
+                    {{/compare}}
+
+                    <!--<td align="right" title="{{statusPontuacao}}"><a>{{qtdePontos}}</a></td>-->
+
+
+                    {{#compare infoSorteioParticipado '' operator='=='}}
+                    <td align="center" title="Essa nota ainda não participou de nenhum sorteio."> - </td>
+                    {{else}}
+                    <td align="center" title="Essa nota participou do sorteio {{infoSorteioParticipado}}.">{{infoSorteioParticipado}}</td>
+                    {{/compare}}
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <!--<thead>-->
+                <!--<tr>-->
+                <th class="centralizado">Nenhuma nota importada.</th>
+                <!--</tr>-->
+                <!--</thead>-->
+                {{/if}}
+            </table>
+
+            {{#if minhasNotas}}
+            <br/>
+            <!--<fieldset>-->
+            <legend style="font-size: small;  ">Legenda:</legend>
+            <canvas  class="legendaVermelhoTabelaNotas"></canvas>
+            <label >Notas que j&aacute; participaram de sorteio.</label>
+            <!--</fieldset>-->
+            {{/if}}
+        </div>
+    </script>
+
+    <script id="tabelaPontosDasNotas" type="text/x-handlebars-template">
+        <div class="row ">
+            <table class="table table-striped table-hover table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if dadosPontuacaoNotas}}
+                <tr>
+                    <th>CNPJ</th>
+                    <th>Estabelecimento</th>
+                    <th></th>
+                    <th>Nr.</th>
+                    <th>Dt.Emissão</th>
+                    <th style="text-align: right">Valor</th>
+                    <th style="text-align: right">Qtd.Pontos</th>
+                    <th style="text-align: right">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each dadosPontuacaoNotas}}
+                <tr>
+                    <td>{{maskCnpj cnpj}}</td>
+                    <td>{{estabelecimento}}</td>
+                    <td><img src="/nfg/images/info.png" title="Nome Fantasia: {{fantasia}}" class="tooltip-info" width="20px;"></td>
+                    <td>{{numero}}</td>
+                    <td>{{prettifyDate emissao}}</td>
+                    <td align="right">{{maskMoneyVirgula valor}}</td>
+
+                    <td align="right">{{qtdePontos}}</td>
+
+                    {{#compare status '1' operator="=="}}
+                    <td align="right"><img src="/nfg/images/ok.png" title="Pontuado - {{detalhe}}." class="tooltip-info" width="20px;"></td>
+                    {{/compare}}
+
+
+                    {{#compare status '3' operator="=="}}
+                    <td align="right"><img src="/nfg/images/attention.ico" title="Parcialmente Pontuado - {{detalhe}}." class="tooltip-info" width="20px;"></td>
+                    {{/compare}}
+
+
+                    {{#compare status '2' operator="=="}}
+                    <td align="right"><img src="/nfg/images/problem.png" title="Não Pontuado - {{detalhe}}." class="tooltip-info" width="20px;"></td>
+                    {{/compare}}
+
+
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center; ">
+                        {{paginate pagination}}
+                    </td>
+
+                </tr>
+                </tfoot>
+                {{else}}
+                <tr>
+                    <div class="centralizado"><label> </label></div>
+                </tr>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaPontosBonus" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if dadosPontuacaoBonus}}
+                <tr>
+                    <th>Data</th>
+                    <th>Descri&ccedil;&atilde;o</th>
+                    <th>Qtd.Pontos</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each dadosPontuacaoBonus}}
+                <tr>
+                    <td>{{prettifyDate data}}</td>
+                    <td>{{descricao}}</td>
+                    <td>{{qtdePontos}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <div class="centralizado"><label></label></div>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="tabelaBilhetes" type="text/x-handlebars-template">
+        <div class="row">
+            <table style="text-align: center; margin-bottom: 0; width: 100%">
+                <thead>
+                {{#if dadosBilhetes}}
+
+                </thead>
+                <tbody>
+                {{#each dadosBilhetes}}
+                <tr>
+                    <td width="30%">
+                        {{#if bilhete1col}}
+                        <div style="position: relative;">
+                            {{#compare bilhete1col.premiado 'S' operator='=='}}
+                            <canvas  class="imagemBilhetePremiado"></canvas>
+                            {{else}}
+                            <canvas  class="imagemBilheteNaoPremiado"></canvas>
+                            {{/compare}}
+
+                            <div style="position: absolute; width: 100%; bottom: 25px; left: 90px;" align="left">
+                                <p style="font: 'Courier New'; font-size: medium"> <b>&nbsp;&nbsp;&nbsp;&nbsp;Nº {{intSeparadoPorMilhar bilhete1col.numero}}</b></p>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </td>
+
+                    <td width="30%">
+                        {{#if bilhete2col}}
+                        <div style="position: relative;">
+                            {{#compare bilhete2col.premiado 'S' operator='=='}}
+                            <canvas  class="imagemBilhetePremiado"></canvas>
+                            {{else}}
+                            <canvas  class="imagemBilheteNaoPremiado"></canvas>
+                            {{/compare}}
+
+                            <div style="position: absolute; width: 100%; bottom: 25px; left: 90px;" align="left">
+                                <p style="font: 'Courier New'; font-size: medium"> <b>&nbsp;&nbsp;&nbsp;&nbsp;Nº {{intSeparadoPorMilhar bilhete2col.numero}}</b></p>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </td>
+
+                    <td width="30%">
+                        {{#if bilhete3col}}
+                        <div style="position: relative;">
+                            {{#compare bilhete3col.premiado 'S' operator='=='}}
+                            <canvas  class="imagemBilhetePremiado"></canvas>
+                            {{else}}
+                            <canvas  class="imagemBilheteNaoPremiado"></canvas>
+                            {{/compare}}
+
+                            <div style="position: absolute; width: 100%; bottom: 25px; left: 90px;" align="left">
+                                <p style="font: 'Courier New'; font-size: medium"> <b>&nbsp;&nbsp;&nbsp;&nbsp;Nº {{intSeparadoPorMilhar bilhete3col.numero}}</b></p>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                <tr/>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <div class="centralizado"><label> </label></div>
+                {{/if}}
+            </table>
+        </div>
+    </script>
+
+    <script id="modalCadastro" type="text/x-handlebars-template">
+        <div class='modal' tabindex='-1' role='dialog' aria-labelledby='' aria-hidden='true'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <form method='post' action='{{urlCadastro}}'>
+                        <input type='hidden' name="inscricao" value="{{inscricao}}">
+                        <input type='hidden' name="dataInicio" value="{{dataInicioVigencia}}">
+                        <input type='hidden' name="termoDeAcordo" value="{{{termoDeAcordo}}}">
+                        <div class='modal-header'><strong>Cadastrar Contribuinte no NFG</strong></div>
+                        <div class='modal-body'>
+                            <div class='form-group'>
+                                <label>Termo de Acordo</label>
+                                <p class='text-justify' style="line-height: 15px">{{{termoDeAcordo}}}</p>
+                            </div>
+                            <div class='form-group'>
+                                <label>Data Início Vigência: </label>
+                                <span>{{dataInicioVigencia}}</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type='submit' class='btn btn-primary' value='Li e concordo'>
+                            <button type='button' class='btn btn-default' data-dismiss='modal'>Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="modal-generico" type="text/x-handlebars-template">
+        <div class='modal fade modalGenericoHandlebars'  tabindex='-1' role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true">
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+
+                    <div class="container-fluid" style="padding: 0">
+
+                        <div class="modal-header" style="background: #02397a; color:white;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                            <div>{{{title}}}</div>
+                        </div>
+
+                        {{#if content}}
+                        <div class="modal-body">
+                            <div>
+
+                                <div class="panel panel-default" style="border: 0">
+                                    {{{content}}}
+                                </div>
+
+                            </div>
+                        </div>
+                        {{/if}}
+
+                        <div class="row modal-footer" style="border-top: 0">
+                            <div id='modal-button-list' class="form-group">
+                                {{{buttons}}}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </script>
+
+    <script id="tabelaMensagensUsuario" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if mensagens}}
+                <tr>
+                    <th width="15%">Tipo Destin.</th>
+                    <th>P&uacute;blica?</th>
+                    <th>Destinat&aacute;rios</th>
+                    <th></th>
+                    <th>T&iacute;tulo</th>
+                    <th></th>
+                    <th>Texto</th>
+                    <th></th>
+                    <th>Data</th>
+                    <th>Alterar</th>
+                    <th>Excluir</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each mensagens}}
+
+                <tr >
+
+                    <td  >{{tipoDestinatario}}</td>
+                    <td align="center" class="publicaLista">{{mensagemPublica}}</td>
+
+                    {{#compare mensagemPublica 'S' operator='=='}}
+                    <td align="center">Todos</td>
+                    {{else}}
+                    <td align="center"><img src="/nfg/images/blue_tag.png" width="20px;" title="{{listaDestinatariosString}}"></td>
+                    {{/compare}}
+
+                    <td>&nbsp;</td>
+                    <td class="tituloMensagemLista">{{titulo}}</td>
+                    <td>&nbsp;</td>
+                    <td class="textoMensagemLista">{{texto}}</td>
+                    <td>&nbsp;</td>
+
+
+                    <td>{{prettifyDate data}}</td>
+                    <td align="center"> <a href="#" class="alterarMensagemUsuario"><img src="/nfg/images/edit-small.png" width="20px;"></a></td>
+                    <td align="center"> <a href="#" class="excluirMensagemUsuario"><img src="/nfg/images/trash.png" width="20px;"></a></td>
+                    <td style="display: none" class="idMensagemLista">{{id}}</td>
+                    </td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr><td colspan="12"><b>Legenda:</b>&nbsp;C=Cidadão &nbsp;&nbsp; E=Empresa &nbsp;&nbsp; S=Sim &nbsp;&nbsp; N=Não</td></tr>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{{paginate pagination}}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma mensagem encontrada.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+
+    <script id="tabelaFiltroDestinatario" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                {{#if destinatarios}}
+                {{#compare tipoDestinatario 'C' operator='=='}}
+                <thead>
+                <tr>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each destinatarios}}
+                <tr >
+                    <td class="cpfFiltroAdicionar">{{cpf}} </td>
+                    <td class="nomeFiltroAdicionar">{{nome}}</td>
+                    <td class="pessoaCidadaoFiltroAdicionar" style="display: none">{{idpessoa}} </td>
+                    <td class="adicionarDestinatarioLink" align="center"> <a href="#" class="adicionarDestinatario">Adicionar</a></td>
+
+                </tr>
+                {{/each}}
+                </tbody>
+                {{else}}
+                <thead>
+                <tr>
+                    <th>CNPJ</th>
+                    <th>Nome</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each destinatarios}}
+
+                <tr >
+                    <td class="cnpjFiltroAdicionar">{{cnpj}} </td>
+                    <td class="fantasiaFiltroAdicionar">{{fantasia}}</td>
+                    <td class="pessoaEmpresaFiltroAdicionar" style="display: none">{{idpessoa}} </td>
+                    <td class="adicionarDestinatarioLink" align="center"> <a href="#" class="adicionarDestinatario">Adicionar</a></td>
+                </tr>
+                {{/each}}
+                </tbody>
+                {{/compare}}
+
+
+                {{else}}
+                <th class="centralizado">Nenhum destinatário encontrado com esses filtros.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+    <script id="listaDestinatariosAdicionados" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                {{#if destinatarios}}
+                <thead>
+                <tr>
+                    <th>Cadastro</th>
+                    <th>Nome</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each destinatarios}}
+
+                <tr >
+                    <td>{{cadastro}} </td>
+                    <td>{{nome}}</td>
+                    <td class="idPessoaAdicionado" style="display: none">{{id}}</td>
+                    <td align="center"> <a href="#" class="removerDestinatario">X</a></td>
+                </tr>
+                {{/each}}
+                </tbody>
+
+                {{else}}
+                <th class="centralizado">Nenhum destinatário adicionado.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+    <script id="tabelaReclamacoesUsuario" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if reclamacoes}}
+                <tr>
+                    <th>N&uacute;mero</th>
+                    <th>Doc.Fiscal</th>
+                    <th style="text-align: right">Valor</th>
+                    <th title="Passe o mouse sobre a empresa para ver a descrição completa do estabelecimento."><a>Empresa(?)</a></th>
+                    <th>Dt.Reclama&ccedil;&atilde;o</th>
+                    <th title="Passe o mouse sobre a situação para ver a descrição completa."><a>Situa&ccedil;&atilde;o(?)</a></th>
+                    <th>Abrir detalhes</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each reclamacoes}}
+                <tr >
+                    <td >{{id}}</td>
+                    <td >{{numero}}</td>
+                    <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
+                    {{#if nomeFantasiaEmpresa}}
+                    <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Nome Fantasia: {{nomeFantasiaEmpresa}}"><div class="truncText" style="width: 100px;">{{nomeFantasiaEmpresa}}</div></td>
+                    {{else}}
+                    <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Razão Social: {{razaoSocial}}"><div class="truncText" style="width: 100px;">{{razaoSocial}}</div></td>
+                    {{/if}}
+                    <td>{{prettifyDate dataReclamacao}}</td>
+                    <td title="{{descUltimaSituacao}}"><div style="width: 150px;" class="truncText">{{descUltimaSituacao}}</div></td>
+                    <td align="center" class="abrirReclamacaoLink"><a href="#"><img src="/nfg/images/edit-small.png" title="Abrir detalhes da reclamação do documento {{numero}}" class="tooltip-info" width="20px;"></a></td>
+                    <td class="idReclamacaoLink" style="display: none" >{{id}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{{paginate pagination}}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma reclamação registrada.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+
+    <script id="tabelaPremiacoesUsuario" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if premiacoes}}
+                <tr>
+                    <th>Nº</th>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                    <th>Valor Prêmio</th>
+                    <th>D.Limite </th>
+                    <th>Tipo Resgate</th>
+                    <th>Taxas Bancárias</th>
+                    <th>Banco</th>
+                    <th>Agência</th>
+                    <th>Tipo Conta</th>
+                    <th>Conta</th>
+                    <th>Valor de Tributos</th>
+                    <th>Valor Líquido</th>
+                    <th>D. Solicitação</th>
+                    <th>D. Pagamento</th>
+                    <th>Info </th>
+                    <th hidden="true">  </th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each premiacoes}}
+                <tr >
+                    <td >{{numeroDoPremioNoSorteio}}</td>
+                    <td >{{cpfGanhador}}</td>
+                    <td >{{nomeGanhador}}</td>
+                    <td >{{maskMoneyVirgula valor}}</td>
+                    <td >{{prettifyDateIfNotNull dataLimiteResgate}}</td>
+
+                    <td >
+                        {{#if tipoResgatePremio}}
+                        {{#compare tipoResgatePremio 'T' operator="=="}} Transferência {{/compare}}
+                        {{#compare tipoResgatePremio 'C' operator="=="}} Cheque {{/compare}}
+                        {{/if}}
+                    </td>
+
+                    <td >{{maskMoneyVirgula valorTaxasBancarias}}</td>
+                    <td >{{nomeBanco}}</td>
+                    <td >{{codigoAgencia}}</td>
+
+                    <td >
+                        {{#compare tipoConta 1 operator="=="}}Corrente {{/compare}}
+                        {{#compare tipoConta 2 operator="=="}}Poupança {{/compare}}
+                        <!--{{#compare tipoConta 0 operator="=="}}<td ></td> {{/compare}}-->
+                    </td>
+
+                    <td >
+                        {{#compare numeroConta 0 operator=">"}}{{numeroConta}}-{{digito}} {{/compare}}
+                    </td>
+
+                    <td >{{maskMoneyVirgula valorTributo}}</td>
+                    <td >{{maskMoneyVirgula valorLiquido}}</td>
+                    <td >{{prettifyDateIfNotNull dataSolicitacaoResgate}}</td>
+
+
+                    <td class="dataResgateEdit"><input type="text" class="inputDate" value="{{prettifyDateIfNotNull dataResgate}}"/>  </td>
+                    <td class="infoResgateEdit"><input type="text" value="{{infoResgate}}"/>  </td>
+                    <td class="idPremioBilheteEdit"  hidden="true">{{idPremioBilhete}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{{paginate pagination}}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma premiação registrada para o sorteio selecionado.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+
+    <script id="tabelaReclamacoes" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if reclamacoes}}
+                <tr>
+                    <th>N&uacute;mero</th>
+                    <th>Doc.Fiscal</th>
+                    <th style="text-align: right">Valor</th>
+                    <th title="Passe o mouse sobre a empresa para ver a descrição completa do estabelecimento."><a>Empresa(?)</a></th>
+                    <th>Dt.Reclama&ccedil;&atilde;o</th>
+                    <th title="Passe o mouse sobre a situação para ver a descrição completa."><a>Situa&ccedil;&atilde;o(?)</a></th>
+                    <th>Abrir detalhes</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each reclamacoes}}
+                <tr >
+                    <td >{{id}}</td>
+                    <td >{{numero}}</td>
+                    <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
+                    {{#if nomeFantasiaEmpresa}}
+                    <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Nome Fantasia: {{nomeFantasiaEmpresa}}"><div class="truncText" style="width: 100px;">{{nomeFantasiaEmpresa}}</div></td>
+                    {{else}}
+                    <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Razão Social: {{razaoSocial}}"><div class="truncText" style="width: 100px;">{{razaoSocial}}</div></td>
+                    {{/if}}
+                    <td>{{prettifyDate dataReclamacao}}</td>
+                    <td title="{{descUltimaSituacao}}"><div style="width: 150px;" class="truncText">{{descUltimaSituacao}}</div></td>
+                    <td align="center" class="abrirReclamacaoLink"><a href="#"><img src="/nfg/images/edit-small.png" title="Abrir detalhes da reclamação do documento {{numero}}" class="tooltip-info" width="20px;"></a></td>
+                    <td class="idReclamacaoLink" style="display: none" >{{id}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{{paginate pagination}}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma reclamação registrada.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+    <script id="tabelaReclamacaoRel" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if reclamacoes}}
+                <tr>
+                    <th>N&uacute;mero</th>
+                    <th>Doc.Fiscal</th>
+                    <th style="text-align: right">Valor</th>
+                    <th>Dt.Emiss&atilde;o</th>
+                    <th >Empresa</th>
+                    <th >Nr.Inscrição</th>
+                    <th>Dt.Reclama&ccedil;&atilde;o</th>
+                    <th >Situa&ccedil;&atilde;o</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {{#each reclamacoes}}
+                <tr >
+                    <td >{{id}}</td>
+                    <td >{{numero}}</td>
+                    <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
+                    <td>{{prettifyDate dataDocumentoFiscal}}</td>
+
+                    {{#if nomeFantasiaEmpresa}}
+                    <td >{{nomeFantasiaEmpresa}}</td>
+                    {{else}}
+                    <td >{{razaoSocial}}</td>
+                    {{/if}}
+
+                    <td >{{inscricaoEmpresa}}</td>
+                    <td>{{prettifyDate dataReclamacao}}</td>
+                    <td title="{{descUltimaSituacao}}"><div style="width: 150px;" class="truncText">{{descUltimaSituacao}}</div></td>
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{{paginate pagination}}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma reclamação registrada.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+    <script id="tabelaAndamentoReclamacao" type="text/x-handlebars-template">
+        <div class="row">
+            <table class="table table-striped table-hover table-condensed" style="text-align: left; margin-bottom: 0;">
+                <thead>
+                {{#if situacoesReclamacao}}
+                <tr>
+                    <th>Perfil</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th title="Passe o mouse sobre o comentário para ver a descição completa."><a>Coment&aacute;rio(?)</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each situacoesReclamacao}}
+                <tr >
+                    <td >{{perfilDescricao}}</td>
+                    <td>{{prettifyDate dataCadastroSituacao}}</td>
+                    <td >{{complSituacaoReclamacao.tipoSituacaoDescricao}}</td>
+                    <!--<td title="{{info}}"><div class="truncText">{{info}}</div></td>-->
+                    <td title="{{info}}">{{info}}</td>
+
+                </tr>
+                {{/each}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="12" style="text-align: center">
+                        {{{paginate pagination}}}
+                    </td>
+                </tr>
+                </tfoot>
+                {{else}}
+                <th class="centralizado">Nenhuma situa&ccedil;&atilde;o registrada.</th>
+                {{/if}}
+            </table>
+
+        </div>
+    </script>
+
+
+</div>
+
+</body>
+
+
+
+</html>

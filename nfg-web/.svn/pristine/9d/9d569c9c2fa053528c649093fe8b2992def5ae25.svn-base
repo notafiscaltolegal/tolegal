@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2 :: site2">
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default centralizado">
+        <div class="panel-heading">
+            <h3>Portal do Cidad&atilde;o</h3>
+
+            <br/>
+            <br/>
+
+            <form id="formLoginCidadao" name="formLoginCidadao" role="form" class="form-horizontal">
+
+                <!--RECUPERACAO DE SENHA-->
+                <div class="row" >
+                    <div class="col-sm-4">&nbsp;</div>
+                    <div class="col-sm-6" >
+                        <div class="form-group" >
+                            <div style="display: block" class="formEmailRecuperacaoSenha">
+                                <div class="col-sm-7" >
+                                    <input type="text" name="cpfRecuperacao" class="form-control inputCpf" id="cpfRecuperacao" placeholder="Informe o CPF cadastrado no NFG">
+                                </div>
+                                <div class="col-sm-1" >
+                                    <a href="#"  id="submitEmailRecuperarSenha" class="btn btn-default " >Enviar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/recaptcha_ajax.js}"></script>
+
+    <!--<script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>-->
+    <!--<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>-->
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+
+        });
+    </script>
+</div>
+</html>

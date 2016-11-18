@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/layout :: template">
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Premiações</h2>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <div class="row"  align="center">
+            <div class="col-md-1"><label>Sorteio:</label></div>
+            <div class="col-md-2">
+                <select class="form-control"  name="selectSorteios" id="selectSorteios" title="Selecione o sorteio.">
+                    <option value="">Selecione...</option>
+                    <option th:each="s : ${sorteios}" th:value="${s.informacao}" th:text="${s.informacao}"/>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-9"><label>Obs.: para editar a Data de Pagamento ou Info de um registro, modifique o valor no campo correspondente e saia do campo.</label>
+            </div>
+        </div>
+
+        <div class="panel-body ">
+            <div class="row" id="dadosPremiacao" >
+                <div class="col-md-12">
+                    <form id="formPremiacoesUsuario" class="form-horizontal ">
+                        <div class="panel panel-default" >
+                            <div class="panel-heading" >
+                                <label id="lblPremiacoesDoSorteioX">Premiações do Sorteio</label>
+                            </div>
+                            <div class="panel-body " >
+                                <div id="containerPremiacoesUsuario"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <!--<script th:src="@{/js/paginate.js}" charset="utf-8"></script>-->
+    <!--<script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>-->
+    <!--<script th:src="@{/js/dialogs.js}" charset="utf-8"></script>-->
+    <script th:src="@{/js/premiacao.js}" charset="utf-8"></script>
+
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Premiacao({});
+    </script>
+</div>
+
+</html>

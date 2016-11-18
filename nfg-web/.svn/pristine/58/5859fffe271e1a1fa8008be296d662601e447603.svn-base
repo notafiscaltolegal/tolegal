@@ -1,0 +1,13 @@
+gen.service=localhost:8081
+#gen.service=sefazhomolog.intra.goias.gov.br
+recaptcha.key=6Ley5AQTAAAAAHGCma-lDq5km7h5oux4dwT0z8Df
+
+nfg.host=localhost:8080
+
+batch.user=admin
+batch.password=123456
+
+#batch.baseUrl=https://nfgoianahomolog.sefaz.go.gov.br/nfg-batch/
+batch.baseUrl=http://localhost:8080/nfg-batch/
+#urlMenu=http://www.projetos.goias.gov.br/notafiscalgoiana2015/menu/menuJson
+urlHome=http://localhost:8080/nfg/

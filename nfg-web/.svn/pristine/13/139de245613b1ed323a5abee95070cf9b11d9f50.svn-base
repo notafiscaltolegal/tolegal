@@ -1,0 +1,38 @@
+package gov.goias.util;
+
+import javax.swing.text.MaskFormatter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.ParseException;
+
+/**
+ * Created by lucas-mp on 24/03/15.
+ */
+public class TextUtils {
+    public static String format(String pattern, Object value) {
+        MaskFormatter mask;
+        try {
+            mask = new MaskFormatter(pattern);
+            mask.setValueContainsLiteralCharacters(false);
+            return mask.valueToString(value);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String encodeURIComponent(String str) {
+        try {
+            return URLEncoder.encode(str, "UTF-8")
+                    .replaceAll("\\+", "%20")
+                    .replaceAll("\\%21", "!")
+                    .replaceAll("\\%27", "'")
+                    .replaceAll("\\%28", "(")
+                    .replaceAll("\\%29", ")")
+                    .replaceAll("\\%7E", "~");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return str;
+        }
+    }
+
+}

@@ -1,0 +1,41 @@
+//package gov.goias.config;
+//
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Profile;
+//import org.apache.commons.dbcp2.BasicDataSource;
+//import javax.sql.DataSource;
+//
+///**
+// * @author henrique-rh
+// * @since 23/03/15.
+// */
+//@Configuration
+//@Profile("homolog")
+//public class DataSourceConfigHomolog extends DataSourceConfig {
+///*
+//    @Bean
+//    public DataSource dataSource() {
+//        System.out.println("Configurado bean homolog");
+////        String jdbcUrl = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledesscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=SHARED)(SERVICE_NAME=orahom))))";
+// 				String jdbcUrl = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracletrscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORAPRD))))";
+//				String user = "HENRIQUE_RH";
+//        String password = "Ed761!";
+//        return getDefaultDataSource(jdbcUrl, user, password);
+//    }
+//*/
+//    @Bean
+//    public DataSource dataSource() {
+//        BasicDataSource dataSource = new BasicDataSource();
+//				String jdbcUrl = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracletrscan.intra.goias.gov.br)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORAPRD))))";
+//	//			String user = "HENRIQUE_RH";
+//		//		String password = "Ed761!";
+//			  String user = "ALLAN_CA";
+//				String password = "ferias2013";
+//				dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+//        dataSource.setUrl(jdbcUrl);
+//        dataSource.setUsername(user);
+//        dataSource.setPassword(password);
+//        return dataSource;
+//    }
+//}

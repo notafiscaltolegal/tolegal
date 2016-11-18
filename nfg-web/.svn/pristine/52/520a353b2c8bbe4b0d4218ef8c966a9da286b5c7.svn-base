@@ -1,0 +1,28 @@
+package gov.goias.mappers;
+
+import gov.goias.dtos.DTOPremiacao;
+
+import org.springframework.jdbc.core.RowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ * Created by bruno-cff on 11/06/2015.
+ */
+public class MapperDTOPremiacao implements RowMapper<DTOPremiacao> {
+
+    @Override
+    public DTOPremiacao mapRow(ResultSet resultSet, int i) throws SQLException{
+        DTOPremiacao dtoPremiacao = new DTOPremiacao();
+        dtoPremiacao.setSorteio(resultSet.getString("INFO_SORTEIO"));
+        dtoPremiacao.setNumeroBilhete(resultSet.getInt("NUMR_SEQUENCIAL_BILHETE"));
+        dtoPremiacao.setValor(resultSet.getInt("VALR_PREMIO"));
+        dtoPremiacao.setCodigoAgencia(resultSet.getString("CODG_AGENCIA"));
+        dtoPremiacao.setNomeBanco(resultSet.getString("NOME_BANCO"));
+        dtoPremiacao.setNumeroConta(resultSet.getInt("NUMR_CONTA_BANCARIA"));
+        dtoPremiacao.setDigito(resultSet.getString("NUMR_DIGITO_CONTA_BANCARIA"));
+        dtoPremiacao.setIdBilhetePremiado(resultSet.getInt("ID_PREMIO_BILHETE"));
+
+        return dtoPremiacao;
+    }
+}

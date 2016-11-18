@@ -1,0 +1,209 @@
+/* CSS com ajustes nas telas do PortalSEFAZ (temporário) */
+
+/* Definições Globais */
+
+* {
+    margin:0px;
+    padding:0px;
+}
+
+html,body {
+    height:100%;
+    font-family:Arial,Tahoma,Helvetica,Verdana;
+    overflow-y:auto;
+}
+
+
+a:link, a:visited {
+    text-decoration:none;
+    color:#666;
+    font-weight:bold;
+}
+
+a:active, a:hover {
+    text-decoration:none;
+    color:#0066FF;
+}
+
+/* Layout padrão (esqueleto) das telas */
+
+* html #caixaConteudo { height:100%	}
+
+#caixaConteudo {
+    width:100%;
+    position:relative;
+    margin:0 auto;
+    min-height:100%;
+}
+
+#caixaConteudoCabecalho {
+    width:100%;
+    height:50px;
+    background-image:url(../images/bg_topo_portal_seg.jpg);
+    background-position:top;
+    background-repeat:repeat-x;
+}
+
+#caixaConteudoCorpo {
+}
+
+#caixaConteudoRodape {
+    width:100%;
+    height:18px;
+    position:absolute;
+    bottom:0;
+    background-image:url(../images/bg_rodape_portal_seg.jpg);
+    background-position:center;
+    background-repeat:repeat-x;
+}
+
+#caixaConteudoRodape p {
+    line-height:18px;
+    font-size:10px;
+    text-align:center;
+    font-weight:bold;
+    color:#fff;
+}
+
+/* Definições do formulário de login (portal.jsp) */
+
+#caixaConteudoCorpoFormulario {
+    width:720px;
+    height:300px;
+    position:relative;
+    left:50%;
+    margin:50px 0px 0px -360px;
+    border:1px solid #999;
+}
+
+#caixaConteudoCorpoFormulario .FormTitulo {
+    text-indent:5px;
+    height:30px;
+    line-height:30px;
+}
+
+#caixaConteudoCorpoFormularioTexto {
+    width:700px;
+    position:relative;
+    top:-20px;
+    margin:0px 0px 10px 10px;
+    clear:both;
+}
+
+#caixaConteudoCorpoFormulario form {
+    margin:10px;
+}
+
+#caixaConteudoCorpoFormulario form label {
+    margin:0px 0px 0px 0px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+#caixaConteudoCorpoFormulario form .TextField {
+    width:183px;
+    height:17px;
+    margin:0px 0px 5px 0px;
+    padding:3px;
+}
+
+#caixaConteudoCorpoFormulario form .Button {
+    margin:5px 0px 0px 0px;
+    width:94px;
+    height:25px;
+    border:1px solid #aaa;
+}
+
+#formularioCampos {
+    float:left;
+}
+
+#formularioTeclado {
+    float:left;
+    position:relative;
+    top:6px;
+    left:20px;
+    margin:0px;
+    padding:0px;
+}
+
+/* Definições da listagem de sistemas */
+
+#caixaConteudoInfoUsuarioLogado {
+    width:100%;
+    line-height:25px;
+}
+
+#caixaConteudoInfoUsuarioLogado p {
+    font-size:11px;
+    text-indent:5px;
+}
+
+#caixaConteudoListagemSistemas {
+    width:100%;
+    height:auto;
+    border-top:1px solid #999;
+}
+
+#caixaConteudoListagemSistemasItem {
+    height:100px;
+    margin:10px 5px 0px 5px;
+}
+
+#caixaConteudoListagemSistemasItemLogo {
+    width:100px;
+    height:100px;
+    float:left;
+    background:url('/portalsefaz/imagens/logos/indisponivel.jpg') center;
+}
+
+#caixaConteudoListagemSistemasItemLogo a {
+    width:100px;
+    height:100px;
+    display:block;
+    background-color:#fff;
+}
+
+#caixaConteudoListagemSistemasItemLogo img {
+    width:100px;
+    height:100px;
+    border:0px;
+}
+
+#caixaConteudoListagemSistemasItemDescricao {
+    margin:25px 0px 0px 10px;
+    float:left;
+}
+
+#caixaConteudoListagemSistemasItemDescricao a {
+    line-height:25px;
+    font-size:14px;
+}
+
+#caixaConteudoListagemSistemasItemDescricao p {
+    line-height:25px;
+    font-size:12px;
+}
+
+/* Definições da página de erro */
+
+#caixaConteudoCorpoMensagemErro {
+    width:700px;
+    height:170px;
+    position:relative;
+    left:50%;
+    margin:50px 0px 0px -350px;
+    border:1px solid #999;
+}
+
+#caixaConteudoCorpoMensagemErro .FormTitulo {
+    text-indent:5px;
+    height:30px;
+    line-height:30px;
+}
+
+#caixaConteudoCorpoMensagemErro p {
+    margin:40px 5px 10px 5px;
+    line-height:20px;
+    text-align:center;
+}

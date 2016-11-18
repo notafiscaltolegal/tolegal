@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'misobold';
+    src: url('fonts/misobold.eot');
+    src: url('fonts/misobold.eot') format('embedded-opentype'),
+         url('fonts/misobold.woff2') format('woff2'),
+         url('fonts/misobold.woff') format('woff'),
+         url('fonts/misobold.ttf') format('truetype'),
+         url('fonts/misobold.svg#misobold') format('svg');
+}

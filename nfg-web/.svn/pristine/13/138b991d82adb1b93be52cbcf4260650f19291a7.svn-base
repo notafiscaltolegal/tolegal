@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/site2 :: site2">
+<div layout:fragment="styles">
+</div>
+
+<div layout:fragment="content">
+    <div class="centralizado container col-md-offset-4 col-md-4"  style="min-height: 400px">
+        <h3>Cadastro efetuado com sucesso.</h3>
+        <p class='text-center' style="line-height: 21px !important;">Parabéns!!! Você já está participando do Nota Fiscal Goiana.</p>
+        <p class='text-center' style="line-height: 21px !important;">Não se esqueça de solicitar a inclusão do seu CPF na Nota/Cupom Fiscal.</p>
+        <p class='text-center' style="line-height: 21px !important;">Dentro de 15 dias você receberá uma senha para acesso à sua área restrita no site do Nota Fiscal Goiana e poderá consultar todas as funcionalidades do programa.</p>
+        <!--/*/
+        <p class='text-justify' style="line-height: 21px !important;">&#8226; O cadastro realizado será homologado pela Secretaria da Fazenda através de suas bases de dados e as da Receita Federal;</p>
+        <p class='text-justify' style='line-height: 21px !important; margin-top: 10px !important;'>&#8226; O cidadão deverá aguardar o recebimento de e-mail com a confirmação do cadastro contendo senha para acesso à sua área restrita no site do Nota Fiscal Goiana;</p>
+        <p class='text-justify' style='line-height: 21px !important; margin-top: 10px !important;'>&#8226; Depois do recebimento de e-mail com a validação do cadastro, o cidadão deverá acessar o site do programa e, no menu "Cidadão", informar seu CPF e a senha enviada anteriormente para o seu e-mail. Após realizado o login, deverá complementar as informações cadastrais solicitadas para ter acesso completo às funcionalidades do programa (Perfil, Consulta Notas, Placar, Pontuação, Bilhetes, Sorteio e Resgate de Prêmios);</p>
+        <p class='text-justify' style='line-height: 21px !important; margin-top: 10px !important;'>Nota 1: O cidadão somente estará apto a concorrer aos prêmios se os dados informados forem validados.</p>
+        <p class='text-justify' style='line-height: 21px !important; margin-top: 10px !important;'>Nota 2: A inserção das notas fiscais emitidas com CPF serão efetivadas diretamente pelas empresas. </p>
+        /*/-->
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+</div>
+</html>

@@ -1,0 +1,11 @@
+gen.service=sefazhomolog.intra.goias.gov.br
+recaptcha.key=6LdMYQcTAAAAAFK3uN-4vG1HYSmt6ypsTER89clW
+
+nfg.host=sefazhomolog.intra.goias.gov.br
+
+batch.user=admin
+batch.password=123456
+
+batch.baseUrl=http://sefazhomolog.intra.goias.gov.br/nfg-batch/
+#urlMenu=http://www.projetos.goias.gov.br/notafiscalgoiana2015/menu/menuJson
+urlHome=http://sefazhomolog.intra.goias.gov.br/nfg
