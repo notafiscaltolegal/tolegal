@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/layout :: template">
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+    <div  id="panelBilhetesPremiados">
+        <div class="container-fluid " >
+            <div class="row text-center">
+                <h1>Bilhetes Premiados</h1>
+                <br/>
+            </div>
+
+            <form id="bilhete-form" name="bilhete" class="form-inline text-center">
+
+                <div class="form-group">
+                    <label>Nr. Sorteio:</label>
+                    <select class="form-control" name="numSorteio" id="numSorteio">
+                        <option value="">Selecione</option>
+                        <option th:each="sorteio : ${listaSorteios}" th:value="${sorteio.id}" th:text="${sorteio.informacao}"></option>
+                    </select>
+                    &nbsp;
+                </div>
+
+                <div class="form-group">
+                    <label>Importar arquivo do resultado:</label>
+                    <a href="#" id="importarTxtResultado"><img src="/nfg-web/images/edit-small.png" width="20px;"></a>
+                    &nbsp;
+                </div>
+
+                <div class="form-group">
+                    <label>Valor do Pr&#234;mio:</label>
+                    <select  class="form-control" name="premio" id="premio" disabled>
+                        <option value="" >Selecione um Sorteio</option>
+                    </select>
+                    &nbsp;
+                </div>
+
+                <div class="form-group">
+                    <label>NÂº Bilhete:</label>
+                    <input class="form-control" name="numBilhete" id="numBilhete" placeholder="NÂº Bilhete">
+                    &nbsp;
+                </div>
+
+                <div class="form-group">
+                    <label>N&#250;mero do pr&#234;mio:</label>
+                    <input class="form-control" name="numeroPremio" id="numeroPremio" placeholder="N&#250;mero">
+                    &nbsp;
+                    &nbsp;
+                </div>
+
+                <button type="submit" class="btn btn-salvar btn-primary">Incluir</button>
+            </form>
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+            <div id="containerBilhetesPremiados">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <td>Nr. SORTEIO</td>
+                            <td>Nr. BILHETE</td>
+                            <td>Nr. PR&#234;MIO</td>
+                            <td>VALOR DO PR&#234;MIO</td>
+                            <td>Nr. CPF</td>
+                            <td>NOME DA PESSOA</td>
+                            <td>MUNIC&#205;PIO</td>
+                            <td>UF</td>
+                            <td>BAIRRO</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Padrao-->
+    <div class="modal fade" id="modalHome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true">
+        <div class="modal-dialog centralizado">
+            <div class="modal-content">
+                <div class="modal-header" style="
+                background: #02397a; color:white;
+                    /*background: #fcf8e3;*/
+                    /*color:#8a6d3b;*/
+                    border-top-right-radius: 5px;
+                    border-top-left-radius: 5px; "
+                        >
+                    <button type="button" style="color:white;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalHomeTitle">...</h4>
+                </div>
+                <div class="centralizado" id="messagesContainerModal">
+                    <div th:if="${not #strings.isEmpty(errorModal)}" class="alert alert-danger" role="alert" th:text="${errorModal}" ></div>
+                </div>
+                <div class="modal-body" id="modalHomeBody" >
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/bilhete.js}" charset="utf-8"></script>
+    <script th:src="@{/js/paginate.js}" charset="utf-8"></script>
+    <script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>
+    <script th:src="@{/js/dialogs.js}" charset="utf-8"></script>
+
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Bilhete( );
+
+    </script>
+</div>
+
+</html>

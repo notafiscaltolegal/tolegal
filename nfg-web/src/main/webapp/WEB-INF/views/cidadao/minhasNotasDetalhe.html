@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+    <div class="row" id="divMinhasNotasEmDetalh" style="overflow-x:auto">
+        <form id="formMinhasNotasEmDetalhe" class="form-horizontal ">
+            <input  type="hidden" name="cpfFiltroDetalhe" id="cpfFiltroDetalhe" th:value="${cidadao.genPessoaFisica.cpf}">
+            <!--<div class="col-sm-1 "></div>-->
+            <div class="col-sm-4 ">
+                Data de Emiss&atilde;o de: <br/><br/>
+                <div class="input-group">
+                    <input  id="referenciaInicial" type="text" class="form-control datepicker " name="referenciaInicial" placeholder="Ex: 01/01/2017" data-toggle="tooltip" data-placement="top" >
+                    <span class="input-group-addon glyphicon glyphicon-calendar  "></span>
+                </div>
+            </div>
+
+            <div class="col-sm-4 ">
+                At&eacute;: <br/><br/>
+                <div class="input-group">
+                    <input  id="referenciaFinal" type="text" class="form-control datepicker " name="referenciaFinal" placeholder="Ex: 01/01/2017" data-toggle="tooltip" data-placement="top" >
+                    <span class="input-group-addon glyphicon glyphicon-calendar  "></span>
+                </div>
+            </div>
+
+            <div class="col-sm-1 ">
+                <br/>
+                <br/>
+                <button class="btn btn-default btn-submitform" id="filtrarMinhasNotasEmDetalhe" type="submit">Filtrar</button>
+            </div>
+
+            <div align="left" class="col-sm-2 ">
+                <br/>
+                <br/>
+                <a class="btn btn-default btn-danger limparFiltro" href="#" >Limpar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="row"><br/>
+        <br/>&nbsp;&nbsp;
+        Notas importadas:
+    </div>
+
+
+
+    <div class="panel-body dadosMinhasNotas"  style="overflow-x:auto">
+        <div id="containerMinhasNotasEmDetalhe"></div>
+    </div>
+
+    <div class="row">&nbsp;</div>
+
+    <div class="row" align="left">
+        &nbsp;
+        &nbsp;
+        Aten&ccedil;&atilde;o: 
+        O prazo para importa&ccedil;&atilde;o das notas &eacute; at&eacute; o &uacute;ltimo dia do m&ecirc;s posterior ao da compra.
+    </div>
+
+</body>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <!--<script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>-->
+    <!--<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>-->
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+            nomeTela: [[${'minhasNotasDetalhe'}]]
+        });
+    </script>
+</div>
+</html>

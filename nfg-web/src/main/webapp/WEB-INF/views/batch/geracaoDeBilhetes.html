@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/admin :: template">
+<!--layout:replace="templates/site :: site">-->
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="page-header col-lg-6 col-lg-offset-3">
+        <h1 id="forms">GERAR BILHETES <span id="status"></span></h1>
+    </div>
+    <div class="col-lg-6 col-lg-offset-3 well bs-component">
+        <div class="form-group">
+            <label class="col-lg-6 control-label">Selecione o Sorteio:</label>
+            <div class="col-lg-6">
+                <select class="form-control"  name="selectSorteios" id="selectSorteios" title="Selecione o sorteio.">
+                    <option >Selecione</option>
+                    <option th:each="s : ${sorteios}" th:value="${s.id}" th:text="${s.informacao}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div id="dadosSorteioSelecionado" style="display: none;">
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Data de Extração da Loteria Federal:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="textDtLoteria">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Data de Realização do Sorteio:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="dtSorteio">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">N&#250;mero de Extra&#231;&#227;o da Loteria Federal:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="textNumeroLoteria">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Fator convers&#227;o Ponto X Bilhete:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="fatorConversaoPontoBilhete">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">N&#250;mero m&#225;ximo de pontos de documentos fiscais:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="numrMaximoPontosDocsFiscais">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Data limite para cadastro de pessoas:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="dataLimiteCadastroPessoa">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Documentos pontuados at&#233; o dia:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="textFimDataRegra">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Status:</label>
+                <div class="col-lg-6">
+                    <input disabled type="text" class="form-control empty" id="statusSorteio">
+                </div>
+            </div>
+            <div class="form-group" id="form-password">
+                <label class="col-lg-6 control-label">Confirme sua senha:</label>
+                <div class="col-lg-3">
+                    <input type="password" class="form-control empty" id="password" name="password" >
+                </div>
+                <div class="col-lg-3">
+                    <a class="btn btn-primary" id="btnGerarBilhetes">Gerar Bilhetes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/batch.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Batch('bilhetes');
+    </script>
+</div>
+
+</html>

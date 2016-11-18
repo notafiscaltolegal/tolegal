@@ -1,0 +1,99 @@
+<style type="text/css">
+    .box-login-form .login-contador, .box-login-form .login-contribuinte {
+        height: 125px;
+    }
+    .box-login-form .alert{
+        color: #a94442;
+        text-align: center;
+    }
+
+    .box-login-form .row {
+        margin-bottom: 5px !important;
+    }
+    .box-login-form .row p{
+        font: 12px/1em Arial;
+        font-weight: bold;
+    }
+
+    .box-login-form .row img{
+        display: block;
+        margin: 0 auto;
+        padding: 12px;
+    }
+
+    .box-login-form .row .radio{
+        padding: 5px;
+        float: left;
+    }
+
+    .box-login-form .row .radio label{
+        display: inline;
+        clear: none;
+    }
+
+    .box-login-form .row .radio input{
+        width: 15px !important;
+        height: 15px !important;
+        display: inline !important;
+    }
+
+</style>
+<form class="box-login-form form-login-nfg" method="POST" action="https://sefazhomolog.intra.goias.gov.br/nfg-web/contribuinte/cadastro" id="login-form">
+    <input type="hidden" name="p" value="">
+    <div class="row alert alert-danger" role="alert"></div>
+    <div class="login-contador" style="display: none;">
+        <div class="row">
+            <label for="field-email">Matr&iacute;cula</label>
+            <input type="text" name="login" id="field-email">
+        </div>
+
+        <div class="row">
+            <label for="field-password">Senha:</label>
+            <input type="password" name="senha" id="field-password">
+        </div>
+    </div>
+    <div class="login-contribuinte">
+        <div class="row">
+            <p align="center">O login ser&aacute; feito atrav&eacute;s do certificado digital</p>
+            <img th:src="${endereco}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="radio"><label><input checked="" name="tipo" type="radio" value="contribuinte"> Contribuinte</label></div>
+        <div class="radio"><label><input name="tipo" type="radio" value="contador"> Contador</label></div>
+    </div>
+
+    <div class="submit-button"><button type="submit"><span>Acessar</span></button></div>
+</form>
+
+<script type="text/javascript">
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&amp;]' + name + '=([^&]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
+    try{
+        $("form.form-login-nfg .alert").html(decodeURIComponent($.urlParam('errorMessage')).replace(/\+/g, ' '));
+    } catch(err){}
+
+
+    $("#login-form").submit(function(){
+        $("input[name='p']").val(location.href);
+    });
+
+    $("input[name ='tipo']").click(function(){
+        if($(this).val() == "contador"){
+            $(".form-login-nfg").attr("action", "http://sefazhomolog.intra.goias.gov.br/nfg-web/login-contador");
+            $(".login-contribuinte").hide();
+            $(".login-contador").fadeIn(300);
+            $("#field-email").attr("required", "required");
+            $("#field-password").attr("required", "required");
+        } else{
+            $(".form-login-nfg").attr("action", "https://sefazhomolog.intra.goias.gov.br/nfg-web/contribuinte/cadastro");
+            $(".login-contador").hide();
+            $(".login-contribuinte").fadeIn(300);
+            $("#field-email").removeAttr("required");
+            $("#field-password").removeAttr("required");
+        }
+    });
+</script>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/site2SemFrameLogin :: site2SemFrameLogin">
+
+<div layout:fragment="content">
+    <div class="centralizado">
+
+    </div>
+    <div class="clearthis">&nbsp;</div>
+    <div class="centralizado">
+        <h3>Login Contador</h3>
+        <form role="form" class="form-horizontal" th:action="@{/login-contador}">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-6 control-label">Matr&iacute;cula</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="login" class="form-control" id="inputEmail3" placeholder="Matr&iacute;cula">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="inputSenhal3" class="col-sm-6 control-label">Senha</label>
+                        <div class="col-sm-6">
+                            <input type="password" name="senha" class="form-control" id="inputSenhal3" placeholder="Senha">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">&nbsp;</div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+
+    </script>
+</div>
+</html>

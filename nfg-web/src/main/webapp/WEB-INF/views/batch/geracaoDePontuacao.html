@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/admin :: template">
+<!--layout:replace="templates/site :: site">-->
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="page-header col-lg-6 col-lg-offset-3">
+        <h1 id="forms">GERAR PONTUAÇÃO <span id="status"></span></h1>
+    </div>
+    <div class="col-lg-6 col-lg-offset-3 well bs-component">
+        <div class="form-group" id="form-regra">
+            <label class="col-lg-5 control-label">Selecione a Regra de Pontuação:</label>
+            <div class="col-lg-7">
+                <select class="form-control" name="selectRegraPontuacao" id="selectRegraPontuacao">
+                    <option >Selecione</option>
+                    <option th:each="s : ${regras}" th:value="${s.id}" th:text="${s.nome}"> </option>
+                </select>
+            </div>
+        </div>
+        <div id="dadosRegraSelecionada" style="display: none">
+            <div class="form-group">
+                <label class="col-lg-5 control-label">Valor Fator Conversao:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="valorFatorConversao">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-5 control-label">N&#250;mero m&#225;ximo de pontua&#231;&#227;o por documento:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="numrMaximoPontoDocumento">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-5 control-label">N&#250;mero m&#225;ximo de documentos por estabelecimento:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="numrMaximoEstabRef">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-5 control-label">M&#225;ximo de documentos:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="numrMaximoDocRef">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-5 control-label">M&#225;ximo de Pontos:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="numrMaximoPontoRef">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-5 control-label">Data inicio regra:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="dataInicioRegra">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-5 control-label">Data fim regra:</label>
+                <div class="col-lg-7">
+                    <input disabled type="text" class="form-control empty" id="dataFimRegra">
+                </div>
+            </div>
+            <div class="form-group" id="form-data-limite">
+                <label class="col-lg-5 control-label">Data limite da pontua&#231;&#227;o por documento fiscal:</label>
+                <div class="col-lg-7">
+                    <input type="text" class="form-control empty datepicker" id="dataLimitePontuacao" placeholder="    /    /">
+                </div>
+            </div>
+            <div class="form-group" id="form-password">
+                <label class="col-lg-5 control-label">Confirme sua senha:</label>
+                <div class="col-lg-3">
+                    <input type="password" class="form-control empty" id="password" name="password" >
+                </div>
+                <div class="col-lg-4">
+                    <a class="btn btn-primary" id="btnGerarPontuacao">Gerar Pontuacao</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/plugins/moment-with-locales.min.js}"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/batch.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Batch('pontuacao');
+    </script>
+</div>
+
+</html>

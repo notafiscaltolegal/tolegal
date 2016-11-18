@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+
+<form id="formPerfilCidadao" name="formPerfilCidadao" class="form-horizontal " >
+    <div class="showDadosDaBase">
+
+        <input type="hidden" id="cpfPerfil" th:value="${cidadao.genPessoaFisica.cpf}"/>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-4 text-right control-label">E-mail:</label>
+                <div class="col-sm-6">
+                    <input type="text" id="emailCidadaoPerfil" th:value="${cidadao.emailPreCadastro}" name="emailCidadao" class="form-control" title="Atualize seu e-mail. O campo E-mail n&#225;o é obrigatório, mas cadastros sem e-mail só conseguirão alterar sua senha do sistema em uma das unidades de atendimento do Vapt Vupt.">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-4 text-right control-label">Telefone:</label>
+                <div class="col-sm-6">
+                    <input type="text" id="telCidadaoPerfil"  th:value="${cidadao.telefonePreCadastro}" name="telCidadao" class="form-control inputTelefone" title="Insira ou atualize seu telefone">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <!--<div class="col-sm-1"></div>-->
+            <div class="panel panel-default col-sm-12" style="background: #f5f5f5; " id="enderecoPanel">
+                <div class="panel-body ">
+                    <div  id="inputsEndereco" >
+                        <input type="hidden" id="enderecoHomolog" th:value="${enderecoHomolog}">
+
+                        <div id="labelEndHomolog"  style="display: none" align="center">
+                            <label style="color: #8a6d3b;" >Existe registro no Cadastro de Contribuintes do Estado (contribuinte, produtor rural, quadro societ&aacute;rio ou contador) para o CPF em quest&atilde;o, o que n&atilde;o permite essa atualiza&ccedil;&atilde;o pelo site. Para corre&ccedil;&atilde;o, procure uma unidade fazend&aacute;ria.</label>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3 text-right control-label">CEP:</label>
+                            <div class="col-sm-9">
+                                <!--<input type="text" id="cepCidadao" name="cepCidadao" th:value="${endereco.cep}" class="form-control inputCep" title="Insira ou atualize seu CEP.">-->
+                                <input type="text" id="cepCidadao" name="cepCidadao" th:value="${cep}" class="form-control inputCep" title="Insira ou atualize seu CEP.">
+                            </div>
+                        </div>
+
+                        <div class="row">&nbsp;</div>
+
+                        <div class="row">
+                            <label class="col-sm-3 text-right control-label">Logradouro:</label>
+                            
+                            <div class="col-sm-9">
+                                <input type="text"  id="logradouroCidadao" th:value="${nomeLogradouro}" name="logradouroCidadao" class="form-control" title="Insira ou atualize seu Logradouro.">
+                            </div>
+                        </div>
+                        <!--<div class="row">&nbsp;</div>-->
+                        <div class="row">
+                            <label class="col-sm-3 text-right control-label">N&uacute;mero:</label>
+                            <div class="col-sm-3">
+                                <input type="text"  id="numeroCidadao"   th:value="${numero}" name="numeroCidadao" class="form-control" title="Insira ou atualize seu N&uacute;mero.">
+                            </div>
+                            <label class="col-sm-2 text-right control-label">Bairro:</label>
+                            <div class="col-sm-4">
+                                <input type="text"  id="bairroCidadao" th:value="${nomeBairro}"  name="bairroCidadao" class="form-control" title="Insira ou atualize seu Bairro.">
+                            </div>
+                        </div>
+                        <!--<div class="row">&nbsp;</div>-->
+                        <div class="row">
+                            <label class="col-sm-3 text-right control-label">Complemento:</label>
+                            <div class="col-sm-9">
+                                <input type="text"  id="complementoCidadao" maxlength="80" size="80" th:value="${complemento}" name="complementoCidadao" class="form-control" title="Insira ou atualize seu Complemento.">
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">
+                            <label class="col-sm-3 text-right control-label">UF:</label>
+                            <div class="col-sm-2">
+                                <input type="hidden" id="nomeUf" th:value="${nomeUf}">
+                                <select  class="form-control no-padding combo-endereco" name="selectUf" id="selectUf" title="Selecione seu Estado.">
+                                    <option th:each="doc : ${ufs}" th:value="${doc.codgUf}" th:text="${doc.codgUf}"
+                                            class="opcao-tipo-documento"></option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 text-right control-label">Cidade:</label>
+                            <div class="col-sm-5" id="divUfMunicipio">
+                                <input type="hidden" id="nomeMunicipio" th:value="${nomeMunicipio}">
+                                <select  class="form-control no-padding combo-endereco" name="selectMunicipio" id="selectMunicipio" title="Selecione sua Cidade.">
+                                    <option class="opcao-tipo-documento">Selecione</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="col-sm-3">&nbsp;</div>
+            <div class="col-sm-4" >
+                <input type="checkbox" id="checkRecebeEmail" th:value="${'S'}" th:checked="${recebeEmail}"/>
+                Recebe e-mail?
+            </div>
+            <div class="col-sm-4" >
+                <input type="checkbox" id="checkParticipaSorteio" th:value="${'S'}" th:checked="${participaSorteio}"/>
+                Participa Sorteio?
+            </div>
+
+            <div class="col-sm-1">&nbsp;</div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+
+        <div class="row" align="center">
+            <button id="atualizarPerfil"  class="btn btn-primary  form-inline btn-submitform" type="button"  >&nbsp; Atualizar &nbsp;</button>
+            <!--&nbsp;-->
+            <!--&nbsp;-->
+            <!--<a class="btn btn-danger"  th:href="@{/cidadao/efetuarlogout}" >&nbsp;Excluir Meu Cadastro&nbsp;</a>-->
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+    </div>
+</form>
+
+
+
+</body>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+        });
+    </script>
+</div>
+</html>
