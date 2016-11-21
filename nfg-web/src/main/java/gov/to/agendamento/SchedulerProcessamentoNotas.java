@@ -24,6 +24,7 @@ import gov.to.persistencia.AbstractModel;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
 import gov.to.service.NotaFiscalToLegalService;
+import gov.to.service.PontuacaoToLegalService;
 
 @Singleton
 @Startup
@@ -52,6 +53,9 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 	
 	@EJB
 	private NotaFiscalToLegalService notaFiscalService;
+	
+	@EJB
+	private PontuacaoToLegalService pontuacaoService;
 
 	@PostConstruct
 	public void inicio(){
@@ -68,6 +72,7 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 		jobDataMap.put(ProcessamentoNotas.NOTA_FISCAL_PERSIST, notaFiscalPersistence);
 		jobDataMap.put(ProcessamentoNotas.PONT_PERSIST, pontuacaoPersistence);
 		jobDataMap.put(ProcessamentoNotas.NOTA_FISCAL_SERVICE, notaFiscalService);
+		jobDataMap.put(ProcessamentoNotas.PONTUACAO_SERVICE, pontuacaoService);
 		
 		Trigger trigger = TriggerBuilder
 			.newTrigger()

@@ -1,5 +1,6 @@
 package gov.to.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,10 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 				.add(Restrictions.eq("notaFiscalToLegal.cpf", cpf)) 
 				.add(Restrictions.eq("sorteioToLegal.id", idSorteio.longValue())) 
 				.uniqueResult();
+		
+		if (soma == null){
+			soma = BigInteger.ZERO.longValue();
+		}
 		
 		return soma.intValue() + totalBonus(cpf, idSorteio);
 	}

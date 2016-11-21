@@ -8,7 +8,7 @@ public class FiltroPontuacaoBonusToLegal implements Filtro{
 	@EntityProperty("cpf")
 	private String cpf;
 	
-	@EntityProperty("situacaoBonusPontuacao")
+	@EntityProperty(pesquisaExata=true,value="situacaoBonusPontuacao")
 	private SituacaoBonusPontuacao situacaoBonus;
 	
 	public String getCpf() {
