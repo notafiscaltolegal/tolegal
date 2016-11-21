@@ -453,6 +453,13 @@ Cidadao.prototype.cadastraCidadao = function( ){
             data,
             'POST',
             function(response) {
+        		
+        		if (response.urlRedirect != null){
+        			nfgMensagens.show(ALERT_TYPES.SUCCESS, "Ative seu cadastro no e-mail.",true);
+            		window.location.replace(enderecoSite+response.urlRedirect);
+            		nfgMensagens.show(ALERT_TYPES.SUCCESS, "Ative seu cadastro no e-mail.",true);
+        		}
+        		
             }
         );
 
@@ -769,9 +776,6 @@ Cidadao.prototype.salvaNovaSenha = function( ){
         });
     });
 }
-
-
-
 
 Cidadao.prototype.listarReclamacoes = function() {
     var me = this;
