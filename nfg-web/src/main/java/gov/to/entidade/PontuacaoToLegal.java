@@ -36,7 +36,7 @@ public class PontuacaoToLegal extends EntidadeBasica{
 	private Integer qntPonto;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_NOTA_LEGAL", referencedColumnName="id_nota_legal")
+	@JoinColumn(name="ID_NOTA_LEGAL",  referencedColumnName="id_nota_legal" )
 	private NotaFiscalToLegal notaFiscalToLegal;
 	
 	@ManyToOne
