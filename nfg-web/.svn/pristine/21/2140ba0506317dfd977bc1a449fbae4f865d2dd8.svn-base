@@ -1,4 +1,0 @@
-#messagesContainer {
-  position: absolute;
-  width: 100%;
-}
