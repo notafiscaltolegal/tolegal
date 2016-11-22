@@ -1029,14 +1029,10 @@ Cidadao.prototype.ativarCaptcha = function(div,container){
         ,lang: 'pt'
     };
 
-    //DESENV
-    //Recaptcha.create("6LctNQcTAAAAAImLbhptA7DIUdTTOVSQgtOIV9bV", container, RecaptchaOptions);
 
-    //HOMOLOG
-    //Recaptcha.create("6LdMYQcTAAAAAEO8OSOXJ6Za7povhEaYGN04Oq3d", container, RecaptchaOptions);
 
     //PROD
-    Recaptcha.create("6Ley5AQTAAAAAAns5fVVnr54d3408TetBXMXF-pD", container, RecaptchaOptions);
+    Recaptcha.create("6LdalwwUAAAAAGv62TpI91iKF-oOWij_7m54SlSQ", container, RecaptchaOptions);
 
 }
 
