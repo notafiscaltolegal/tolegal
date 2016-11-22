@@ -9,8 +9,10 @@ import javax.ejb.Stateless;
 import gov.goias.entidades.RegraSorteio;
 import gov.goias.service.SorteioCidadaoDTO;
 import gov.to.entidade.SorteioToLegal;
+import gov.to.filtro.FiltroSorteioToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
+import gov.to.util.SorteioProperties;
 
 @Stateless
 public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> implements SorteioToLegalService{
@@ -89,5 +91,17 @@ public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> i
 	@Override
 	public RegraSorteio sorteioPorId(Integer idSorteio) {
 		return regraSorteioPorIdSorteioToLegal(idSorteio);
+	}
+
+	@Override
+	public SorteioToLegal sorteioAtual() {
+
+		int numSorteio = SorteioProperties.getValue(SorteioProperties.NUMERO_SORTEIO);
+		
+		FiltroSorteioToLegal filtro = new FiltroSorteioToLegal();
+		
+		filtro.setNumeroSorteio(numSorteio);
+		
+		return primeiroRegistroPorFiltro(filtro, SorteioToLegal.class);
 	}
 }

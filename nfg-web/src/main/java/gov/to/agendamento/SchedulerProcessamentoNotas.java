@@ -23,8 +23,10 @@ import gov.to.entidade.SorteioToLegal;
 import gov.to.persistencia.AbstractModel;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
+import gov.to.service.BilheteToLegalService;
 import gov.to.service.NotaFiscalToLegalService;
 import gov.to.service.PontuacaoToLegalService;
+import gov.to.service.SorteioToLegalService;
 
 @Singleton
 @Startup
@@ -56,6 +58,12 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 	
 	@EJB
 	private PontuacaoToLegalService pontuacaoService;
+	
+	@EJB
+	private SorteioToLegalService sorteioToLegalService;
+	
+	@EJB
+	private BilheteToLegalService bilheteToLegalService;
 
 	@PostConstruct
 	public void inicio(){
@@ -73,12 +81,15 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 		jobDataMap.put(ProcessamentoNotas.PONT_PERSIST, pontuacaoPersistence);
 		jobDataMap.put(ProcessamentoNotas.NOTA_FISCAL_SERVICE, notaFiscalService);
 		jobDataMap.put(ProcessamentoNotas.PONTUACAO_SERVICE, pontuacaoService);
+		jobDataMap.put(ProcessamentoNotas.PERSISTENCE_PONTUACAO_BONUS, genericPontuacaoPersistence);
+		jobDataMap.put(ProcessamentoNotas.SORTEIO_SERVICE, sorteioToLegalService);
+		jobDataMap.put(ProcessamentoNotas.BILHETE_SERVICE, bilheteToLegalService);
 		
 		Trigger trigger = TriggerBuilder
 			.newTrigger()
 			.withSchedule(
 				SimpleScheduleBuilder.simpleSchedule()
-					.withIntervalInSeconds(60).repeatForever())
+					.withIntervalInSeconds(30).repeatForever())
 			.build();
 		
 		Scheduler scheduler;

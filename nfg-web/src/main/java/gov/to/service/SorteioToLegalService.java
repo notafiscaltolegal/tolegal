@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import gov.goias.entidades.RegraSorteio;
 import gov.goias.service.SorteioCidadaoDTO;
+import gov.to.entidade.SorteioToLegal;
 
 /**
  * 
@@ -23,5 +24,7 @@ public interface SorteioToLegalService {
 	Integer pontuacaoSemSorteio(Integer id);
 
 	RegraSorteio sorteioPorId(Integer idSorteio);
+
+	SorteioToLegal sorteioAtual();
 
 }

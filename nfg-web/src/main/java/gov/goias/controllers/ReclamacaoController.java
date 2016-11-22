@@ -100,22 +100,23 @@ public class ReclamacaoController extends BaseController{
         Map<String, Object> resposta = new HashMap<String, Object>();
         Map<String, Object> pagination = new HashMap<String, Object>();
 
-        PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoPorCNPJ(numeroCnpj, max, page);
-        List<DocumentoFiscalReclamado> reclamacoes = paginacaoDocumentoReclamado.getList();
+//        PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoPorCNPJ(numeroCnpj, max, page);
+//        List<DocumentoFiscalReclamado> reclamacoes = paginacaoDocumentoReclamado.getList();
         List<DocumentoFiscalReclamado> listDocumentos = new ArrayList<>();
 
-        for(DocumentoFiscalReclamado reclamacao : reclamacoes){
-            List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CONTRIBUINTE, reclamacao);
-            if(statusDisponiveis != null && statusDisponiveis.size() > 0){
-               reclamacao.setDisableRadioBtn("");
-               listDocumentos.add(reclamacao);
-            }else{
-                reclamacao.setDisableRadioBtn("disabled");
-                listDocumentos.add(reclamacao);
-            }
-        }
+//        for(DocumentoFiscalReclamado reclamacao : reclamacoes){
+//            List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CONTRIBUINTE, reclamacao);
+//            if(statusDisponiveis != null && statusDisponiveis.size() > 0){
+//               reclamacao.setDisableRadioBtn("");
+//               listDocumentos.add(reclamacao);
+//            }else{
+//                reclamacao.setDisableRadioBtn("disabled");
+//                listDocumentos.add(reclamacao);
+//            }
+//        }
 
-        pagination.put("total", paginacaoDocumentoReclamado.getCount());
+//        pagination.put("total", paginacaoDocumentoReclamado.getCount());
+        pagination.put("total", 0);
         pagination.put("page", ++page);
         pagination.put("max", max);
         resposta.put("listDocumentos", listDocumentos);

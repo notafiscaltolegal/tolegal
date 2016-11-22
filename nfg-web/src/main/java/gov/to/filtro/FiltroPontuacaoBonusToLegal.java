@@ -1,6 +1,6 @@
 package gov.to.filtro;
 
-import gov.to.dominio.SituacaoBonusPontuacao;
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.persistencia.EntityProperty;
 
 public class FiltroPontuacaoBonusToLegal implements Filtro{
@@ -8,8 +8,11 @@ public class FiltroPontuacaoBonusToLegal implements Filtro{
 	@EntityProperty("cpf")
 	private String cpf;
 	
-	@EntityProperty(pesquisaExata=true,value="situacaoBonusPontuacao")
-	private SituacaoBonusPontuacao situacaoBonus;
+	@EntityProperty(pesquisaExata=true,value="situacaoPontuacaoNota")
+	private SituacaoPontuacaoNota situacaoPontuacaoNota;
+	
+	@EntityProperty("sorteio.id")
+	private Long idSorteio;
 	
 	public String getCpf() {
 		return cpf;
@@ -19,11 +22,19 @@ public class FiltroPontuacaoBonusToLegal implements Filtro{
 		this.cpf = cpf;
 	}
 
-	public SituacaoBonusPontuacao getSituacaoBonus() {
-		return situacaoBonus;
+	public SituacaoPontuacaoNota getSituacaoPontuacaoNota() {
+		return situacaoPontuacaoNota;
 	}
 
-	public void setSituacaoBonus(SituacaoBonusPontuacao situacaoBonus) {
-		this.situacaoBonus = situacaoBonus;
+	public void setSituacaoPontuacaoNota(SituacaoPontuacaoNota situacaoPontuacaoNota) {
+		this.situacaoPontuacaoNota = situacaoPontuacaoNota;
+	}
+
+	public Long getIdSorteio() {
+		return idSorteio;
+	}
+
+	public void setIdSorteio(Long idSorteio) {
+		this.idSorteio = idSorteio;
 	}
 }

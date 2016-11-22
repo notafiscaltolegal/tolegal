@@ -13,7 +13,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import gov.to.dominio.SituacaoBonusPontuacao;
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.filtro.FiltroPontuacaoBonusToLegal;
@@ -65,8 +65,12 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 		Long soma = (Long) criteria
 				.setProjection(Projections.sum("qntPonto"))
 				.add(Restrictions.eq("cpf", cpf)) 
-				.add(Restrictions.eq("situacaoBonusPontuacao", SituacaoBonusPontuacao.ATIVO))
+				.add(Restrictions.eq("situacaoPontuacaoNota", SituacaoPontuacaoNota.PONTUADO))
 				.uniqueResult();
+		
+		if (soma == null){
+			soma = BigInteger.ZERO.longValue();
+		}
 		
 		return soma.intValue();
 	}
@@ -83,6 +87,10 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 				.add(Restrictions.eq("notaFiscalToLegal.cpf", cpf)) 
 				.add(Restrictions.eq("sorteioToLegal.id", idSorteio.longValue())) 
 				.uniqueResult();
+		
+		if (soma == null){
+			soma = BigInteger.ZERO.longValue();
+		}
 		
 		return soma.intValue();
 	}
@@ -132,7 +140,7 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
         	
             Map<String, Object> mapResults = new HashMap<String, Object>();
             
-            mapResults.put("data", pont.getDataPontuacaoFormat());
+            mapResults.put("data", pont.getDataPontuacao());
             mapResults.put("descricao",pont.getDescricao());
             mapResults.put("qtdePontos",pont.getQntPonto());
             

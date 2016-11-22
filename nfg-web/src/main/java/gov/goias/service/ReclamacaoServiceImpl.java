@@ -19,10 +19,11 @@ import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 @Service
 public class ReclamacaoServiceImpl implements ReclamacaoService {
 
+	//TODO Reclamação cidadão
 	@Override
 	public PaginacaoDTO<DocumentoFiscalReclamado> findReclamacoesDoCidadao(PessoaParticipante cidadao, Integer page, Integer max) {
 		
-		PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDTO = getPaginacaoDocumentoFiscalReclamado();
+		PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDTO = new PaginacaoDTO<>();
 		
 		return paginacaoDTO;
 	}

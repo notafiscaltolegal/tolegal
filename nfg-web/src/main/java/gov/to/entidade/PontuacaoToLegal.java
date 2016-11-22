@@ -70,26 +70,9 @@ public class PontuacaoToLegal extends EntidadeBasica{
 				
 			}else if (notaFiscalToLegal.getValor() > VALOR_MINIMO_PONTUACAO_POR_NOTA){
 				
-				int valorMinimoPontuacao = notaFiscalToLegal.getValor().intValue();
-				int pontuacao = valorMinimoPontuacao;
-				
-				if (possuiCentavos(notaFiscalToLegal.getValor())){
-					
-					++pontuacao;
-				}
-				
-				this.qntPonto = pontuacao;
+				this.qntPonto = notaFiscalToLegal.getValor().intValue();
 			}
 		}
-	}
-
-	private boolean possuiCentavos(Double dinheiro) {
-		
-		if (dinheiro == null){
-			return Boolean.FALSE;
-		}
-		
-		return dinheiro % 10 > 0;
 	}
 
 	public Long getId() {

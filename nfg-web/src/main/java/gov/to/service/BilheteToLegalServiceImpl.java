@@ -1,10 +1,12 @@
 package gov.to.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.hibernate.Criteria;
@@ -14,12 +16,35 @@ import org.hibernate.criterion.Restrictions;
 import gov.goias.dtos.DTOBilhetePessoa;
 import gov.goias.entidades.BilhetePessoa;
 import gov.goias.exceptions.NFGException;
+import gov.to.dominio.SituacaoBilhete;
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.entidade.BilheteToLegal;
+import gov.to.entidade.PontuacaoBonusToLegal;
+import gov.to.entidade.PontuacaoToLegal;
+import gov.to.entidade.SorteioToLegal;
 import gov.to.filtro.FiltroBilheteToLegal;
+import gov.to.filtro.FiltroPontuacaoBonusToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
+import gov.to.persistencia.GenericPersistence;
+import gov.to.util.SorteioProperties;
 
 @Stateless
 public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> implements BilheteToLegalService{
+	
+	@EJB
+	private SorteioToLegalService sorteioToLegalService;
+	
+	@EJB
+	private ConsultasDaoJpa<PontuacaoBonusToLegal> reposirotyPontuacaoBonus; 
+	
+	@EJB
+	private GenericPersistence<BilheteToLegal, Long> bilhetePersistence;
+	
+	@EJB
+	private GenericPersistence<PontuacaoBonusToLegal, Long> pontuacaoBonusPersistence;
+	
+	@EJB
+	private GenericPersistence<PontuacaoToLegal, Long> pontuacaoPersistence;
 	
 	@Override
 	public List<BilhetePessoa> listBilhetes(String cpf, Integer idSorteio) {
@@ -143,5 +168,94 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 	private static int calcInicio(Integer page, Integer max) {
 		
 		return (page * max);
+	}
+
+	@Override
+	public void processaBilheteBonusPontuacao(String cpf) {
+		
+		SorteioToLegal sorteioToLegal = sorteioToLegalService.sorteioAtual();
+		
+		FiltroPontuacaoBonusToLegal filtro = new FiltroPontuacaoBonusToLegal();
+		filtro.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
+		filtro.setIdSorteio(sorteioToLegal.getId());
+		filtro.setCpf(cpf);
+		List<PontuacaoBonusToLegal> listPontuacaoBonus = reposirotyPontuacaoBonus.filtrarPesquisa(filtro, PontuacaoBonusToLegal.class);
+		
+		for (PontuacaoBonusToLegal pontuacaoBonus : listPontuacaoBonus){
+			
+			Integer qntBilhetes = pontuacaoBonus.getQntPonto() / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
+			
+			for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
+				
+				BilheteToLegal bilheteToLegal = new BilheteToLegal();
+				bilheteToLegal.setSorteioToLegal(sorteioToLegal);
+				bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
+				bilheteToLegal.setStBilhete(SituacaoBilhete.VALIDO);
+				bilheteToLegal.setCpf(pontuacaoBonus.getCpf());
+				bilheteToLegal.setPontuacaoBonusToLegal(pontuacaoBonus);
+				
+				bilhetePersistence.salvar(bilheteToLegal);
+			}
+			
+			pontuacaoBonus.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.PONTUADO);
+			pontuacaoBonusPersistence.merge(pontuacaoBonus);
+		}
+	}
+	
+	@Override
+	public Integer geraNumeroBilhete() {
+		
+		Criteria criteria = getSession().createCriteria(BilheteToLegal.class);
+		
+		criteria.setProjection(Projections.max("numeroSeqBilhete"));
+		Integer max = (Integer)criteria.uniqueResult();
+		
+		if (max == null){
+			return BigInteger.TEN.intValue();
+		}
+		
+		return ++max;
+	}
+
+	@Override
+	public void processaBilhetePorPontuacao(SorteioToLegal sorteioToLegal, PontuacaoToLegal pontuacao) {
+			
+		Integer qntBilhetes = pontuacao.getQntPonto() / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
+		
+		for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
+			
+			BilheteToLegal bilheteToLegal = new BilheteToLegal();
+			bilheteToLegal.setSorteioToLegal(sorteioToLegal);
+			bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
+			bilheteToLegal.setStBilhete(SituacaoBilhete.VALIDO);
+			bilheteToLegal.setCpf(pontuacao.getNotaFiscalToLegal().getCpf());
+			bilheteToLegal.setPontuacaoToLegal(pontuacao);
+			
+			bilhetePersistence.salvar(bilheteToLegal);
+		}
+		
+		pontuacao.setSituacaoPontuacao(SituacaoPontuacaoNota.PONTUADO);
+		pontuacaoPersistence.merge(pontuacao);
+	}
+	
+	@Override
+	public void processaBilhetePorPontuacaoBonus(SorteioToLegal sorteioToLegal, PontuacaoBonusToLegal pontuacaoBonus) {
+			
+		Integer qntBilhetes = pontuacaoBonus.getQntPonto() / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
+		
+		for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
+			
+			BilheteToLegal bilheteToLegal = new BilheteToLegal();
+			bilheteToLegal.setSorteioToLegal(sorteioToLegal);
+			bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
+			bilheteToLegal.setStBilhete(SituacaoBilhete.VALIDO);
+			bilheteToLegal.setCpf(pontuacaoBonus.getCpf());
+			bilheteToLegal.setPontuacaoBonusToLegal(pontuacaoBonus);
+			
+			bilhetePersistence.salvar(bilheteToLegal);
+		}
+		
+		pontuacaoBonus.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.PONTUADO);
+		pontuacaoBonusPersistence.merge(pontuacaoBonus);
 	}
 }

@@ -100,13 +100,13 @@ public class MensagensController extends BaseController{
     @RequestMapping("/mensagensNaoLidasCidadao")
     public @ResponseBody Map<String, Object> getMensagensNaoLidasCidadao() {
     	Map<String, Object> resposta = new HashMap<String, Object>();
-        PessoaParticipante cidadao = (PessoaParticipante) request.getSession().getAttribute(BaseController.SESSION_CIDADAO_LOGADO);
-        if (cidadao != null && cidadao.getGenPessoaFisica() != null) {
-            Integer numeroDeMensagensNaoLidasPeloCidadao = mensagemService.findNumeroDeMensagensNaoLidasPeloCidadao(cidadao);
-            if(numeroDeMensagensNaoLidasPeloCidadao>0){
-                resposta.put("nrMensagensNovas",numeroDeMensagensNaoLidasPeloCidadao.toString());
-            }
-        }
+//        PessoaParticipante cidadao = (PessoaParticipante) request.getSession().getAttribute(BaseController.SESSION_CIDADAO_LOGADO);
+//        if (cidadao != null && cidadao.getGenPessoaFisica() != null) {
+//            Integer numeroDeMensagensNaoLidasPeloCidadao = mensagemService.findNumeroDeMensagensNaoLidasPeloCidadao(cidadao);
+//            if(numeroDeMensagensNaoLidasPeloCidadao>0){
+                resposta.put("nrMensagensNovas",null);
+//            }
+//        }
         return resposta;
     }
 
