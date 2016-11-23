@@ -330,7 +330,7 @@ Cidadao.prototype.chamaPreValidadorDeCadastro = function(dataGenPessoaFisica){
             //cadastro convencional
             $("#inputValidaCpf").prop('disabled', true);
             $("#inputValidaNomeDaMae").prop('disabled', true);
-            $("#inputValidaDataDeNascimento").prop('disabled', true);
+            $("#inputValidaDataDeNascimento").prop('disabled', true); 
             $("#spanValidaDataDeNascimento").hide();
             $("#btnValidaDadosCidadao").hide();
             $("#btnValidaDadosCidadao").removeClass("btn-submitform");
