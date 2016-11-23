@@ -84,7 +84,7 @@
                         <div class="row">&nbsp;</div>
                         <div class="row">
                             <label class="col-sm-3 text-right control-label">UF:</label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-2" id="divUf">
                                 <input type="hidden" id="nomeUf" th:value="${nomeUf}">
                                 <select  class="form-control no-padding combo-endereco" name="selectUf" id="selectUf" title="Selecione seu Estado.">
                                     <option th:each="doc : ${ufs}" th:value="${doc.codgUf}" th:text="${doc.codgUf}"

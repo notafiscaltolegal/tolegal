@@ -62,9 +62,13 @@ import gov.goias.util.UtilReflexao;
 import gov.sefaz.util.Base64;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.EnderecoToLegal;
+import gov.to.entidade.MunicipioToLegal;
+import gov.to.entidade.UsuarioToLegal;
 import gov.to.service.BilheteToLegalService;
+import gov.to.service.GenericService;
 import gov.to.service.PontuacaoToLegalService;
 import gov.to.service.SorteioToLegalService;
+import gov.to.service.UsuarioToLegalService;
 
 @Controller
 @RequestMapping("/cidadao")
@@ -97,6 +101,11 @@ public class CidadaoController extends BaseController {
 	@Autowired
 	private PontuacaoToLegalService pontuacaoToLegalService;
 	
+	@Autowired
+	private UsuarioToLegalService usuarioToLegalService;
+	
+	@Autowired
+	private GenericService<MunicipioToLegal, Long> genericMunicipioService;
 	
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -128,7 +137,7 @@ public class CidadaoController extends BaseController {
         resposta.put("municipios", enderecoService.listMunicipioPorUf(uf));
         return resposta;
     }
-
+    
     @RequestMapping("carregaNomeAgencia")
     public
     @ResponseBody
@@ -234,7 +243,7 @@ public class CidadaoController extends BaseController {
     public @ResponseBody Map efetuarCadastroDeCidadao(GENPessoaFisica genPessoaFisica,
                                                       String email, String telefone, String senha,
                                                       String senhaAtual,
-                                                      Integer cep,
+                                                      String cep,
                                                       Integer tipoLogradouro,
                                                       String nomeLogradouro,
                                                       String nomeBairro,
@@ -267,15 +276,15 @@ public class CidadaoController extends BaseController {
             throw new NFGException("Já existe um cadastro com este endereço de e-mail.");
         }
         
-        Municipio muni = new Municipio();
+        MunicipioToLegal muni = new MunicipioToLegal();
         
-        muni.setCodigo(municipio);
+        muni.setId(municipio.longValue());
 
-        Endereco endereco = new Endereco();
+        EnderecoToLegal endereco = new EnderecoToLegal();
         
         endereco.setCep(cep);
-        endereco.setNomeLogradouro(nomeLogradouro);
-        endereco.setNomeBairro(nomeBairro);
+        endereco.setLogradouro(nomeLogradouro);
+        endereco.setBairro(nomeBairro);
         endereco.setNumero(numero);
         endereco.setComplemento(complemento);
         endereco.setMunicipio(muni);
@@ -474,7 +483,7 @@ public class CidadaoController extends BaseController {
         if (enderecoCadastrado.getMunicipio() != null){
 
             endDto.setNomeMunicipio(enderecoCadastrado.getMunicipio().getMunNome());
-            endDto.setNomeUf(enderecoCadastrado.getMunicipio().getEstado().getLabel());	
+            endDto.setNomeUf(enderecoCadastrado.getMunicipio().getEstado().name());	
         }
         
         return endDto;
@@ -527,7 +536,6 @@ public class CidadaoController extends BaseController {
         modelAndView.addObject("nomeBairro", enderecoDTO.getNomeBairro());
         modelAndView.addObject("complemento", enderecoDTO.getComplemento());
 
-        modelAndView.addObject("nomeTipoLogradouro", enderecoDTO.getNomeTipoLogradouro());
         modelAndView.addObject("nomeUf", enderecoDTO.getNomeUf());
         modelAndView.addObject("nomeMunicipio", enderecoDTO.getNomeMunicipio());
         modelAndView.addObject("enderecoHomolog", enderecoDTO.getEnderecoHomolog());
@@ -578,7 +586,7 @@ public class CidadaoController extends BaseController {
     @RequestMapping("gravaPerfil")
 //    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public @ResponseBody Map atualizarPerfilCidadao(String cpf, String email, String telefone, Boolean participaSortreio, Boolean recebeEmail,
-                                                    Integer cep,
+                                                    String cep,
                                                     Integer tipoLogradouro,
                                                     String nomeLogradouro,
                                                     String nomeBairro,
@@ -591,38 +599,47 @@ public class CidadaoController extends BaseController {
     }
 
 	public Map dadosCidadao(String cpf, String email, String telefone, Boolean participaSortreio, Boolean recebeEmail,
-			Integer cep, Integer tipoLogradouro, String nomeLogradouro, String nomeBairro, String numero,
+			String cep, Integer tipoLogradouro, String nomeLogradouro, String nomeBairro, String numero,
 			String complemento, Integer municipio, String endHomologado, String senha) {
 		
 		Map<String, Object> resposta = new HashMap<String, Object>();
-		Integer dddTelefone, nrTelefone;
 		
-		try {
-			dddTelefone = Integer.parseInt(telefone.split(" ")[0]);
-			nrTelefone = Integer.parseInt(telefone.split(" ")[1]);
-		} catch (Exception e) {
-			throw new NFGException("Campo Telefone em formato errado!", true);
-		}
-		
-		PessoaParticipante pessoaParticipante = cidadaoService.pessoaParticipantePorCPF(cpf);
-		GENPessoaFisica genPessoaFisica = pessoaParticipante.getGenPessoaFisica();
-
-		if (cidadaoService.emailCadastrado(email, genPessoaFisica.getCpf())) {
+		if (cidadaoService.emailCadastrado(email, cpf)) {
 			throw new NFGException("Já existe um cadastro com este endereço de e-mail.", true);
 		}
 		
-		PessoaParticipante pessoaPerfilAtualizado = cidadaoService.atualizaPerfil(pessoaParticipante);
+		UsuarioToLegal usuarioToLegal = usuarioToLegalService.usuarioPorCpf(cpf);
 		
-		if (pessoaPerfilAtualizado != null) {
-			if (senha != null) {
-				cidadaoService.gravaNovaSenha(pessoaPerfilAtualizado.getGenPessoaFisica().getCpf(), senha);
-			}
-
+		usuarioToLegal.setEmail(email);
+		usuarioToLegal.setTelefone(telefone);
+		usuarioToLegal.setRecebeEmail(recebeEmail);
+		usuarioToLegal.setParticipaSorteio(participaSortreio);
+		
+		EnderecoToLegal endereco = usuarioToLegal.getPessoaFisica().getEndereco();
+		endereco.setBairro(nomeBairro);
+		endereco.setCep(cep);
+		endereco.setNumero(numero);
+		endereco.setLogradouro(nomeLogradouro);
+		endereco.setComplemento(complemento);
+		
+		if (municipio != null && !endereco.getMunicipio().getId().equals(municipio.longValue())){
+			
+			endereco.setMunicipio(genericMunicipioService.getById(MunicipioToLegal.class, municipio.longValue()));
+		}
+		
+		usuarioToLegal.getPessoaFisica().setEndereco(endereco);
+		
+		try{
+			
+			PessoaParticipante pessoaPerfilAtualizado = usuarioToLegalService.atualizaPerfil(usuarioToLegal);
+			
 			request.getSession().setAttribute(SESSION_CIDADAO_LOGADO, pessoaPerfilAtualizado);
 			setSuccessMessage("Perfil atualizado com sucesso!");
 			resposta.put("urlRedirect", "/cidadao/inicioSite");
 			return resposta;
-		} else {
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 			throw new NFGException("Falha ao atualizar o perfil!", true);
 		}
 	}

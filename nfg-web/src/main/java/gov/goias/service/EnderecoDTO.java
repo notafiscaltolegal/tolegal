@@ -4,7 +4,7 @@ import gov.goias.entidades.PessoaParticipante;
 
 public class EnderecoDTO {
      
-     private Integer cep;
+     private String cep;
      private String nomeLogradouro;
      private String numero;
      private String nomeBairro;
@@ -21,10 +21,10 @@ public class EnderecoDTO {
      private boolean recebeEmail;
 	private boolean cepInvalido;
      
-	public Integer getCep() {
+	public String getCep() {
 		return cep;
 	}
-	public void setCep(Integer cep) {
+	public void setCep(String cep) {
 		this.cep = cep;
 	}
 	public String getNomeLogradouro() {

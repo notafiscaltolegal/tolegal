@@ -70,14 +70,6 @@ public class UsuarioToLegal extends EntidadeBasica{
 	@JoinColumn(referencedColumnName="id_pes_fisica")
 	private PessoaFisicaToLegal pessoaFisica;
 	
-	
-	
-	@PrePersist
-	public void pontuacaoExtra(){
-		
-		
-	}
-	
 	public Character getRecebeEmailFormat(){
 		return booleanToChar(this.getRecebeEmail());
 	}

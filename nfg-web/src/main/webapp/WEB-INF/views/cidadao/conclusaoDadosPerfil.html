@@ -73,14 +73,7 @@
 
                                     <div class="row">
                                         <label class="col-sm-3 text-right control-label">Logradouro:</label>
-                                        <div class="col-sm-3">
-                                            <input type="hidden" id="nomeTipoLogradouro" th:value="${nomeTipoLogradouro}">
-                                            <select  class="form-control no-padding combo-endereco" th:value="${nomeTipoLogradouro}" name="selectLogradouro" id="selectLogradouro" title="Selecione o tipo do Logradouro.">
-                                                <option th:each="doc : ${tiposLogradouro}"  th:value="${doc.tipoLogradouro}" th:text="${doc.descTipoLogradouro}"
-                                                        class="opcao-tipo-documento"></option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-9">
                                             <input type="text"  id="logradouroCidadao" th:value="${nomeLogradouro}" name="logradouroCidadao" class="form-control" title="Insira ou atualize seu Logradouro.">
                                         </div>
                                     </div>

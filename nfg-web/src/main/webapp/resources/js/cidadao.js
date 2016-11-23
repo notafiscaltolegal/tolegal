@@ -112,10 +112,6 @@ function Cidadao(options) {
     me.selecionaUf();
     me.limparFiltros();
 
-
-
-
-
     if(options.nomeTela == 'telaInicial'){
         new ModaisCidadao({cidadao:me});
         me.listarNotasCidadao();
@@ -136,7 +132,7 @@ function Cidadao(options) {
 
         me.verificaInconsistenciaCidadao();
         if(!me.carregaDadosSorteio($("#selectSorteios").val())){
-            $(".panelSorteios").html("N&#225;o houveram sorteios até o momento.")
+            $(".panelSorteios").html("Não houveram sorteios até o momento.")
         }
     }else if(options.nomeTela == 'pontos'){
         new ModaisCidadao({cidadao:me});
@@ -156,15 +152,6 @@ function Cidadao(options) {
         }
     }
 
-}
-
-
-Cidadao.prototype.carregaTipoLogradouro = function(tipoLogradouro){
-    var me= this;
-    if (tipoLogradouro==null) return;
-    $("#selectLogradouro option").filter(function() {
-        return $(this).text() == tipoLogradouro;
-    }).prop('selected', true);
 }
 
 Cidadao.prototype.carregaUFMunicipios = function(uf,municipio){
@@ -1183,7 +1170,6 @@ Cidadao.prototype.carregaMunicipios = function(uf){
             }
         )
     }
-
 };
 
 Cidadao.prototype.salvaNovaReclamacao = function(){

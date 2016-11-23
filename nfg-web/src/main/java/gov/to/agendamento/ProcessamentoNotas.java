@@ -240,7 +240,7 @@ public class ProcessamentoNotas implements Job {
 		
 		return formataLista(chavesAcesso);
 	}
-
+	
 	private String formataLista(List<String> chavesAcesso) {
 		
 		Set<String> chavesAcessoComAspas = new HashSet<>();
