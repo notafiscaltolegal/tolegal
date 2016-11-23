@@ -1,9 +1,0 @@
-@font-face {
-    font-family: 'miso';
-    src: url('../../fonts/site2/miso.eot');
-    src: url('../../fonts/site2/miso.eot') format('embedded-opentype'),
-         url('../../fonts/site2/miso.woff2') format('woff2'),
-         url('../../fonts/site2/miso.woff') format('woff'),
-         url('../../fonts/site2/miso.ttf') format('truetype'),
-         url('../../fonts/site2/miso.svg#miso') format('svg');
-}
