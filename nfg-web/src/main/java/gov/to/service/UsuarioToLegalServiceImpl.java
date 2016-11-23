@@ -49,4 +49,8 @@ public class UsuarioToLegalServiceImpl implements UsuarioToLegalService{
 		
 		emailService.sendMail(email);
 	}
+	
+	public void teste(){
+		
+	}
 }
