@@ -99,4 +99,8 @@ public class UsuarioToLegalServiceImpl implements UsuarioToLegalService{
 		pessoaParticipante.setGenPessoaFisica(pessoaFisica);
 		return pessoaParticipante;
 	}
+	
+	public void teste(){
+		
+	}
 }
