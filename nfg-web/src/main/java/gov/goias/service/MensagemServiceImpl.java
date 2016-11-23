@@ -14,19 +14,11 @@ import gov.goias.entidades.TipoMensagem;
 @Service
 public class MensagemServiceImpl implements MensagemService {
 
+	//TODO Caixa de entrada de mensagens do cidadão
 	@Override
 	public PaginacaoDTO<Mensagem> findMensagensCaixaDeEntrada(Integer max, Integer page, Integer idPessoa) {
 		
-		Mensagem mensagem = getMensagem();
-		
-		PaginacaoDTO<Mensagem> pgMs = new PaginacaoDTO<>();
-		List<Mensagem> list = new ArrayList<>();
-		list.add(mensagem);
-		
-		pgMs.setList(list);
-		pgMs.setCount(list.size());
-		
-		return pgMs;
+		return new PaginacaoDTO<>();
 	}
 
 	private Mensagem getMensagem() {

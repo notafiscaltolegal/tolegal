@@ -25,7 +25,7 @@ public class EnderecoToLegal extends EntidadeBasica{
 	private Long id;
 
 	@Column(name="cep")
-	private Integer cep;
+	private String cep;
 	
 	@Column(name = "logradouro")
 	private String logradouro;
@@ -47,11 +47,11 @@ public class EnderecoToLegal extends EntidadeBasica{
 		return id;
 	}
 
-	public Integer getCep() {
+	public String getCep() {
 		return cep;
 	}
 
-	public void setCep(Integer cep) {
+	public void setCep(String cep) {
 		this.cep = cep;
 	}
 

@@ -1,5 +1,6 @@
 package gov.to.filtro;
 
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.persistencia.DataFiltroBetween;
 import gov.to.persistencia.EntityProperty;
 
@@ -13,6 +14,9 @@ public class FiltroPontuacaoToLegal implements Filtro{
 	
 	@EntityProperty("sorteioToLegal.id")
 	private Long idSorteio;
+	
+	@EntityProperty(pesquisaExata=true,value="situacaoPontuacao",ignoraCaseSensitive=false)
+	private SituacaoPontuacaoNota situacaoPontuacaoNota;
 	
 	public String getCpf() {
 		return cpf;
@@ -36,5 +40,13 @@ public class FiltroPontuacaoToLegal implements Filtro{
 
 	public void setIdSorteio(Long idSorteio) {
 		this.idSorteio = idSorteio;
+	}
+
+	public SituacaoPontuacaoNota getSituacaoPontuacaoNota() {
+		return situacaoPontuacaoNota;
+	}
+
+	public void setSituacaoPontuacaoNota(SituacaoPontuacaoNota situacaoPontuacaoNota) {
+		this.situacaoPontuacaoNota = situacaoPontuacaoNota;
 	}
 }

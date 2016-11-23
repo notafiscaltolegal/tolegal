@@ -1,6 +1,5 @@
 package gov.to.agendamento;
 
-import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,17 +10,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
 import org.hibernate.transform.Transformers;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import gov.to.dominio.SituacaoBilhete;
-import gov.to.dominio.SituacaoBonusPontuacao;
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.entidade.BilheteToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
@@ -30,11 +25,13 @@ import gov.to.entidade.PontuacaoToLegal;
 import gov.to.entidade.SorteioToLegal;
 import gov.to.filtro.FiltroNotaFiscalToLegal;
 import gov.to.filtro.FiltroPontuacaoBonusToLegal;
-import gov.to.filtro.FiltroSorteioToLegal;
+import gov.to.filtro.FiltroPontuacaoToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
+import gov.to.service.BilheteToLegalService;
 import gov.to.service.NotaFiscalToLegalService;
-import gov.to.util.SorteioProperties;
+import gov.to.service.PontuacaoToLegalService;
+import gov.to.service.SorteioToLegalService;
 
 public class ProcessamentoNotas implements Job {
 	
@@ -47,6 +44,9 @@ public class ProcessamentoNotas implements Job {
 	public static final String BILHETE_PERSIST = "bilhetePersistence";
 	public static final String NOTA_FISCAL_SERVICE = "notaFiscalService";
 	public static final String REPO_BILHETE = "repositorioBilhete";
+	public static final String PONTUACAO_SERVICE = "pontuacaoService";
+	public static final String SORTEIO_SERVICE = "sorteioService";
+	public static final String BILHETE_SERVICE = "bilheteService";
 	
 	private Session session;
     
@@ -66,13 +66,30 @@ public class ProcessamentoNotas implements Job {
 	
 	private ConsultasDaoJpa<BilheteToLegal> repositorioBilhete;
 	
+	private PontuacaoToLegalService pontuacaoService;
+	
+	private SorteioToLegalService sorteioToLegalService;
+	
+	private BilheteToLegalService bilheteToLegalService;
+	
 	@Override
 	public void execute(JobExecutionContext jbContext) throws JobExecutionException {
 		
 		initLookup(jbContext.getJobDetail().getJobDataMap());
 		
-		this.processamentoNotas();
-		this.processaBilhetes();
+		try{
+			
+			this.processamentoNotas();
+			this.processaBilhetes();
+			
+		}catch(Exception xException){
+			xException.printStackTrace();
+			
+		}finally{
+			getSession().flush();
+			getSession().clear();
+			getSession().disconnect();
+		}
 	}
 
     @SuppressWarnings("unchecked")
@@ -85,6 +102,18 @@ public class ProcessamentoNotas implements Job {
 			if (!session.isOpen()) {
 				session = session.getSessionFactory().openSession();
 			}
+    	}
+    	
+    	if (bilheteToLegalService == null){
+    		bilheteToLegalService = (BilheteToLegalService) jobDataMap.get(BILHETE_SERVICE);
+    	}
+    	
+    	if (sorteioToLegalService == null){
+    		sorteioToLegalService = (SorteioToLegalService) jobDataMap.get(SORTEIO_SERVICE);
+    	}
+    	
+    	if (pontuacaoService == null){
+    		pontuacaoService = (PontuacaoToLegalService) jobDataMap.get(PONTUACAO_SERVICE);
     	}
     	
     	if (bilhetePersistence == null){
@@ -178,13 +207,19 @@ public class ProcessamentoNotas implements Job {
         
 		getSession().flush();
 		getSession().clear();
+		
+		int i = 1;
         
         for (NotaFiscalToLegal nota : results){
         	
-        	System.out.println("Incluindo notas ainda não processadas no TO LEGAL para pontuação.");
-        	
     		nota.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
         	notaFiscalPersistence.salvar(nota);
+        	
+        	if (i % 50 == 0){
+        		getSession().flush();
+        	}
+        	
+        	++i;
         }
 	}
 
@@ -205,7 +240,7 @@ public class ProcessamentoNotas implements Job {
 		
 		return formataLista(chavesAcesso);
 	}
-
+	
 	private String formataLista(List<String> chavesAcesso) {
 		
 		Set<String> chavesAcessoComAspas = new HashSet<>();
@@ -220,93 +255,67 @@ public class ProcessamentoNotas implements Job {
 	
 	public void processaBilhetes() {
 		
+		SorteioToLegal sorteioToLegal = sorteioToLegalService.sorteioAtual();
+		
+		processaNotaLegalParaGerarPontuacao(sorteioToLegal);
+		
+		getSession().flush();
+		
+		processaPontuacaoParaGerarBilhete(sorteioToLegal);
+		
+		getSession().flush();
+		
+		processaPontuacaoBonusParaGerarBilhete(sorteioToLegal);
+		
+		getSession().flush();
+	}
+
+	private void processaNotaLegalParaGerarPontuacao(SorteioToLegal sorteioToLegal) {
+		
 		FiltroNotaFiscalToLegal filtroNota = new FiltroNotaFiscalToLegal();
 		filtroNota.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
 		List<NotaFiscalToLegal> listNotaFiscal = notaFiscalService.pesquisar(filtroNota);
 		
-		FiltroSorteioToLegal filtroSorteio = new FiltroSorteioToLegal();
-		filtroSorteio.setNumeroSorteio(SorteioProperties.getValue(SorteioProperties.NUMERO_SORTEIO));
-		SorteioToLegal sorteioToLegal = reposirotySorteio.primeiroRegistroPorFiltro(filtroSorteio, SorteioToLegal.class);
-		
 		for (NotaFiscalToLegal nota : listNotaFiscal){
 			
 			PontuacaoToLegal pontuacao = new PontuacaoToLegal(nota);
-			
 			pontuacao.setSorteioToLegal(sorteioToLegal);
-			
 			pontuacaoPersistence.salvar(pontuacao);
-			System.out.println("REALIZA PONTUAÇÂO DA NOTA "+nota.getChaveAcesso());
 			
 			getSession().flush();
-			getSession().clear();
 			
 			nota.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.PONTUADO);
 			notaFiscalPersistence.merge(nota);
-			System.out.println("MARCA NOTA COMO PONTUADA");
 		}
-		
-		List<PontuacaoToLegal> listPontuacao = pontuacaoPersistence.listarTodos(PontuacaoToLegal.class);
-		
-		for (PontuacaoToLegal pontuacao : listPontuacao){
-			
-			Integer qntBilhetes = pontuacao.getQntPonto() / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
-			
-			for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
-				
-				BilheteToLegal bilheteToLegal = new BilheteToLegal();
-				bilheteToLegal.setSorteioToLegal(sorteioToLegal);
-				bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
-				bilheteToLegal.setStBilhete(SituacaoBilhete.VALIDO);
-				bilheteToLegal.setCpf(pontuacao.getNotaFiscalToLegal().getCpf());
-				
-				bilhetePersistence.salvar(bilheteToLegal);
-			}
-		}
+	}
+
+	private void processaPontuacaoBonusParaGerarBilhete(SorteioToLegal sorteioToLegal) {
 		
 		FiltroPontuacaoBonusToLegal filtro = new FiltroPontuacaoBonusToLegal();
-		
-		filtro.setSituacaoBonus(SituacaoBonusPontuacao.ATIVO);
+		filtro.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
+		filtro.setIdSorteio(sorteioToLegal.getId());
 		List<PontuacaoBonusToLegal> listPontuacaoBonus = pontuacaoBonusPersistence.filtrarPesquisa(filtro, PontuacaoBonusToLegal.class);
 		
 		for (PontuacaoBonusToLegal pontuacaoBonus : listPontuacaoBonus){
 			
-			if (pontuacaoBonus.getDataLimiteBonus() != null && pontuacaoBonus.getDataLimiteBonus().getTime() < new Date().getTime()){
-				
-				pontuacaoBonus.setSituacaoBonusPontuacao(SituacaoBonusPontuacao.INATIVO);
-				
-				genericPontuacaoPersistence.merge(pontuacaoBonus);
-				continue;
-			}
-			
-			Integer qntBilhetes = pontuacaoBonus.getQntPonto() / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
-			
-			for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
-				
-				BilheteToLegal bilheteToLegal = new BilheteToLegal();
-				bilheteToLegal.setSorteioToLegal(sorteioToLegal);
-				bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
-				bilheteToLegal.setStBilhete(SituacaoBilhete.VALIDO);
-				bilheteToLegal.setCpf(pontuacaoBonus.getCpf());
-				
-				bilhetePersistence.salvar(bilheteToLegal);
-			}
+			bilheteToLegalService.processaBilhetePorPontuacaoBonus(sorteioToLegal, pontuacaoBonus);
+			getSession().flush();
 		}
 	}
 
-	private Integer geraNumeroBilhete() {
+	private void processaPontuacaoParaGerarBilhete(SorteioToLegal sorteioToLegal) {
 		
-		Criteria criteria = getSession().createCriteria(BilheteToLegal.class);
+		FiltroPontuacaoToLegal filtroPont = new FiltroPontuacaoToLegal();
+		filtroPont.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
+		List<PontuacaoToLegal> listPontuacao = pontuacaoService.pesquisar(filtroPont);
 		
-		criteria.setProjection(Projections.max("numeroSeqBilhete"));
-		Integer max = (Integer)criteria.uniqueResult();
-		
-		if (max == null){
-			return BigInteger.TEN.intValue();
+		for (PontuacaoToLegal pontuacao : listPontuacao){
+			
+			bilheteToLegalService.processaBilhetePorPontuacao(sorteioToLegal, pontuacao);
+			getSession().flush();
 		}
-		
-		return ++max;
 	}
-	
+
 	public Session getSession(){
 		
 		if (!session.isOpen()) {

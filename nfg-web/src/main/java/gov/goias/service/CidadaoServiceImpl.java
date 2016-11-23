@@ -10,34 +10,31 @@ import org.apache.xerces.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import entidade.endereco.Endereco;
-import entidade.endereco.Municipio;
 import gov.goias.bindings.PessoaPerfil3;
 import gov.goias.dtos.DTOMinhasNotas;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.exceptions.NFGException;
 import gov.goias.util.Encrypter;
-import gov.to.dominio.SituacaoBonusPontuacao;
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.dominio.SituacaoUsuario;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.EnderecoToLegal;
-import gov.to.entidade.MunicipioToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PessoaFisicaToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.entidade.UsuarioToLegal;
 import gov.to.filtro.FiltroNotaFiscalToLegal;
-import gov.to.filtro.FiltroPessoaFisicaToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
 import gov.to.filtro.FiltroUsuarioToLegal;
 import gov.to.persistencia.DataFiltroBetween;
+import gov.to.service.BilheteToLegalService;
 import gov.to.service.GenericService;
 import gov.to.service.NotaFiscalToLegalService;
 import gov.to.service.PessoaFisicaToLegalService;
 import gov.to.service.PontuacaoToLegalService;
+import gov.to.service.SorteioToLegalService;
 import gov.to.service.UsuarioToLegalService;
 import gov.to.util.SorteioProperties;
 
@@ -51,7 +48,13 @@ public class CidadaoServiceImpl implements CidadaoService{
 	private UsuarioToLegalService serviceUsuario;
 	
 	@Autowired
+	private SorteioToLegalService sorteioToLegalService;
+	
+	@Autowired
 	private NotaFiscalToLegalService notaFiscalToLegalService;
+	
+	@Autowired
+	private BilheteToLegalService bilheteToLegalService;
 	
 	@Autowired
 	private PontuacaoToLegalService pontuacaoToLegalService;
@@ -127,6 +130,10 @@ public class CidadaoServiceImpl implements CidadaoService{
 			
 			pessoaParticipanteDTO.setErro("Senha incorreta.");
 			
+		}else if (usuario.getSituacao().equals(SituacaoUsuario.INATIVO)){
+			
+			pessoaParticipanteDTO.setErro("Usuário inativo, favor realizar a ativação no e-mail cadastrado.");
+			
 		}else{
 			
 			PessoaParticipante pess = new PessoaParticipante();
@@ -138,6 +145,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 			pess.setId(usuario.getId().intValue());
 			pess.setParticipaSorteio(booleanToChar(usuario.getParticipaSorteio()));
 			pess.setRecebeEmail(booleanToChar(usuario.getRecebeEmail()));
+			pess.setTelefonePreCadastro(usuario.getTelefone());
 			
 			pessoaParticipanteDTO.setPessoaParticipante(pess);
 			pessoaParticipanteDTO.setUsuarioToLegal(usuario);
@@ -214,6 +222,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 			dto.setValor(nto.getValor());
 			dto.setEstabelecimento(nto.getRazaoSocial());
 			dto.setRegistro(nto.getDataEmissao());
+			dto.setEmissao(nto.getDataEmissao());
 			
 			if (pontuacao == null){
 				
@@ -253,26 +262,28 @@ public class CidadaoServiceImpl implements CidadaoService{
 	@Override
 	public PessoaParticipante pessoaParticipantePorCPF(String cpf) {
 		
-		FiltroPessoaFisicaToLegal filtro = new FiltroPessoaFisicaToLegal();
+		FiltroUsuarioToLegal filtro = new FiltroUsuarioToLegal();
 		
 		filtro.setCpf(cpf);
 		
-		PessoaFisicaToLegal pessoa = this.servicePessoaFisica.primeiroRegistro(filtro, "endereco","endereco.municipio");
+		UsuarioToLegal usuario = this.serviceUsuario.primeiroRegistro(filtro, "pessoaFisica","pessoaFisica.endereco","endereco.municipio");
 		
-		if (pessoa == null){
+		if (usuario == null){
 			return null;
 		}
 		
 		PessoaParticipante pessoaParticipante = new PessoaParticipante();
 		GENPessoaFisica genPessoaFisica = new GENPessoaFisica();
 		
-		genPessoaFisica.setCpf(pessoa.getCpf());
-		genPessoaFisica.setDataDeNascimento(pessoa.getDataNascimento());
-		genPessoaFisica.setIdPessoa(pessoa.getId().intValue());
-		genPessoaFisica.setNome(pessoa.getNome());
-		genPessoaFisica.setNomeDaMae(pessoa.getNomeMae());
+		genPessoaFisica.setCpf(usuario.getPessoaFisica().getCpf());
+		genPessoaFisica.setDataDeNascimento(usuario.getPessoaFisica().getDataNascimento());
+		genPessoaFisica.setIdPessoa(usuario.getPessoaFisica().getId().intValue());
+		genPessoaFisica.setNome(usuario.getPessoaFisica().getNome());
+		genPessoaFisica.setNomeDaMae(usuario.getPessoaFisica().getNomeMae());
 		
 		pessoaParticipante.setGenPessoaFisica(genPessoaFisica);
+		pessoaParticipante.setEmailPreCadastro(usuario.getEmail());
+		pessoaParticipante.setTelefonePreCadastro(usuario.getTelefone());
 		
 		return pessoaParticipante;
 	}
@@ -311,13 +322,6 @@ public class CidadaoServiceImpl implements CidadaoService{
 	}
 
 	@Override
-	public PessoaParticipante atualizaPerfil(PessoaParticipante pessoaParticipante) {
-		
-		System.out.println("Atualizar perfil mock");
-		return MockCidadao.getPessoaParticipante(pessoaParticipante.getGenPessoaFisica().getCpf());
-	}
-
-	@Override
 	public void gravaNovaSenha(String cpf, String senha) {
 		
 		System.out.println("gerar nova senha mock");
@@ -346,7 +350,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 	}
 
 	@Override
-	public void preCadastroCidadao(PessoaParticipante pessoaParticipante, Endereco endereco, String senha) throws NFGException{
+	public void preCadastroCidadao(PessoaParticipante pessoaParticipante, EnderecoToLegal endereco, String senha) throws NFGException{
 		
 		FiltroUsuarioToLegal filtro = new FiltroUsuarioToLegal();
 		
@@ -390,7 +394,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 		}
 	}
 
-	private PessoaFisicaToLegal converteParaPF(GENPessoaFisica genPessoaFisica, Endereco enderecoNFG) {
+	private PessoaFisicaToLegal converteParaPF(GENPessoaFisica genPessoaFisica, EnderecoToLegal enderecoNFG) {
 		
 		PessoaFisicaToLegal pessoaFisica = new PessoaFisicaToLegal();
 		
@@ -401,29 +405,16 @@ public class CidadaoServiceImpl implements CidadaoService{
 		
 		EnderecoToLegal enderecoToLegal = new EnderecoToLegal();
 		
-		enderecoToLegal.setBairro(enderecoNFG.getNomeBairro());
+		enderecoToLegal.setBairro(enderecoNFG.getBairro());
 		enderecoToLegal.setCep(enderecoNFG.getCep());
 		enderecoToLegal.setComplemento(enderecoNFG.getComplemento());
-		enderecoToLegal.setLogradouro(enderecoNFG.getNomeLogradouro());
+		enderecoToLegal.setLogradouro(enderecoNFG.getLogradouro());
 		enderecoToLegal.setNumero(enderecoNFG.getNumero());
-		enderecoToLegal.setMunicipio(converteMunicipioNFG(enderecoNFG.getMunicipio()));
+		enderecoToLegal.setMunicipio(enderecoNFG.getMunicipio());
 		
 		pessoaFisica.setEndereco(enderecoToLegal);
 		
 		return pessoaFisica;
-	}
-
-	private MunicipioToLegal converteMunicipioNFG(Municipio municipio) {
-		
-		if (municipio == null || municipio.getCodigo() == null){
-			return null;
-		}
-
-		MunicipioToLegal legal = new MunicipioToLegal();
-		
-		legal.setId(municipio.getCodigo().longValue());
-		
-		return legal;
 	}
 
 	private String gerarHash(String cpf, String emailPreCadastro) {
@@ -458,11 +449,13 @@ public class CidadaoServiceImpl implements CidadaoService{
 			
 			pontuacaoBonusCadastro.setDescricao(DESCRICAO_PONTUACAO_CADASTRO);
 			pontuacaoBonusCadastro.setQntPonto(SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_BONUS_CADASTRO));
-			pontuacaoBonusCadastro.setSituacaoBonusPontuacao(SituacaoBonusPontuacao.ATIVO);
 			pontuacaoBonusCadastro.setCpf(cpf);
 			pontuacaoBonusCadastro.setDataPontuacao(new Date());
+			pontuacaoBonusCadastro.setSorteio(sorteioToLegalService.sorteioAtual());
 			
 			genericServicePontuacaoBonus.salvar(pontuacaoBonusCadastro);
+			
+			bilheteToLegalService.processaBilheteBonusPontuacao(cpf);
 			
 		}else{
 			throw new NFGException("Usuário já ativo ou e-mail de ativação inválido.");

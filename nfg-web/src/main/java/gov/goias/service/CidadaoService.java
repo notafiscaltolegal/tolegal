@@ -3,7 +3,6 @@ package gov.goias.service;
 import java.util.Date;
 import java.util.List;
 
-import entidade.endereco.Endereco;
 import gov.goias.dtos.DTOMinhasNotas;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.exceptions.NFGException;
@@ -30,8 +29,6 @@ public interface CidadaoService {
 
 	boolean emailCadastrado(String email, String cpf);
 
-	PessoaParticipante atualizaPerfil(PessoaParticipante pessoaParticipante);
-
 	void gravaNovaSenha(String cpf, String senha);
 
 	String enviaEmailRecuperacaoSenha(String cpf);
@@ -40,7 +37,7 @@ public interface CidadaoService {
 
 	boolean emailCadastrado(String email);
 
-	void preCadastroCidadao(PessoaParticipante pessoaParticipante, Endereco endereco, String senha) throws NFGException;
+	void preCadastroCidadao(PessoaParticipante pessoaParticipante, EnderecoToLegal endereco, String senha) throws NFGException;
 
 	void ativarCadastro(String cpf, String email);
 

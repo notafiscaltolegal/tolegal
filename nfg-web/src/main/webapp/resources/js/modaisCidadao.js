@@ -709,9 +709,7 @@ ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(){
 
 ModaisCidadao.prototype.inicializaEnderecoAtualizaPerfil = function(){
     var me = this;
-
-    me.cidadao.carregaTipoLogradouro($("#nomeTipoLogradouro").val());
-
+    
     if ($("#nomeUf").val()!=null) {
         $("#selectUf option").filter(function() {
             return $(this).text() == $("#nomeUf").val();

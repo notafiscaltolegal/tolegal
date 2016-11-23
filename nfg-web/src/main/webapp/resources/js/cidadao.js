@@ -112,10 +112,6 @@ function Cidadao(options) {
     me.selecionaUf();
     me.limparFiltros();
 
-
-
-
-
     if(options.nomeTela == 'telaInicial'){
         new ModaisCidadao({cidadao:me});
         me.listarNotasCidadao();
@@ -136,7 +132,7 @@ function Cidadao(options) {
 
         me.verificaInconsistenciaCidadao();
         if(!me.carregaDadosSorteio($("#selectSorteios").val())){
-            $(".panelSorteios").html("N&#225;o houveram sorteios até o momento.")
+            $(".panelSorteios").html("Não houveram sorteios até o momento.")
         }
     }else if(options.nomeTela == 'pontos'){
         new ModaisCidadao({cidadao:me});
@@ -156,15 +152,6 @@ function Cidadao(options) {
         }
     }
 
-}
-
-
-Cidadao.prototype.carregaTipoLogradouro = function(tipoLogradouro){
-    var me= this;
-    if (tipoLogradouro==null) return;
-    $("#selectLogradouro option").filter(function() {
-        return $(this).text() == tipoLogradouro;
-    }).prop('selected', true);
 }
 
 Cidadao.prototype.carregaUFMunicipios = function(uf,municipio){
@@ -343,7 +330,7 @@ Cidadao.prototype.chamaPreValidadorDeCadastro = function(dataGenPessoaFisica){
             //cadastro convencional
             $("#inputValidaCpf").prop('disabled', true);
             $("#inputValidaNomeDaMae").prop('disabled', true);
-            $("#inputValidaDataDeNascimento").prop('disabled', true);
+            $("#inputValidaDataDeNascimento").prop('disabled', true); 
             $("#spanValidaDataDeNascimento").hide();
             $("#btnValidaDadosCidadao").hide();
             $("#btnValidaDadosCidadao").removeClass("btn-submitform");
@@ -453,6 +440,13 @@ Cidadao.prototype.cadastraCidadao = function( ){
             data,
             'POST',
             function(response) {
+        		
+        		if (response.urlRedirect != null){
+        			nfgMensagens.show(ALERT_TYPES.SUCCESS, "Ative seu cadastro no e-mail.",true);
+            		window.location.replace(enderecoSite+response.urlRedirect);
+            		nfgMensagens.show(ALERT_TYPES.SUCCESS, "Ative seu cadastro no e-mail.",true);
+        		}
+        		
             }
         );
 
@@ -770,9 +764,6 @@ Cidadao.prototype.salvaNovaSenha = function( ){
     });
 }
 
-
-
-
 Cidadao.prototype.listarReclamacoes = function() {
     var me = this;
     me.pagination = new NFGPagination({
@@ -1025,14 +1016,10 @@ Cidadao.prototype.ativarCaptcha = function(div,container){
         ,lang: 'pt'
     };
 
-    //DESENV
-    //Recaptcha.create("6LctNQcTAAAAAImLbhptA7DIUdTTOVSQgtOIV9bV", container, RecaptchaOptions);
 
-    //HOMOLOG
-    //Recaptcha.create("6LdMYQcTAAAAAEO8OSOXJ6Za7povhEaYGN04Oq3d", container, RecaptchaOptions);
 
     //PROD
-    Recaptcha.create("6Ley5AQTAAAAAAns5fVVnr54d3408TetBXMXF-pD", container, RecaptchaOptions);
+    Recaptcha.create("6LdalwwUAAAAAGv62TpI91iKF-oOWij_7m54SlSQ", container, RecaptchaOptions);
 
 }
 
@@ -1183,7 +1170,6 @@ Cidadao.prototype.carregaMunicipios = function(uf){
             }
         )
     }
-
 };
 
 Cidadao.prototype.salvaNovaReclamacao = function(){

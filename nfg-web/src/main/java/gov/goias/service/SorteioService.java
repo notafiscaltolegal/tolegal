@@ -28,5 +28,4 @@ public interface SorteioService {
 	List<Map<?,?>> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page);
 	
 	Integer consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf);
-
 }

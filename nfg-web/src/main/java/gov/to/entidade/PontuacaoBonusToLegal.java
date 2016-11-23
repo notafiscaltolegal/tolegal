@@ -1,6 +1,5 @@
 package gov.to.entidade;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,12 +9,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import gov.to.dominio.SituacaoBonusPontuacao;
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.persistencia.EntidadeBasica;
 
 @Entity
@@ -48,25 +49,17 @@ public class PontuacaoBonusToLegal extends EntidadeBasica{
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "situacao")
-	private SituacaoBonusPontuacao situacaoBonusPontuacao;
+	private SituacaoPontuacaoNota situacaoPontuacaoNota;
 	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_limite_validade")
-	private Date dataLimiteBonus;
+	@ManyToOne
+	@JoinColumn(name="id_sorteio")
+	private SorteioToLegal sorteio;
 	
-	public PontuacaoBonusToLegal(){}
-	
-	public String getDataPontuacaoFormat(){
+	public PontuacaoBonusToLegal(){
 		
-		if (this.getDataPontuacao() != null){
-			
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			return dateFormat.format(getDataPontuacao());
-		}
-		
-		return "";
+		situacaoPontuacaoNota = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -91,20 +84,12 @@ public class PontuacaoBonusToLegal extends EntidadeBasica{
 		this.descricao = descricao;
 	}
 
-	public SituacaoBonusPontuacao getSituacaoBonusPontuacao() {
-		return situacaoBonusPontuacao;
+	public SituacaoPontuacaoNota getSituacaoPontuacaoNota() {
+		return situacaoPontuacaoNota;
 	}
 
-	public void setSituacaoBonusPontuacao(SituacaoBonusPontuacao situacaoBonusPontuacao) {
-		this.situacaoBonusPontuacao = situacaoBonusPontuacao;
-	}
-
-	public Date getDataLimiteBonus() {
-		return dataLimiteBonus;
-	}
-
-	public void setDataLimiteBonus(Date dataLimiteBonus) {
-		this.dataLimiteBonus = dataLimiteBonus;
+	public void setSituacaoPontuacaoNota(SituacaoPontuacaoNota situacaoPontuacaoNota) {
+		this.situacaoPontuacaoNota = situacaoPontuacaoNota;
 	}
 
 	public String getCpf() {
@@ -121,5 +106,13 @@ public class PontuacaoBonusToLegal extends EntidadeBasica{
 
 	public void setDataPontuacao(Date dataPontuacao) {
 		this.dataPontuacao = dataPontuacao;
+	}
+
+	public SorteioToLegal getSorteio() {
+		return sorteio;
+	}
+
+	public void setSorteio(SorteioToLegal sorteio) {
+		this.sorteio = sorteio;
 	}
 }

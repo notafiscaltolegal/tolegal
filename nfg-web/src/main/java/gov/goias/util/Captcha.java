@@ -20,7 +20,7 @@ public class Captcha {
 
     private static final Logger log = Logger.getLogger(Captcha.class);
 
-    private String keyReCaptcha = "captcha";
+    private static final String PRIVATE_KEY_RECAPTCHA = "6LdalwwUAAAAANoCrg-15gokeYfejylG6MnhoRUk";
 
     public static boolean verificarAtivacaoCaptcha(String contadorSessao, HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -33,21 +33,21 @@ public class Captcha {
     public void validarCaptchaSeAtivo(HttpServletRequest request, String challangeField, String responseField) throws BindException {
         if (challangeField != null && responseField != null && challangeField.length() > 0) {
             ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-            reCaptcha.setPrivateKey(keyReCaptcha);
+            reCaptcha.setPrivateKey(PRIVATE_KEY_RECAPTCHA);
             ReCaptchaResponse reCaptchaResponse;
 
 //            setProxyForRecaptcha(reCaptcha);
 
             try {
                 log.info("Captcha:::Remote Addr: " + request.getRemoteAddr());
-                log.info("key: " + keyReCaptcha);
+                log.info("key: " + PRIVATE_KEY_RECAPTCHA);
 
                 reCaptchaResponse = reCaptcha.checkAnswer(request.getRemoteAddr(), challangeField, responseField);
             } catch (Exception e) {
                 log.error("Erro ao se comunicar com o ws do Re Captcha: anulando validacao! "+e.getMessage());
                 return;
             }
-                if (!reCaptchaResponse.isValid()) throw new NFGException("CÃ³digo verificador incorreto!");
+                if (!reCaptchaResponse.isValid()) throw new NFGException("Código verificador incorreto!");
         }
     }
 

@@ -36,11 +36,11 @@ public class PontuacaoToLegal extends EntidadeBasica{
 	private Integer qntPonto;
 	
 	@ManyToOne
-	@JoinColumn(name="NTF_ID_NOTA_LEGAL", referencedColumnName="id_nota_legal")
-	private NotaFiscalToLegal nfToLegal;
+	@JoinColumn(name="ID_NOTA_LEGAL",  referencedColumnName="id_nota_legal" )
+	private NotaFiscalToLegal notaFiscalToLegal;
 	
 	@ManyToOne
-	@JoinColumn(referencedColumnName="id_sorteio")
+	@JoinColumn(name="ID_SORTEIO", referencedColumnName="id_sorteio")
 	private SorteioToLegal sorteioToLegal;
 	
 	@Enumerated(EnumType.STRING)
@@ -48,10 +48,13 @@ public class PontuacaoToLegal extends EntidadeBasica{
 	private SituacaoPontuacaoNota situacaoPontuacao;
 	
 	public PontuacaoToLegal (NotaFiscalToLegal nft){
-		this.nfToLegal = nft;
+		this.notaFiscalToLegal = nft;
+		this.situacaoPontuacao = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
 	}
 	
-	public PontuacaoToLegal(){}
+	public PontuacaoToLegal(){
+		this.situacaoPontuacao = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
+	}
 	
 	@PrePersist
 	public void calcPontuacao(){
@@ -59,34 +62,17 @@ public class PontuacaoToLegal extends EntidadeBasica{
 		final int VALOR_MAXIMO_PONTUACAO_POR_NOTA = SorteioProperties.getValue(SorteioProperties.QNT_MAXIMA_PONTOS_POR_DOCUMENTO);
 		final int VALOR_MINIMO_PONTUACAO_POR_NOTA = SorteioProperties.getValue(SorteioProperties.QNT_MINIMA_PONTOS_POR_DOCUMENTO);
 		
-		if (nfToLegal != null && nfToLegal.getValor() != null){
+		if (notaFiscalToLegal != null && notaFiscalToLegal.getValor() != null){
 			
-			if (nfToLegal.getValor() > VALOR_MAXIMO_PONTUACAO_POR_NOTA){
+			if (notaFiscalToLegal.getValor() > VALOR_MAXIMO_PONTUACAO_POR_NOTA){
 				
 				this.qntPonto = VALOR_MAXIMO_PONTUACAO_POR_NOTA;
 				
-			}else if (nfToLegal.getValor() > VALOR_MINIMO_PONTUACAO_POR_NOTA){
+			}else if (notaFiscalToLegal.getValor() > VALOR_MINIMO_PONTUACAO_POR_NOTA){
 				
-				int valorMinimoPontuacao = nfToLegal.getValor().intValue();
-				int pontuacao = valorMinimoPontuacao;
-				
-				if (possuiCentavos(nfToLegal.getValor())){
-					
-					++pontuacao;
-				}
-				
-				this.qntPonto = pontuacao;
+				this.qntPonto = notaFiscalToLegal.getValor().intValue();
 			}
 		}
-	}
-
-	private boolean possuiCentavos(Double dinheiro) {
-		
-		if (dinheiro == null){
-			return Boolean.FALSE;
-		}
-		
-		return dinheiro % 10 > 0;
 	}
 
 	public Long getId() {
@@ -102,7 +88,11 @@ public class PontuacaoToLegal extends EntidadeBasica{
 	}
 
 	public NotaFiscalToLegal getNotaFiscalToLegal() {
-		return nfToLegal;
+		return notaFiscalToLegal;
+	}
+	
+	public void setNotaFiscalToLegal(NotaFiscalToLegal notaFiscalToLegal) {
+		this.notaFiscalToLegal = notaFiscalToLegal;
 	}
 
 	public SorteioToLegal getSorteioToLegal() {

@@ -7,8 +7,6 @@ import org.springframework.ws.soap.client.core.SoapActionCallback;
 import gov.goias.bindings.ArrayOfPessoaPerfil3;
 import gov.goias.bindings.ConsultarCPFP3;
 import gov.goias.bindings.ConsultarCPFP3Response;
-import gov.goias.bindings.ConsultarCPFP3T;
-import gov.goias.bindings.ConsultarCPFP3TResponse;
 import gov.goias.bindings.PessoaPerfil3;
 
 /**
@@ -30,14 +28,14 @@ public class InfoConvService extends WebServiceGatewaySupport {
     }
 
     public PessoaPerfil3 consultaPorCpf(String cpf){
-        ConsultarCPFP3T consultarCPF = new ConsultarCPFP3T();
-        consultarCPF.setCPFUsuario(cpf);
-
-        ConsultarCPFP3TResponse consultarCPFResponse = (ConsultarCPFP3TResponse) getWebServiceTemplate().marshalSendAndReceive(consultarCPF,
-
-                new SoapActionCallback("https://infoconv.receita.fazenda.gov.br/ws/cpf/ConsultarCPFP3T"));
-
-        ArrayOfPessoaPerfil3 consultarCPFResult = consultarCPFResponse.getConsultarCPFP3TResult();
+//        ConsultarCPFP3T consultarCPF = new ConsultarCPFP3T();
+//        consultarCPF.setCPFUsuario(cpf);
+//
+//        ConsultarCPFP3TResponse consultarCPFResponse = (ConsultarCPFP3TResponse) getWebServiceTemplate().marshalSendAndReceive(consultarCPF,
+//
+//                new SoapActionCallback("https://infoconv.receita.fazenda.gov.br/ws/cpf/ConsultarCPFP3T"));
+//
+//        ArrayOfPessoaPerfil3 consultarCPFResult = consultarCPFResponse.getConsultarCPFP3TResult();
 //      PessoaPerfil3 pessoaPerfil = consultarCPFResult.getPessoaPerfil3().get(0);
         
         PessoaPerfil3 pessoaPerfil = new PessoaPerfil3();

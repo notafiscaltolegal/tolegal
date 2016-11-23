@@ -100,7 +100,7 @@ public class EnderecoServiceImpl implements EnderecoService{
 		
 		EnderecoDTO enderecodto = new EnderecoDTO();
 		
-		if (endereco == null){
+		if (endereco == null || endereco.getCep() == null){
 			enderecodto.setCepInvalido(Boolean.TRUE);
 		}else{
 			enderecodto = converteParaModeloLogicoNFG(endereco);
@@ -146,7 +146,7 @@ public class EnderecoServiceImpl implements EnderecoService{
 			
 			cepSemFormat = cepSemFormat.replace("-", "");
 			
-			enderecoDTO.setCep(Integer.valueOf(cepSemFormat));
+			enderecoDTO.setCep(cepSemFormat);
 		}
 		
 		enderecoDTO.setNomeBairro(endereco.getBairro());

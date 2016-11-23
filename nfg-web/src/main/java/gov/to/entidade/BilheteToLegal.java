@@ -38,8 +38,16 @@ public class BilheteToLegal extends EntidadeBasica{
 	private Integer numeroSeqBilhete;
 	
 	@ManyToOne
-	@JoinColumn(referencedColumnName="id_sorteio")
+	@JoinColumn(name="ID_SORTEIO", referencedColumnName="id_sorteio")
 	private SorteioToLegal sorteioToLegal;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_PONTUACAO", referencedColumnName="id_pont_to_legl")
+	private PontuacaoToLegal pontuacaoToLegal;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_PONTUACAO_BONUS", referencedColumnName="id_pont_bonus")
+	private PontuacaoBonusToLegal pontuacaoBonusToLegal;
 	
 	@Column(name="cpf")
 	private String cpf;
@@ -106,5 +114,21 @@ public class BilheteToLegal extends EntidadeBasica{
 
 	public void setPremiado(Boolean premiado) {
 		this.premiado = premiado;
+	}
+
+	public PontuacaoToLegal getPontuacaoToLegal() {
+		return pontuacaoToLegal;
+	}
+
+	public void setPontuacaoToLegal(PontuacaoToLegal pontuacaoToLegal) {
+		this.pontuacaoToLegal = pontuacaoToLegal;
+	}
+
+	public PontuacaoBonusToLegal getPontuacaoBonusToLegal() {
+		return pontuacaoBonusToLegal;
+	}
+
+	public void setPontuacaoBonusToLegal(PontuacaoBonusToLegal pontuacaoBonusToLegal) {
+		this.pontuacaoBonusToLegal = pontuacaoBonusToLegal;
 	}
 }
