@@ -26,8 +26,35 @@ function Nota(options,tipoDocumentoFiscal,idNota)
     this.eventoCarregarPelaLista();
     this.limparCampos();
 
+    $(".datepicker").each(function() {
+    	self.initDatePicker($(this));
+    });
 
 }
+
+Nota.prototype.initDatePicker = function($campo) {
+    if (isIE()) {
+        $campo.on('keydown', function() {
+            return false;
+        });
+    }
+    $campo.datetimepicker({
+        formatDate: 'd-m-Y',
+        format: 'd/m/Y',
+        lang: 'pt',
+        timepicker: false,
+        allowBlank: true,
+        maxDate: 0,
+        mask: true,
+        closeOnDateSelect: true,
+        yearStart:1900,
+        validateOnBlur: false
+    });
+
+    $(".datepickerIcon").click(function() {
+        $campo.datetimepicker('show');
+    }).css("top","0").css("cursor","pointer");
+};
 
 Nota.prototype.build = function()
 {

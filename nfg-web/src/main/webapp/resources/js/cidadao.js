@@ -45,7 +45,7 @@ function Cidadao(options) {
     $(".datepicker").each(function() {
         me.initDatePicker($(this));
     });
-
+    
     $( ".showDadosDaBase" ).tooltip({
         position: {
             my: "left top",
@@ -128,7 +128,6 @@ function Cidadao(options) {
         me.resetaElementosAcaoReclamacao();
 
         me.voltarTelaDeReclamacao();
-
 
         me.verificaInconsistenciaCidadao();
         if(!me.carregaDadosSorteio($("#selectSorteios").val())){

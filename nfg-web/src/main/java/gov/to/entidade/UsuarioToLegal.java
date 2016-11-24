@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -67,7 +66,7 @@ public class UsuarioToLegal extends EntidadeBasica{
 	private Date dataAtivacao;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(referencedColumnName="id_pes_fisica")
+	@JoinColumn(name="id_pes_fisica",referencedColumnName="id_pes_fisica")
 	private PessoaFisicaToLegal pessoaFisica;
 	
 	public Character getRecebeEmailFormat(){

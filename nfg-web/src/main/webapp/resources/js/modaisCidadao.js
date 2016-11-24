@@ -30,6 +30,13 @@ function ModaisCidadao(options) {
     me.selecionaBanco();
     me.calculaValoresResgate();
     me.eventoReclamacaoDetalhe();
+    
+    $("#referenciaInicial").prop('disabled', true);
+    $("#referenciaFinal").prop('disabled', true);
+    
+    $(".datepicker").each(function() {
+        me.initDatePicker($(this));
+    });
 
     $("#modalHome").on('hidden.bs.modal', function () {
         $("#messagesContainerModal").html("");
@@ -43,7 +50,29 @@ function ModaisCidadao(options) {
     }).off("focusin focusout");
 }
 
+ModaisCidadao.prototype.initDatePicker = function($campo) {
+    if (isIE()) {
+        $campo.on('keydown', function() {
+            return false;
+        });
+    }
+    $campo.datetimepicker({
+        formatDate: 'd-m-Y',
+        format: 'd/m/Y',
+        lang: 'pt',
+        timepicker: false,
+        allowBlank: true,
+        maxDate: 0,
+        mask: true,
+        closeOnDateSelect: true,
+        yearStart:1900,
+        validateOnBlur: false
+    });
 
+    $(".datepickerIcon").click(function() {
+        $campo.datetimepicker('show');
+    }).css("top","0").css("cursor","pointer");
+};
 
 ModaisCidadao.prototype.modalNovaReclamacao  = function() {
     var me = this;
