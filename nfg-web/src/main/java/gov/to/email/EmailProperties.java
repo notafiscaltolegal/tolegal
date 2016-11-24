@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public final class EmailProperties {
 	
-	private static final String ARQUIVO_CONFIGURACAO = "/email.properties";
+	private static final String ARQUIVO_CONFIGURACAO = "/host.properties";
 	
 	private static Properties properties;
 	
@@ -14,9 +14,11 @@ public final class EmailProperties {
 	}
 
 	static {
+		
 		InputStream inStream;
 		properties = new Properties();
 		inStream = EmailProperties.class.getResourceAsStream(ARQUIVO_CONFIGURACAO);
+		
 		try {
 			properties.load(inStream);
 		} catch (IOException e) {

@@ -12,7 +12,7 @@ import gov.to.entidade.SorteioToLegal;
 import gov.to.filtro.FiltroSorteioToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
-import gov.to.util.SorteioProperties;
+import gov.to.properties.SorteioProperties;
 
 @Stateless
 public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> implements SorteioToLegalService{

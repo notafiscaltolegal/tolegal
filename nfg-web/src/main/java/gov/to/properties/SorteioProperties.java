@@ -1,4 +1,4 @@
-package gov.to.util;
+package gov.to.properties;
 
 import java.io.IOException;
 import java.io.InputStream;

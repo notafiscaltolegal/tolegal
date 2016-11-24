@@ -29,6 +29,7 @@ import gov.to.filtro.FiltroNotaFiscalToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
 import gov.to.filtro.FiltroUsuarioToLegal;
 import gov.to.persistencia.DataFiltroBetween;
+import gov.to.properties.SorteioProperties;
 import gov.to.service.BilheteToLegalService;
 import gov.to.service.GenericService;
 import gov.to.service.NotaFiscalToLegalService;
@@ -36,7 +37,6 @@ import gov.to.service.PessoaFisicaToLegalService;
 import gov.to.service.PontuacaoToLegalService;
 import gov.to.service.SorteioToLegalService;
 import gov.to.service.UsuarioToLegalService;
-import gov.to.util.SorteioProperties;
 
 @Service
 public class CidadaoServiceImpl implements CidadaoService{
