@@ -1,24 +1,22 @@
-package gov.to.email;
+package gov.to.properties;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public final class EmailProperties {
+public final class HostProperties {
 	
-	private static final String ARQUIVO_CONFIGURACAO = "/email.properties";
+	private static final String ARQUIVO_CONFIGURACAO = "/host.properties";
 	
 	private static Properties properties;
 	
-	private EmailProperties(){
+	private HostProperties(){
 	}
 
 	static {
-		
 		InputStream inStream;
 		properties = new Properties();
-		inStream = EmailProperties.class.getResourceAsStream(ARQUIVO_CONFIGURACAO);
-		
+		inStream = HostProperties.class.getResourceAsStream(ARQUIVO_CONFIGURACAO);
 		try {
 			properties.load(inStream);
 		} catch (IOException e) {
@@ -30,7 +28,7 @@ public final class EmailProperties {
 		return properties;
 	}
 	
-	public static String getValue(EmailRemetenteEnum remetente) {
-		return properties.getProperty(remetente.getChave());
+	public static String homeUrl() {
+		return properties.getProperty("urlHome");
 	}
 }

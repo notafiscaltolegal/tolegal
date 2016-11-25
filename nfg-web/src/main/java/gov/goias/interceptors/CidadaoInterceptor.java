@@ -77,11 +77,11 @@ public class CidadaoInterceptor extends HandlerInterceptorAdapter {
             urlSemFiltro |= request.getRequestURI().contains("inicioSite");
 
             if (request.getRequestURI().contains("inicioSite")){
-                throw new NFGException("Usuário n&#225;o logado.", "/cidadao/telaCidadao");
+                throw new NFGException("Usuário não logado.", "/cidadao/telaCidadao");
             }
 
             if (!urlSemFiltro){
-                throw new NFGException("Usuário n&#225;o logado.",  "/cidadao/login");
+                throw new NFGException("Usuário não logado.",  "/cidadao/login");
             }
         }
     }

@@ -31,9 +31,6 @@ function ModaisCidadao(options) {
     me.calculaValoresResgate();
     me.eventoReclamacaoDetalhe();
     
-    $("#referenciaInicial").prop('disabled', true);
-    $("#referenciaFinal").prop('disabled', true);
-    
     $(".datepicker").each(function() {
         me.initDatePicker($(this));
     });
@@ -57,7 +54,6 @@ ModaisCidadao.prototype.initDatePicker = function($campo) {
         });
     }
     $campo.datetimepicker({
-        formatDate: 'd-m-Y',
         format: 'd/m/Y',
         lang: 'pt',
         timepicker: false,

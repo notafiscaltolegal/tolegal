@@ -60,8 +60,6 @@ function Cidadao(options) {
         }
     }).off("focusin focusout");
 
-
-
     $( ".dadosMinhasNotas" ).tooltip({
         track:true
     }).off("focusin focusout");
