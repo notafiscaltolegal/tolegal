@@ -1,10 +1,10 @@
 package gov.to.service;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Random;
 
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
@@ -18,6 +18,7 @@ import gov.to.entidade.UsuarioToLegal;
 import gov.to.filtro.FiltroUsuarioToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
+import gov.to.properties.HostProperties;
 
 
 @Stateless
@@ -102,7 +103,7 @@ public class UsuarioToLegalServiceImpl implements UsuarioToLegalService{
 		EmailParametro param = new EmailParametro();
 		
 		param.addParametro("{cpf}", usuarioToLegal.getPessoaFisica().getCpf());
-		param.addParametro("{link}", "http://localhost:8080/nfg-web/cidadao/login?hash="+ usuarioToLegal.getHash());
+		param.addParametro("{link}", HostProperties.homeUrl()+"/nfg-web/cidadao/login?hash="+ usuarioToLegal.getHash());
 		
 		email.setAssunto(EmailEnum.CONFIRMAR_CADASTRO.getAssunto());
 		email.setMensagem(EmailUtils.formataEmail(EmailEnum.CONFIRMAR_CADASTRO, param));

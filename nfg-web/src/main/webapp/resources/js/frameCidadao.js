@@ -51,7 +51,6 @@ FrameCidadao.prototype.loginCidadaoSite = function(){
 
     $("#linkRecuperarSenhaSite").click(function(e) {
     	
-    	alert('teste 123');
         window.parent.location.href = "esqueciSenha";
     });
 }

@@ -148,7 +148,7 @@ function trataErroDoServidor(xhr) {
         }
     } else {
         var mensagem = "O sistema se comportou de forma inesperada - " + moment().format('DD/MM/YYYY HH:mm:ss') + ". ";
-        mensagem += "Se o problema persistir entre em contato com 0800 942 9011.";
+        mensagem += "Tente novamente após 5 minutos.";
         nfgMensagens.show(ALERT_TYPES.ERROR, mensagem);
     }
     hideLoading();

@@ -34,8 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import entidade.endereco.Endereco;
-import entidade.endereco.Municipio;
 import gov.goias.dtos.DTOMinhasNotas;
 import gov.goias.entidades.BilhetePessoa;
 import gov.goias.entidades.ComplSituacaoReclamacao;
@@ -338,6 +336,8 @@ public class CidadaoController extends BaseController {
     
     @RequestMapping("login")
     public ModelAndView viewLoginCidadao(@RequestParam(required=false, value="hash") String hash) {
+    	
+    	 request.getSession().setAttribute(SESSION_CIDADAO_LOGADO, null);
     	
     	 ModelAndView mav = new ModelAndView("cidadao/login");
     	

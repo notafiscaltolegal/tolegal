@@ -15,7 +15,7 @@ import javax.persistence.Table;
  
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.persistencia.EntidadeBasica;
-import gov.to.util.SorteioProperties;
+import gov.to.properties.SorteioProperties;
 
 @Entity
 @Table(name = "tb_pont_nota")

@@ -26,7 +26,7 @@ import gov.to.filtro.FiltroBilheteToLegal;
 import gov.to.filtro.FiltroPontuacaoBonusToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
-import gov.to.util.SorteioProperties;
+import gov.to.properties.SorteioProperties;
 
 @Stateless
 public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> implements BilheteToLegalService{
