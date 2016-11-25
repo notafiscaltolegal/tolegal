@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.Random;
 
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
+import gov.goias.util.Encrypter;
 import gov.to.email.EmailDTO;
 import gov.to.email.EmailEnum;
 import gov.to.email.EmailParametro;
@@ -16,6 +18,7 @@ import gov.to.entidade.UsuarioToLegal;
 import gov.to.filtro.FiltroUsuarioToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
+
 
 @Stateless
 public class UsuarioToLegalServiceImpl implements UsuarioToLegalService{
@@ -38,6 +41,58 @@ public class UsuarioToLegalServiceImpl implements UsuarioToLegalService{
 	public UsuarioToLegal primeiroRegistro(FiltroUsuarioToLegal filtro, String... hbInitialize) {
 		return reposiroty.primeiroRegistroPorFiltro(filtro, UsuarioToLegal.class, hbInitialize);
 	}
+	
+	@Override
+	public String emailRecuperarSenha(String cpf) {
+		
+		EmailDTO email = new EmailDTO();
+		
+		EmailParametro param = new EmailParametro();
+		
+		UsuarioToLegal usuario = usuarioPorCpf(cpf);
+		String novaSenhax="";
+		novaSenhax=this.gerarNumeroAleatorio0_10();
+		usuario.setSenha(novaSenhax);
+		
+		usuario.setSenha(Encrypter.encryptMD5(usuario.getSenha()));
+		
+		genericPersistence.merge(usuario);
+		
+		param.addParametro("{cpf}", cpf);
+		param.addParametro("{senha}", novaSenhax);
+		
+		email.setAssunto(EmailEnum.RECUPERAR_SENHA.getAssunto());
+		email.setMensagem(EmailUtils.formataEmail(EmailEnum.RECUPERAR_SENHA, param));
+		email.setPara(usuario.getEmail());
+		
+		emailService.sendMail(email);
+		
+		return usuario.getEmail();
+	}
+    
+	public String gerarNumeroAleatorio0_10()
+	{
+        String novaSenha="";
+		for(int i=0; i<9;i++)
+		{
+			novaSenha+=this.gerarNumeroRandomico().toString();
+		}
+		novaSenha+="a";
+		return novaSenha;
+		
+	}
+    
+   
+    public Integer gerarNumeroRandomico()
+    {
+    	
+    	Random gerador = new Random();
+    	
+    	return gerador.nextInt(9);
+    }
+
+
+	
 
 	@Override
 	public void enviaEmailConfirmacaoCadastro(UsuarioToLegal usuarioToLegal) {
@@ -49,7 +104,7 @@ public class UsuarioToLegalServiceImpl implements UsuarioToLegalService{
 		param.addParametro("{cpf}", usuarioToLegal.getPessoaFisica().getCpf());
 		param.addParametro("{link}", "http://localhost:8080/nfg-web/cidadao/login?hash="+ usuarioToLegal.getHash());
 		
-		email.setAssunto("Confirmar cadastrado To Legal!");
+		email.setAssunto(EmailEnum.CONFIRMAR_CADASTRO.getAssunto());
 		email.setMensagem(EmailUtils.formataEmail(EmailEnum.CONFIRMAR_CADASTRO, param));
 		email.setPara(usuarioToLegal.getEmail());
 		

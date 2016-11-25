@@ -2,7 +2,8 @@ package gov.to.email;
 
 public enum EmailEnum {
 	
-	CONFIRMAR_CADASTRO("emails/cadastro/emailConfirmarCadastro.html","{cpf}","{link}");
+	RECUPERAR_SENHA("emails/recuperar_senha/emailRecuperarSenha.html","Nova senha TOLegal","{cpf}","{senha}"),
+	CONFIRMAR_CADASTRO("emails/cadastro/emailConfirmarCadastro.html","Confirmar cadastrado To Legal!","{cpf}","{link}");
 	
 	/** The arquivo. */
 	private String arquivo;

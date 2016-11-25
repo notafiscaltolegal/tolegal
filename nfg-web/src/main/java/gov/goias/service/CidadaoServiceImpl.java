@@ -329,7 +329,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 
 	@Override
 	public String enviaEmailRecuperacaoSenha(String cpf) {
-		return "mock@mock.com.br";
+		return serviceUsuario.emailRecuperarSenha(cpf);
 	}
 
 	@Override
