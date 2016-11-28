@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        >
+
+<body>
+
+
+<form id="formPontuacao">
+    <input type="hidden" id="idSorteioSelecionado">
+</form>
+
+<div class="centralizado">
+
+    <div class="row" align="left" style="font-size: medium;">
+        <div class="col-sm-6" >
+            <label style="font-size: larger;" >Sorteio:</label>
+            <p style="display: inline-block" id="infoSorteio" th:text="${sorteio.informacao}" />
+        </div>
+        <div class="col-sm-6">
+            <label >Data do Sorteio:</label>
+            <p style="display: inline-block" id="dataSorteio" th:text="${sorteio.dataRealizacaoStr}" />
+        </div>
+        <!--<div class="col-sm-4">-->
+        <!--<label >J&aacute; foi realizado:</label>-->
+        <!--<p style="display: inline-block; color: #843534;" id="indiSorteioRealizadoSim" th:if="${sorteio.realizadoBoolean}" th:text="${'Este sorteio j&aacute; foi realizado.'}" />-->
+        <!--<p style="display: inline-block; color: darkgreen;" id="indiSorteioRealizadoNao" th:if="${not sorteio.realizadoBoolean}" th:text="${'Este sorteio ainda não foi realizado.'}"  />-->
+        <!--</div>-->
+    </div>
+
+    <hr/>
+    <div class="row" >&nbsp;</div>
+
+
+    <div class="panel panelPontosDasNotas">
+        <div class="panel-header" style="font-size: large; background: #d6e9c6; color: darkgreen;
+        border-top-right-radius: 5px; border-top-left-radius: 5px; ">
+            <br/>
+            <label>
+                &nbsp;&nbsp;Pontua&ccedil;&atilde;o das Notas:
+            </label>
+            <br/>
+            <br/>
+        </div>
+        <div class="panel-body dadosPontosDasNotas "  style="overflow-x:auto; background:whitesmoke; padding-bottom:0;">
+            <div  id="containerPontosDasNotas" class="table-responsive"></div>
+        </div>
+    </div>
+
+
+
+    <div class="panel panelPontosBonus">
+        <div class="panel-header" style="font-size: large; background: #bce8f1; color: #27486e;
+        border-top-right-radius: 5px; border-top-left-radius: 5px; ">
+            <br/>
+            <label>
+                &nbsp;&nbsp;Pontua&ccedil;&atilde;o B&ocirc;nus:
+            </label>
+            <br/>
+            <br/>
+        </div>
+        <div class="panel-body dadosPontosBonus"  style="overflow-x:auto; background:whitesmoke; padding-bottom:0;">
+            <div  id="containerPontosBonus" class="table-responsive"></div>
+        </div>
+    </div>
+
+
+    <hr/>
+
+    <div class="row" align="left">
+        <div class="col-sm-6    "    style="font-size: medium;">
+            <label >Total de pontos:</label>
+            <p style="display: inline-block" id="totalDePontos" th:text="${totalDePontos}" />
+        </div>
+        <div class="col-sm-6" style="font-size: medium;">
+            <label >Total de Bilhetes:</label>
+            <p style="display: inline-block" id="totalDeBilhetes" th:text="${totalDeBilhetes}" />
+        </div>
+    </div>
+
+    <hr/>
+
+
+    <div class="row" >
+        <a class="btn btn-primary" id="linkPontuacaoParaBilhetes" href="#">Bilhetes Neste Sorteio</a>
+        &nbsp;
+        &nbsp;
+        <button class="btn btn-default" id="linkSair" href="#">Sair</button>
+    </div>
+
+
+</div>
+
+
+
+</body>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+            nomeTela: [[${'pontos'}]]
+        });
+    </script>
+</div>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2SemFrameLogin :: site2SemFrameLogin">
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default centralizado">
+        <div class="panel-heading">
+            <h3>Portal do Cidad&atilde;o</h3>
+
+            <br/>
+            <br/>
+
+            <form id="formLoginCidadao" name="formLoginCidadao" role="form" class="form-horizontal">
+
+                <!--CPF-->
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="loginCpf" class="col-sm-6 control-label">CPF</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="loginCpf" class="form-control inputCpf" id="loginCpf" placeholder="CPF">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">&nbsp;</div>
+                </div>
+
+                <!--SENHA-->
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="loginSenha" class="col-sm-6 control-label">Senha</label>
+                            <div class="col-sm-6">
+                                <input type="password" name="loginSenha" class="form-control" id="loginSenha" maxlength="10" placeholder="Senha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">&nbsp;</div>
+                </div>
+
+
+                <div class="row " id="captchaLogin" style="clear:both;display: none" >
+                    <center>
+                        <label  class="control-label">C&oacute;digo Verificador:</label>
+                        <br/>
+                        <br/>
+                        <div class="col-md-12 "  >
+                            <input type="hidden" id="numeroDeTentativasLogin" name="numeroDeTentativasLogin" th:value="${session.numeroDeTentativasLogin}" />
+                            <div id="containerCaptchaLogin"  ></div>
+                        </div>
+                    </center>
+                </div>
+
+
+                <div class="row">&nbsp;</div>
+                <div class="row">&nbsp;</div>
+                <!--RECUPERACAO DE SENHA-->
+                <div class="row">
+                    <div class="col-sm-4">&nbsp;</div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-8" >
+                                <a href="#" id="linkRecuperarSenha" title="Clique para informar o e-mail cadastrado para recuperação de senha." >Esqueci minha senha</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--RECUPERACAO DE SENHA-->
+                <div class="row" >
+                    <div class="col-sm-4">&nbsp;</div>
+                    <div class="col-sm-6" >
+                        <div class="form-group" >
+                            <div style="display: none" class="formEmailRecuperacaoSenha">
+                                <div class="col-sm-7" >
+                                    <input type="text" name="cpfRecuperacao" class="form-control inputCpf" id="cpfRecuperacao" placeholder="Informe o CPF cadastrado no NFG">
+                                </div>
+                                <div class="col-sm-1" >
+                                    <a href="#"  id="submitEmailRecuperarSenha" class="btn btn-default " >Enviar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--BOTAO SUBMIT-->
+                <div id="btnsTelaLogin">
+                    <div class="row">
+                        <div class="col-sm-4">&nbsp;</div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-sm-8">
+                                    <button type="button" id="loginSubmit" class="btn btn-primary btn-block btn-submitform" title="Se você já efetuou o cadasto e já possui senha, preencha os campos de login e clique para acessar.">Entrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--BOTAO LINK CADASTRAR-->
+                    <div class="row">
+                        <div class="col-sm-4">&nbsp;</div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-sm-8">
+                                    <!--<a class="btn btn-default btn-block" style="background: #3278b3; color: white;" th:href="@{/cidadao/cadastrar}" >Primeiro Acesso</a>-->
+                                    <!--<a class="btn btn-default btn-block" style="background: mediumseagreen; color: whitesmoke;" th:href="@{/cidadao/cadastrar}" title="Se este é seu primeiro acesso, clique para se cadastrar." >Primeiro Acesso</a>-->
+                                    <!--<a class="btn btn-default btn-block" style="background: seagreen; color: whitesmoke;" th:href="@{/cidadao/cadastrar}" title="Se este é seu primeiro acesso, clique para se cadastrar." >Primeiro Acesso</a>-->
+                                    <a class="btn btn-success btn-block"   th:href="@{/cidadao/cadastrar}" title="Se este é seu primeiro acesso, clique para se cadastrar." >Primeiro Acesso</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--BOTAO CERTIFICADO-->
+                    <div class="row">
+                        <div class="col-sm-4">&nbsp;</div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="col-sm-8">
+                                    <!--<a class="btn btn-default btn-block"  style="background: darkkhaki; color: white;" th:href="@{/cidadao/certificado}" >Acesso com Certificado Digital</a>-->
+                                    <a class="btn btn-default btn-block"   th:href="@{/cidadao/certificado}" title="Se você possui certificado digital, clique para efetuar seu cadastro ou para acessar o portal caso já tenha se cadastrado." >Acesso com Certificado Digital</a>
+                                    <!--<br/>-->
+                                    <!--<br/>-->
+                                    <!--<hr/>-->
+                                    <!--<a class="btn btn-default btn-block"  style="background: gray; color: white;" href="https://localhost:8443/nfg/cidadao/certificado" >Acesso com Certificado Digital (Dev)</a>-->
+                                    <!--<a class="btn btn-default btn-block"  style="background: gray; color: white;" href="https://sefazhomolog.intra.goias.gov.br/nfg/cidadao/certificado" >Acesso com Certificado Digital (Hom)</a>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/recaptcha_ajax.js}"></script>
+
+    <!--<script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>-->
+    <!--<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>-->
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+
+        });
+    </script>
+</div>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:fragment="template">
+<head layout:fragment="head">
+    <meta charset="UTF-8" />
+    <title>NFG - Nota Fiscal Goiana1</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/css/boilerplate/main.css}" />
+    <div layout:fragment="styles"></div>
+
+    <script th:src="@{/js/boilerplate/vendor/jquery-1.10.2.min.js}"></script>
+</head>
+<body>
+<div layout:fragment="msg" id="messages">
+    <div class="centralizado" id="messagesContainer">
+        <div th:if="${not #strings.isEmpty(errorMessage)}" class="alert alert-danger" role="alert" th:text="${errorMessage}" ></div>
+        <div th:if="${not #strings.isEmpty(mensagemDeErro)}" class="alert alert-danger" role="alert" th:text="${mensagemDeErro}" ></div>
+        <div th:if="${not #strings.isEmpty(message)}" class="alert alert-warning" role="alert" th:text="${message}" ></div>
+    </div>
+</div>
+
+<div layout:fragment="content"></div>
+
+<div layout:fragment="templates">
+    <div layout:include="templates/handlebars :: templatesHandlebars"></div>
+</div>
+<footer layout:fragment="footer">
+    <script th:src="@{/js/plugins/bootstrap-filestyle.js}"></script>
+    <script th:src="@{/js/globals.js}"></script>
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/js/boilerplate/vendor/modernizr-2.6.2.min.js}"></script>
+    <script th:src="@{/js/boilerplate/main.js}"></script>
+    <script th:src="@{/js/boilerplate/plugins.js}"></script>
+    <script th:src="@{/js/plugins/lodash.min.js}"></script>
+    <script th:src="@{/js/plugins/handlebars-v1.3.0.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskedinput.min.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}"></script>
+    <script th:src="@{/js/plugins/moment-with-locales.min.js}"></script>
+    <script th:src="@{/js/plugins/numeral.min.js}"></script>
+    <script th:src="@{/js/plugins/languages.min.js}"></script>
+    <script th:src="@{/js/helpers/handlebars.js}"></script>
+    <script th:src="@{/js/fixHeight.js}"></script>
+    <script th:src="@{/js/endereco-site.js}"></script>
+    <script th:src="@{/js/nfg-mensagens.js}"></script>
+    <script th:src="@{/js/nfg-modal.js}"></script>
+    <script th:src="@{/js/nfg-pagination.js}"></script>
+    <div layout:fragment="scripts"></div>
+</footer>
+</body>
+</html>

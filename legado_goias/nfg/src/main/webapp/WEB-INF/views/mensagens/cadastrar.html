@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/layout :: template">
+
+
+<div layout:fragment="content">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Nova Mensagem</h2>
+        </div>
+
+
+        <div class="panel-body ">
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label class="col-md-2">Tipo de destinatário:</label>
+                <div class="col-md-3">
+                    <select  class="form-control "  name="selectTipoDestinatario" id="selectTipoDestinatario" >
+                        <option value="C" >Cidadão</option>
+                        <option value="E" >Empresa</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <!--<div class="col-md-2"></div>-->
+                <label class="col-md-2   control-label">Mensagem Pública?</label>
+                <div class="col-md-2">
+                    <input type="checkbox" id="checkMensagemPublica" th:value="${'S'}" th:checked="${true}" title="Mensagem Pública?">&nbsp;<b></b>
+                </div>
+            </div>
+
+            <div class="row" id="dadosListaDeDestinatarios" style="display: none">
+                <hr/>
+                <div class="col-md-5">
+                    <form id="formListaDeDestinatarios" class="form-horizontal ">
+                        <div class="panel panel-info" >
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <label class="col-md-10 ">Lista de destinatários</label>
+                                    <div class="col-md-2">
+                                        <button id="btnFiltrarDestinatario"  class="btn btn-default" type="button"  >Adicionar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style='height: 250px; overflow-y: auto' class="panel-body " >
+                                <div id="containerListaDeDestinatarios"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <hr/>
+
+            <div class="row">
+                <label class="col-md-2 control-label">Título:</label>
+                <div class="col-md-5">
+                    <input type="text" maxlength="80" id="tituloMensagem" name="tituloMensagem" class="form-control" >
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label class="col-md-2 control-label">Texto:</label>
+                <div class="col-md-9">
+                    <textarea rows="8" cols="90" maxlength="300" id="textoMensagem"/>
+                </div>
+            </div>
+
+            <hr/>
+            <div class="row">&nbsp;</div>
+
+            <div class="row" align="right">
+                <div class="col-md-3">
+                    <a id="btnMensagemCancelar"  class="btn btn-default" type="button" th:href="@{/portal/mensagens/usuario/index}"  >Cancelar</a>
+                </div>
+                <div class="col-md-2">
+                    <button id="btnMensagemConcluir"  class="btn btn-primary" type="button"  >Concluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalhome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true"
+         style="left: 20%">
+        <div class="modal-dialog centralizado">
+            <div class="modal-content">
+                <div class="modal-header" style="
+                background: #d9edf7; color:#31708f;
+                    border-top-right-radius: 5px;
+                    border-top-left-radius: 5px; "
+                        >
+                    <button type="button" style="color:white;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalHomeTitle">...</h4>
+                </div>
+                <div class="centralizado" id="messagesContainerModal">
+                    <div th:if="${not #strings.isEmpty(errorModal)}" class="alert alert-danger" role="alert" th:text="${errorModal}" ></div>
+                </div>
+                <div class="modal-body" id="modalHomeBody" >
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <!--<script th:src="@{/js/paginate.js}" charset="utf-8"></script>-->
+    <!--<script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>-->
+    <!--<script th:src="@{/js/dialogs.js}" charset="utf-8"></script>-->
+    <script th:src="@{/js/mensagens.js}" charset="utf-8"></script>
+
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Mensagens({tela:'usuarioCadastrar'});
+    </script>
+</div>
+
+</html>

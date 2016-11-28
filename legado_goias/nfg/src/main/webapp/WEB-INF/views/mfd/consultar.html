@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2 :: site2">
+<!--layout:replace="templates/layout :: template">-->
+
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content" >
+    <div class="container-fluid">
+         <div class="row">
+             <div class="text-left col-lg-12">
+                 <label style="...">Relat&oacute;rio MFD</label>
+             </div>
+         </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="text-left col-lg-12">
+                <label class="control-label" th:text="'Inscri&ccedil;&atilde;o Estadual:  '+${inscricaoEstadual}"></label>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <form class="form-inline" id="formReferencia">
+            <input type="hidden" id="inscricaoEstadual" name="inscricaoEstadual" th:value="${inscricaoEstadual}">
+
+            <div class="form-group">
+                <label  for="referenciaInicio">Refer&ecirc;ncia: </label>
+                <input  id="referenciaInicio" type="text" class="form-control datepicker " name="referenciaInicio" placeholder="Ex: 01/2015" required>
+            </div>
+
+            <div class="form-group">
+                <label for="referenciaFim">&agrave; </label>
+                <input  id="referenciaFim" type="text" class="form-control datepicker " name="referenciaFim" placeholder="Ex: 12/2015" required>
+            </div>
+
+            <button type="submit" id="btnGerar" class="btn btn-primary btn-gerar form-control form-inline has-feedback">Gerar</button>
+        </form>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="panel-body dadosMfd centralizado"  style=" background:whitesmoke; padding-bottom: 0">
+            <div  id="containerMfd" class="table-responsive"></div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/numericInput.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/mfd.js}" charset="utf-8"></script>
+    <script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>
+    <script th:src="@{/js/dialogs.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Mfd({
+            inscricaoEstadual: [[${inscricaoEstadual}]],
+            urlBase: [[${urlBase}]]
+        });
+
+        $("#referenciaInicio").mask("99/9999");
+        $("#referenciaFim").mask("99/9999");
+    </script>
+</div>
+
+</html>

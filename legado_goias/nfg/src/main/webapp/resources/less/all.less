@@ -1,0 +1,336 @@
+/*
+    Document   : all
+    Created on : 16/07/2014, 11:25:00
+    Author     : André Dal Molin <andre@admolin.com>
+    Description:
+        Site styles.
+*/
+@import "common";
+
+html { overflow-x: hidden; }
+body { font: 10px/1.231 Verdana; *font-size: small; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { width: 100%; height: 100%; }
+.ie7 { body { font-size: 10px; } }
+
+/**
+ * ----------------------------------------------------------------------- *
+ *     Header.
+ * ----------------------------------------------------------------------- *
+ */
+#header-wrapper {
+    width: 100%; height: 197px;
+    background: url('../images/site/navigation-background.png') top center repeat-x;
+    position: relative; z-index: 500;
+    .logo-wrapper {
+        width: 408px; height: 197px;
+        background: url('../images/site/logo-wrapper-background.png') no-repeat;
+        position: absolute; top: 0; left: 50%; margin-left: -204px; z-index: 100;
+        .logo {
+            margin: 0;
+            text-align: center;
+            padding-top: 26px;
+        }
+    }
+    #nav {
+        width: 1000px;
+        margin: 0 auto; padding-top: 137px;
+        position: relative; z-index: 200;
+        background-color: transparent;
+        border: 0;
+        ul {
+            width: 370px;
+            &.left li { float: right; &:last-child a { padding-left: 0; border-left: 0 none; } }
+            &.right li { float: left; &:first-child a { border-left: 0 none; } &:last-child a { padding-right: 0; } }
+            li {
+                a {
+                    color: #014592; font: bold 15px/15px Arial;
+                    text-decoration: none;
+                    padding: 4px 20px;
+                    border-left: 1px dotted #666;
+                    &:hover, &.current { text-decoration: underline; }
+                }
+            }
+        }
+    }
+    #search-form {
+        position: absolute; top: 35px; left: 50%; margin-left: 186px; z-index: 300;
+        input {
+            display: block;
+            float: left;
+            width: 250px; height: 36px;
+            background: #FFF;
+            color: #ADADAD; font: 12px/12px Arial;
+            border: 1px solid #E5E5E5; border-right: 0 none;
+            padding: 0 12px;
+            .box-shadow( 0 0 6px 0px rgba( 0, 0, 0, .1 ) );
+        }
+        button {
+            display: block;
+            float: left;
+            width: 38px; height: 38px;
+            background: url('../images/site/search-form-submit-button-background.png') no-repeat;
+            border: 0 none;
+            padding: 0; margin: 0;
+        }
+    }
+}
+
+/**
+ * ----------------------------------------------------------------------- *
+ *     Banners slideshow.
+ * ----------------------------------------------------------------------- *
+ */
+#banners-wrapper {
+    width: 100%;
+    position: relative; z-index: 100;
+    margin-top: -26px;
+    .cycle-slideshow {
+        width: 100%; height: 425px;
+        position: relative;
+        .slide {
+            width: 100%; height: 425px;
+            background-repeat: no-repeat; background-position: top center;
+            position: absolute; top: 0; left: 0;
+        }
+    }
+    .slideshow-pager {
+        width: 100%;
+        background: #2D2D2D;
+        padding: 6px 0 12px;
+        border-bottom: 1px solid #BBB;
+        .pager-table {
+            width: 99%; min-width: 1000px;
+            margin: 0 auto;
+            td {
+                text-align: left;
+                cursor: pointer;
+                .bar-wrapper {
+                    height: 6px;
+                    margin-bottom: 10px; padding: 2px;
+                    background: #000;
+                    .bar { width: 100%; height: 100%; background: #000; .transition( all .6s ); }
+                }
+                .category {
+                    padding: 0 0 4px 8px;
+                    color: #FFF; font: 18px/1em 'OpenSans-Bold';
+                }
+                .description {
+                    padding-left: 8px;
+                    color: #ADADAD; font: 12px/1em Arial;
+                }
+                &:hover, &.current { .bar { background: #4DB846; } }
+            }
+        }
+    }
+    .login-box-wrapper {
+        width: 310px;
+        position: absolute; top: 60px; right: 50%; z-index: 1000; margin-right: -490px;
+        #login-form {
+            width: 90%;
+            margin: 0 auto;
+            .row {
+                margin-bottom: 14px;
+                label {
+                    display: block;
+                    padding: 0 0 3px 3px;
+                    color: #014592; font: bold 14px/1em Arial;
+                }
+                input {
+                    display: block;
+                    width: ~"calc( 100% - 22px )"; height: 40px;
+                    border: 1px solid #DCDCDC;
+                    padding: 0 10px; margin: 0;
+                    background: #FFF;
+                    color: #ADADAD; font: 12px/1em Arial;
+                }
+            }
+            .submit-button {
+                text-align: center;
+                button {
+                    height: 40px;
+                    background: #024593;
+                    border: 0 none;
+                    padding: 0 40px; margin: 0;
+                    color: #FFF; font: 18px/1em 'OpenSans-Bold';
+                }
+            }
+        }
+    }
+}
+.btn-blue {
+  &:disabled {
+    background: #e6e6e6;
+  }
+  height: 40px;
+  background: #024593;
+  border: 0 none;
+  padding: 0 40px; margin: 0;
+  color: #FFF; font: 18px/1em 'OpenSans-Bold';
+}
+/**
+ * ----------------------------------------------------------------------- *
+ *     Partners.
+ * ----------------------------------------------------------------------- *
+ */
+#partners-wrapper {
+    width: 100%;
+    padding: 22px 0;
+    background: #EBEBEB;
+    .partners {
+        width: 996px;
+        margin: 0 auto;
+        position: relative;
+        .title {
+            color: #999; font: 30px/1em Arial;
+            margin-bottom: 12px;
+            span { font-weight: 900; }
+        }
+        .partners-list {
+            li {
+                float: left;
+                width: 223px; height: 113px;
+                background: #FFF;
+                border: 1px solid #C0C5CB;
+                margin: 0 12px;
+                .table {
+                    width: 100%; height: 100%;
+                    display: table;
+                    .cell {
+                        width: 100%; height: 100%;
+                        display: table-cell;
+                        text-align: center; vertical-align: middle;
+                    }
+                }
+            }
+        }
+        .filter-select {
+            position: absolute; top: 0; right: 0;
+            color: #2C2C2C; font: bold 12px/1em Arial;
+            select {
+                width: 150px;
+                padding: 4px 5px; margin-left: 2px;
+                border: 1px solid #DDD; .border-radius( 3px );
+                background: #ffffff;
+                background: -moz-linear-gradient(top,  #ffffff 0%, #f3f3f3 100%);
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f3f3f3));
+                background: -webkit-linear-gradient(top,  #ffffff 0%,#f3f3f3 100%);
+                background: -o-linear-gradient(top,  #ffffff 0%,#f3f3f3 100%);
+                background: -ms-linear-gradient(top,  #ffffff 0%,#f3f3f3 100%);
+                background: linear-gradient(to bottom,  #ffffff 0%,#f3f3f3 100%);
+                filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f3f3f3',GradientType=0 )";
+            }
+        }
+    }
+}
+
+/**
+ * ----------------------------------------------------------------------- *
+ *     Middle.
+ * ----------------------------------------------------------------------- *
+ */
+#middle-wrapper {
+    background: #FFF;
+    padding: 50px 0;
+    #middle {
+        width: 1000px;
+        margin: 0 auto;
+        position: relative;
+    }
+}
+
+/**
+ * ----------------------------------------------------------------------- *
+ *     Footer.
+ * ----------------------------------------------------------------------- *
+ */
+#footer-wrapper {
+  width: 100%;
+  bottom: -20px;
+  position: relative;
+  float: left;
+    .footer-wrapper {
+        padding: 40px 0;
+        background: #001B34;
+        .footer {
+            width: 90%;
+            margin: 0 auto 25px; padding-bottom: 25px;
+            border-bottom: 1px solid #00243C;
+            .columns-wrapper {
+                width: 1000px;
+                margin: 0 auto;
+                .column {
+                    width: 250px;
+                    float: left;
+                    .title {
+                        text-transform: uppercase;
+                        margin-bottom: 16px;
+                        color: #FFF; font: 14px/1em 'OpenSans-Bold';
+                    }
+                    .content {
+                        p { color: #A3A3A3; font: 12px 'MyriadPro-Regular'; margin-bottom: 12px; span { color: #F24B44; } }
+                        .see-more { a { color: #A3A3A3; } }
+                    }
+                    &.column-2 { margin: 0 125px; }
+                }
+            }
+        }
+        .news-wrapper {
+            width: 1000px;
+            margin: 0 auto;
+            #newsletter-form {
+                float: left;
+                input {
+                    display: block;
+                    float: left;
+                    width: 250px; height: 36px;
+                    background: #2D2D2D;
+                    border: 0 none;
+                    color: #7D7D7D; font: 12px/12px Arial;
+                    padding: 0 12px; margin: 0;
+                }
+                button {
+                    display: block;
+                    float: left;
+                    width: 36px; height: 36px;
+                    background: #7D7D7D url('../images/site/newsletter-form-submit-button-background.png') 50% 50% no-repeat;
+                    border: 0 none;
+                    padding: 0; margin: 0;
+                }
+            }
+            .social-list {
+                float: right;
+                li { margin-left: 8px; }
+            }
+        }
+    }
+    .copy {
+        padding: 16px;
+        background: #2D2D2D;
+        color: #969696; font: 12px/1.3em Arial;
+        text-align: center;
+        small { font-size: 11px; }
+    }
+}
+.centralizado {
+  text-align: center;
+  margin: 0 auto;
+}
+.input-group-addon {
+  &.glyphicon{
+    top:0;
+    cursor: pointer;
+  }
+}
+@media (max-width: 1200px) {
+  div[class^='col-'] {
+    &.padding-b {
+      padding-bottom: 5px !important;
+    }
+  }
+}
+
+div[class^='col-'] {
+  &.no-padding {
+    padding: 0;
+  }
+}

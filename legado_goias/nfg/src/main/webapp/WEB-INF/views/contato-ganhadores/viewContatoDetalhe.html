@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/layout :: template">
+
+<div layout:fragment="content">
+    <div class="container-fluid" id="divTelaPrincipal">
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="control-label">Contatos:</label>
+            </div>
+            <div class="col-lg-12">
+                <div class="clearfix">&nbsp;</div>
+                <div class="row">
+                    <div class="panel panel-default">
+                        <table class="table table-striped table-responsive table-condensed" id="listContato">
+                            <div class="panel-body dadosContato" title="Contatos" style="overflow-x:auto">
+                                <div id="containerContato"></div>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/numericInput.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/cnaes/paginate.js}"></script>
+    <script th:src="@{/js/contatoGanhadores.js}" type="application/javascript" charset="ISO-8859-1"></script>
+</div>

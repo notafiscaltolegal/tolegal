@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+	<head>
+		<title>Secretaria da Fazenda do Estado de Goias</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<meta name="resource-type" content="document"/>
+		<meta http-equiv="pragma" content="no-cache"/>
+		<meta name="author" content="Secretaria da Fazenda do Estado de Goias"/>
+		<meta name="language" content="pt-br"/>
+		<link rel="shortcut icon" href="/nfg/imagens/favicon.ico"/>
+		<link rel="stylesheet" href="/nfg/css/portalsefaz.css" type="text/css"/>
+		<script type="text/javascript" src="/nfg/js/menu7_ini.js"></script>
+		<script type="text/javascript" src='/nfg/js/menu7_com.js'></script>
+	</head>
+	<script type="text/javascript">
+		function close(){
+		    var b_version=navigator.appVersion;
+		    var index = b_version.indexOf("MSIE");
+			var version;	    
+		    
+		    if(index!=-1){
+		     	version =  parseFloat(b_version.substring(index+"MSIE".length+1));	    
+		    }else{
+		   		version = 7.0;
+		    }
+			
+		    if(version >= 7.0){
+				document.location.href = "/nfg/control?cmd=s";
+		    } 
+		}
+		function closeVersion6(){
+			document.location.href = "/nfg/control?cmd=s";
+		}
+	</script>
+	<body onbeforeunload="close();" onunload="closeVersion6();">
+		<div id="caixaConteudo">
+			<!-- Topo da pagina -->
+			<div id="caixaConteudoCabecalho">
+				&nbsp;
+			</div>
+			<script type="text/javascript">
+				$buf.toString()
+				NoOffFirstLineMenus=$qtdMenus;
+			</script>
+		</div>
+		<input type="hidden" name="nomeUsuario" value="$nomeUsuario">
+		<div id="interVeil"></div>
+	</body>
+</html>

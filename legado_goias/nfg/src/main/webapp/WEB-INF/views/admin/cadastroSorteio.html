@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/admin :: template">
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+    <form id="formCadastroSorteio" >
+        <div class="page-header col-lg-6 col-lg-offset-3">
+            <h1 id="forms">CADASTRO SORTEIO</h1>
+        </div>
+        <div class="col-lg-6 col-lg-offset-3 well bs-component">
+            <div class="form-group">
+                <label class="col-lg-6 control-label">Selecione o Sorteio:</label>
+                <div class="col-lg-3">
+                    <select class="form-control" name="idSorteio" id="idSorteio" title="Selecione o sorteio.">
+                        <option value="0">-</option>
+                        <option th:each="s : ${sorteios}" th:value="${s.id}" th:text="${s.informacao}"></option>
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <a class="btn btn-info btn-sm" id="btnNovoSorteio">Novo Sorteio</a>
+                </div>
+            </div>
+            <div id="fieldsSorteio" style="display: none;">
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Descrição Sorteio:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty" name="informacao" id="informacao">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Data de Extração da Loteria Federal:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty datepicker" name="dataExtracaoLoteria" id="dataExtracaoLoteria">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Número de Extração da Loteria Federal:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty" name="numeroLoteria" id="numeroLoteria">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Data de Realização do Sorteio:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty datepicker" name="dataRealizacao" id="dataRealizacao">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Fator conversão Ponto X Bilhete:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty" name="numeroConversao" id="numeroConversao">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Número máximo de pontos de documentos fiscais:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty" name="numeroMaxDocFisc" id="numeroMaxDocFisc">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Data Limite Cadastro de pessoa:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty datepicker" name="dataLimiteCadastroPessoa" id="dataLimiteCadastroPessoa">
+                    </div>
+                </div>
+                <div class="form-group" id="divStatus">
+                    <label class="col-lg-6 control-label">Status:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control empty datepicker" name="status" id="status" disabled>
+                    </div>
+                </div>
+                <div class="form-group" id="form-password">
+                    <label class="col-lg-6 control-label">Confirme sua senha:</label>
+                    <div class="col-lg-3">
+                        <input type="password" class="form-control empty" id="password" name="password">
+                    </div>
+                    <div class="col-lg-3">
+                        <a class="btn btn-primary" id="btnCadastrarSorteio">Cadastrar Sorteio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+        <input style="display:none" type="text" name="fakeusernameremembered"/>
+        <input style="display:none" type="password" name="fakepasswordremembered"/>
+    </form>
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/sorteio.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Sorteio();
+    </script>
+</div>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2 :: site2">
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default centralizado">
+        <div class="panel-heading">Cadastrar como participante do NFG</div>
+        <div class="panel-body">
+            <div class="form-horizontal" style="margin: 0 20%;">
+                <div style="text-align: left">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Nome:</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static" th:text="${contribuinte?.pessoa?.pessoaJuridica?.empresa?.nomeEmpresa}" ></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">CNPJ:</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static maskCnpj" th:text="${contribuinte?.pessoa?.pessoaJuridica?.numeroCnpj}" ></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Inscrição:</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static" th:text="${contribuinte?.numeroInscricao}" ></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Participante NFG:</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static" th:text="Sim" th:if="${isParticipante}" value="Sim"></p>
+                            <p class="form-control-static" th:text="Não" th:unless="${isParticipante}" value="Não"></p>
+                        </div>
+                    </div>
+                    <div class="form-group" th:if="${dataLimite}">
+                        <label class="col-sm-4 control-label">Início Vigência</label>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control datepicker" name="dataInicio" th:value="${dataEfetiva}" placeholder="Ex: 01/01/2014" data-toggle="tooltip" data-placement="top" th:title="${'Data limite: '+dataLimite}" required>
+                                <span class="input-group-addon glyphicon glyphicon-calendar datepickerIcon"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" th:if="${podeParticipar}">
+                        <!--<label class="control-label col-sm-4"></label>-->
+                        <div class="col-sm-4">
+                            <div class="col-sm-8"></div>
+                            <a class="btn btn-default btn-lg" th:href="@{/contribuinte/cadastro}">Voltar</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <button th:if="${isParticipante}" class="btn btn-primary btn-lg alterarContribuinte">Atualizar data</button>
+                            <button th:unless="${isParticipante}" class="btn btn-primary btn-lg cadastrarContribuinte" >Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/contribuinte.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Contribuinte().initCadastro({
+            isParticipante: [[${isParticipante}]],
+            podeParticipar: [[${podeParticipar}]],
+            dataLimite: [[${dataLimite}]],
+            dataEfetiva: [[${dataEfetiva}]],
+            podeAlterar: [[${podeAlterar}]]
+        });
+    </script>
+</div>
+</html>

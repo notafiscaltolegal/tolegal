@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/site2 :: site2">
+
+<div layout:fragment="msg"></div>
+
+<div layout:fragment="content">
+    <div class="centralizado">
+        <h1>404 <br />
+            <small>Página não encontrada</small>
+        </h1>
+        <h1>&nbsp;&#865;&#176;&nbsp;&#860;&#662;&nbsp;&#865;&#176;</h1>
+
+        <!--<img th:src="@{/images/homer.png}" height="250px">-->
+        <br />
+        <br />
+        <small th:text="${message}"></small>
+    </div>
+</div>
+</html>
