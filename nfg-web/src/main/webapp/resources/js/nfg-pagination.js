@@ -25,7 +25,7 @@ function NFGPagination(options) {
         formFilterSelector: "form"
     };
     options = _.defaults(options, defaults);
-
+    
     this.url = options.url;
     this.$container = $(options.containerSelector);
     this.template = Handlebars.compile($(options.templateSelector).html());

@@ -4,11 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +19,8 @@ import gov.goias.exceptions.NFGException;
 import gov.goias.interceptors.CertificateInterceptor;
 import gov.goias.service.ContribuinteService;
 import gov.goias.service.MensagemService;
+import gov.to.dto.PaginacaoContribuinteDTO;
+import gov.to.service.ContribuinteToLegalService;
 
 /**
  * @author henrique-rh
@@ -33,6 +32,9 @@ public class ContribuinteController extends BaseController {
 
 	@Autowired
 	private ContribuinteService contribuinteService;
+	
+	@Autowired
+	private ContribuinteToLegalService contribuinteToLegalService;
 	
 	@Autowired
 	private MensagemService mensagemService;
@@ -58,19 +60,23 @@ public class ContribuinteController extends BaseController {
          String cnpj = request.getParameter("cnpj");
          cnpj = cnpj != null ? cnpj.replaceAll("[^0-9]", "") : null;
          String nome = request.getParameter("nome");
+         
+         PaginacaoContribuinteDTO pagDTO = contribuinteToLegalService.findContribuintes(page, max, cnpjBase, numrInscricao, cnpj, nome);
 
-         List<DTOContribuinte> resultado = contribuinteService.findContribuintes(page, max, cnpjBase, numrInscricao, cnpj, nome);
-         List<DTOContribuinte> contribuintes =  mensagemService.retornaQtdMensagensEmpresas(resultado);
-         Long count = contribuinteService.countContribuintes(cnpjBase, numrInscricao);
-
-         Map<String, Object> retorno = new HashMap<String, Object>();
-         retorno.put("contribuintes", contribuintes);
-         retorno.put("urlBase", "/nfg-web/contribuinte");
+         List<DTOContribuinte> resultado = pagDTO.getListContribuinteDTO();
+         
          Map<String, Object> pagination = new HashMap<String, Object>();
-         pagination.put("total", count);
+         
+         pagination.put("total", pagDTO.getCountPaginacao());
          pagination.put("page", ++page);
          pagination.put("max", max);
+       
+
+         Map<String, Object> retorno = new HashMap<String, Object>();
+         retorno.put("contribuintes", resultado);
+         retorno.put("urlBase", "/nfg-web/contribuinte");
          retorno.put("pagination", pagination);
+         
          return retorno;
     }
 

@@ -22,7 +22,6 @@
                     <th>Inscri&ccedil;&atilde;o</th>
                     <th>Raz&atilde;o Social</th>
                     <th>CNPJ</th>
-                    <th>Observa&ccedil;&atilde;o</th>
                     <th>Data In&iacute;cio Vig&ecirc;ncia</th>
                     <th>A&ccedil;&otilde;es</th>
                     <th></th>
@@ -36,13 +35,8 @@
                     <td class="maskInscricao">{{numeroInscricao}}</td>
                     <td>{{nomeEmpresa}}</td>
                     <td class="maskCnpj">{{numeroCnpj}}</td>
-                    {{#if hasCnaeAutorizado}}
-                    {{#if isEmissorEFD}}
-                    <td>Cadastrado. (Emitente EFD)</td>
-                    <td>&nbsp;</td>
+                    <td> {{dataEfetivaParticipacaoFormatada}} </td>
                     <td class="padding-2"><a href="{{../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
-                    <td class="padding-2"><a href="{{../../../urlBase}}/mfd/consultar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Consultar MFD</a></td>
-           <!--         <td class="padding-2"><a href="{{../../../urlBase}}/ecf/importar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Importa&ccedil;&atilde;o ECF</a></td> -->
                     <td>
                         <a class="iconGlobe">
                             {{#compare qtdReclamacoes 0 operator=">"}}
@@ -61,70 +55,6 @@
                         </a>
                         <button type="button" class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span title="Mensagens" class="glyphicon glyphicon-envelope"></span></button>
                     </td>
-                    {{else}} {{#if hasCnaeObrigatorio}}
-                    <td>Cadastrado. (CNAE Obrigat&oacute;rio)</td>
-                    <td>{{dataObrigatoriedadeCnaeFormatada}}</td>
-                    <td class="padding-4"><a href="{{../../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
-                    <td class="padding-4"><a href="{{../../../../urlBase}}/mfd/consultar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Consultar MFD</a></td>
-                    <!-- <td class="padding-2"><a href="{{../../../../urlBase}}/ecf/importar/{{numeroInscricao}}" class="btn btn-default btn-sm ">Importa&ccedil;&atilde;o ECF</a></td> -->
-                    <td>
-                        <a class="iconGlobe">
-                            {{#compare qtdReclamacoes 0 operator=">"}}
-                            <span class="notification-count" >{{qtdReclamacoes}}</span>
-                            {{/compare}}
-                        </a>
-                        <a href="{{../../../../urlBase}}/reclamacao/consultar/{{numeroCnpj}}" type="button" title="Reclama&#231;&#245;es"
-                           class="btn btn-danger btn-md btn-reclamacao" data-numcnpj="{{numeroCnpj}}"><span  class="glyphicon glyphicon-bullhorn"></span>
-                        </a>
-                    </td>
-                    <td>
-                        <a class="iconGlobe">
-                            {{#compare qtdMensagens 0 operator=">"}}
-                            <span class="notification-count" >{{qtdMensagens}}</span>
-                            {{/compare}}
-                        </a>
-                        <button type="button"  class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span  class="glyphicon glyphicon-envelope"></span></button>
-                    </td>
-
-                    {{else}} {{#if isEmpresaParticipante}}
-                    {{#compare indiResponsavelAdesao 'C' operator='=='}}
-                    <td>Contribuinte cadastrado pelo contador.</td>
-                    {{else}}
-                    <td>Empresa j&#225; se cadastrou.</td>
-                    {{/compare}}
-                    <td class="col-md-2 padding-4">
-                        <div class="input-group col-md-10">
-                            <input type="text" class="form-control datepicker" data-pode-alterar="{{podeAlterar}}" data-limite="{{dataLimiteFormatada}}" name="dataInicio" value="{{dataEfetivaParticipacaoFormatada}}" placeholder="Ex: 01/01/2014" required>
-                            <span class="input-group-addon glyphicon glyphicon-calendar datepickerIcon"></span>
-                        </div>
-                    </td>
-                    {{#if podeAlterar}}
-                    <td class="padding-4"><button type="button" class="btn btn-default btn-sm btn-alterar" data-inscricao="{{numeroInscricao}}">Alterar Cadastro</button></td>
-                    {{else}}
-                    <td class="padding-4"><a href="{{../../../../../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
-                    {{/if}}
-                    {{else}}
-                    <td>&nbsp;</td>
-                    <td class="col-md-2 padding-4">
-                        <div class="input-group col-md-10">
-                            <input type="text" class="form-control datepicker" data-pode-alterar="{{podeAlterar}}" data-limite="{{dataLimiteFormatada}}" name="dataInicio" placeholder="Ex: 01/01/2014" required >
-                            <span class="input-group-addon glyphicon glyphicon-calendar datepickerIcon"></span>
-                        </div>
-                    </td>
-                    <td class="padding-4"><button type="button" class="btn btn-default btn-sm btn-cadastrar" data-inscricao="{{numeroInscricao}}">Cadastrar</button></td>
-                    <td>&nbsp;</td>
-                    <td><button type="button" class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span class="glyphicon glyphicon-envelope"></span></button></td>
-                    {{/if}}
-                    {{/if}}
-                    {{/if}}
-                    {{else}}
-                    <td>Contribuinte n&atilde;o possui CNAE autorizado para participar.</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    {{/if}}
                 </tr>
                 {{/each}}
                 </tbody>

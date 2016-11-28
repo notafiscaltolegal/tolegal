@@ -11,7 +11,7 @@ import gov.goias.entidades.GENPessoaJuridica;
 
 @Service
 public class ContibuinteServiceImpl implements ContribuinteService{
-
+	
 	@Override
 	public Long countContribuintes(String cnpjBase, Integer numrInscricao) {
 		return 123L;
@@ -20,7 +20,7 @@ public class ContibuinteServiceImpl implements ContribuinteService{
 	@Override
 	public List<DTOContribuinte> findContribuintes(Integer page, Integer max, String cnpjBase, Integer numrInscricao, String cnpj, String nome) {
 		
-		return MockContribuinte.listDTOContriuinte();
+		return null;
 	}
 
 	@Override
