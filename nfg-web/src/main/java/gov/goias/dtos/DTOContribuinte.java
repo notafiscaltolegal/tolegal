@@ -31,15 +31,7 @@ public class DTOContribuinte implements Serializable {
 
     @Transient
     private Integer qtdReclamacoes;
-
-    public Integer getIdPessoa() {
-        return idPessoa;
-    }
-
-    public void setIdPessoa(Integer idPessoa) {
-        this.idPessoa = idPessoa;
-    }
-
+    
     private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     private ArrayList<DTOCnaeAutorizado> listaCnaeAutorizado;
 
@@ -55,6 +47,14 @@ public class DTOContribuinte implements Serializable {
     public DTOContribuinte(Integer numeroInscricao, String nomeEmpresa, String numeroCnpj, Date dataEfetivaParticipacao) {
         this(numeroInscricao, nomeEmpresa, numeroCnpj);
         this.dataEfetivaParticipacao = dataEfetivaParticipacao;
+    }
+    
+    public Integer getIdPessoa() {
+        return idPessoa;
+    }
+
+    public void setIdPessoa(Integer idPessoa) {
+        this.idPessoa = idPessoa;
     }
 
     public Integer getNumeroInscricao() {
@@ -110,6 +110,11 @@ public class DTOContribuinte implements Serializable {
     }
 
     public Boolean getHasCnaeAutorizado() {
+    	
+    	if (listaCnaeAutorizado == null){
+    		return Boolean.TRUE;
+    	}
+    	
         for (DTOCnaeAutorizado cnae : listaCnaeAutorizado) {
             if (cnae.getIsCnaeAutorizado()) {
                 return true;
@@ -135,6 +140,11 @@ public class DTOContribuinte implements Serializable {
     }
 
     public Boolean getHasCnaeObrigatorio() {
+    	
+    	if (listaCnaeAutorizado == null){
+    		return Boolean.TRUE;
+    	}
+    	
         for (DTOCnaeAutorizado cnae : listaCnaeAutorizado) {
             if (cnae.getIsCnaeObrigatorio()) {
                 return true;

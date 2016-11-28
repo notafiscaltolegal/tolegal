@@ -33,4 +33,6 @@ public interface UsuarioToLegalService {
 
 	PessoaParticipante atualizaPerfil(UsuarioToLegal usuarioToLegal);
 
+	String emailRecuperarSenha(String cpf);
+
 }
