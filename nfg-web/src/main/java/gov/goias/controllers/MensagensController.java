@@ -44,7 +44,7 @@ public class MensagensController extends BaseController{
         PessoaParticipante cidadao = getCidadaoLogado();
         Integer idPessoa = cidadao.getGenPessoaFisica().getIdPessoa();
 
-        PaginacaoDTO<Mensagem> mensagemPaginate = mensagemService.findMensagensCaixaDeEntrada(max, page, idPessoa);
+        PaginacaoDTO<Mensagem> mensagemPaginate = new PaginacaoDTO<>(); //mensagemService.findMensagensCaixaDeEntrada(max, page, idPessoa);
 
         resposta.put("mensagens", mensagemPaginate.getList());
 
