@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author henrique-rh
  * @since 16/07/2014
@@ -18,6 +20,7 @@ public class DTOContribuinte implements Serializable {
     private Integer numeroInscricao;
     private String nomeEmpresa;
     private String numeroCnpj;
+    private String numeroCnpjSemMask;
     private Date dataEfetivaParticipacao;
     private Date dataObrigatoriedadeCnae;
     private Date dataCredenciamento;
@@ -102,9 +105,14 @@ public class DTOContribuinte implements Serializable {
     }
 
     public void setNumeroCnpj(String numeroCnpj) {
+    	
+    	if (StringUtils.isNotBlank(numeroCnpj)){
+    		this.numeroCnpjSemMask = numeroCnpj.replaceAll("\\D", "");
+    	}
+    	
         this.numeroCnpj = numeroCnpj;
     }
-
+    
     public void setDataEfetivaParticipacao(Date dataEfetivaParticipacao) {
         this.dataEfetivaParticipacao = dataEfetivaParticipacao;
     }
@@ -212,4 +220,12 @@ public class DTOContribuinte implements Serializable {
     public void setQtdReclamacoes(Integer qtdReclamacoes) {
         this.qtdReclamacoes = qtdReclamacoes;
     }
+
+	public String getNumeroCnpjSemMask() {
+		return numeroCnpjSemMask;
+	}
+
+	public void setNumeroCnpjSemMask(String numeroCnpjSemMask) {
+		this.numeroCnpjSemMask = numeroCnpjSemMask;
+	}
 }
