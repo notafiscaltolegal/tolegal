@@ -36,14 +36,14 @@
                     <td>{{nomeEmpresa}}</td>
                     <td class="maskCnpj">{{numeroCnpj}}</td>
                     <td> {{dataEfetivaParticipacaoFormatada}} </td>
-                    <td class="padding-2"><a href="{{../../../urlBase}}/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm ">Cadastrar Nota</a></td>
+                    <td class="padding-2"><a href="/nfg-web/contribuinte/nota/cadastro/{{numeroInscricao}}" class="btn btn-default btn-sm">Cadastrar Nota</a></td>
                     <td>
                         <a class="iconGlobe">
                             {{#compare qtdReclamacoes 0 operator=">"}}
                             <span class="notification-count" >{{qtdReclamacoes}}</span>
                             {{/compare}}
                         </a>
-                        <a href="{{../../../../urlBase}}/reclamacao/consultar/{{numeroCnpj}}" type="button" title="Reclama&#231;&#245;es"
+                        <a href="/nfg-web/contribuinte/reclamacao/consultar/{{numeroCnpj}}" type="button" title="Reclama&#231;&#245;es"
                            class="btn btn-danger btn-md btn-reclamacao" data-numcnpj="{{numeroCnpj}}"><span  class="glyphicon glyphicon-bullhorn"></span>
                         </a>
                     </td>
