@@ -112,7 +112,7 @@ public class CidadaoController extends BaseController {
         return "redirect:login";
     }
 
-    @RequestMapping("telaCidadao")
+	@RequestMapping("telaCidadao")
     public ModelAndView telaCidadao() throws Exception {
         ModelAndView m = new ModelAndView("cidadao/telaCidadao");
         return m;
