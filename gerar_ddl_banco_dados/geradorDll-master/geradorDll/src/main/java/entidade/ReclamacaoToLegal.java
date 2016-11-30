@@ -1,4 +1,4 @@
-package gov.to.entidade;
+package entidade;
 
 import java.util.Date;
 
@@ -17,14 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import gov.to.dominio.MotivoReclamacaoEnum;
-import gov.to.dominio.ProblemaEmpresaEnum;
-import gov.to.dominio.TipoDocumentoFiscalEnum;
-import gov.to.persistencia.EntidadeBasica;
-
 @Entity
 @Table(name = "tb_reclamacao")
-public class ReclamacaoToLegal extends EntidadeBasica{
+public class ReclamacaoToLegal {
 	
 	/**
 	 * 
