@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import gov.to.dominio.MotivoReclamacaoEnum;
+import gov.to.dominio.ProblemaEmpresaEnum;
+import gov.to.dominio.TipoDocumentoFiscalEnum;
 import gov.to.persistencia.EntidadeBasica;
 
 @Entity
@@ -31,8 +34,41 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	@GeneratedValue(generator = "seq_reclamacao", strategy = GenerationType.IDENTITY)
 	@SequenceGenerator(name = "seq_reclamacao", sequenceName = "seq_reclamacao",allocationSize=1)
 	@Column(name = "id_reclamacao")
-	private Long id;
+	private Long id;	
 	
+	@ManyToOne
+	@JoinColumn(name="id_usuario",referencedColumnName="id_usr_to_legl")
+	private UsuarioToLegal usuarioToLegal;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="motivo_reclamacao")
+	private MotivoReclamacaoEnum motivoReclamacao;	
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "problema_empresa")
+	private ProblemaEmpresaEnum problemaEmpresa;
+		
+	@Enumerated(EnumType.STRING)
+	@Column(name="tipo_doc_fiscal")
+	private TipoDocumentoFiscalEnum tipoDocFiscal;	
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "data_cadastro")
+	private Date dataCadastro;	
+	
+	@Column(name = "inscricao_estadual")
+	private String inscricaoEstadual;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "data_emissao_doc_fiscal")
+	private Date dataEmissaoDocFiscal;	
+	
+	@Column(name = "numero_doc_fiscal")
+	private String numeroDocFiscal;
+		
+	@Column(name = "valor_doc_fiscal")
+	private Double valorDocFiscal;
+
 	public Long getId() {
 		return id;
 	}
@@ -40,47 +76,39 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	@ManyToOne
-	@JoinColumn(name="id_usuario",referencedColumnName="id_usr_to_legl")
-	private UsuarioToLegal usuarioToLegal;
-	
+
 	public UsuarioToLegal getUsuarioToLegal() {
 		return usuarioToLegal;
 	}
-	
+
 	public void setUsuarioToLegal(UsuarioToLegal usuarioToLegal) {
 		this.usuarioToLegal = usuarioToLegal;
 	}
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="motivoReclamacao")
-	private String motivoReclamacao;
-	
-	public String getMotivoReclamacao() {
+
+	public MotivoReclamacaoEnum getMotivoReclamacao() {
 		return motivoReclamacao;
 	}
-	
-	public void setMotivoReclamacao(String motivoReclamacao) {
+
+	public void setMotivoReclamacao(MotivoReclamacaoEnum motivoReclamacao) {
 		this.motivoReclamacao = motivoReclamacao;
 	}
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name="tipoDocFiscal")
-	private String tipoDocFiscal;
-	
-	public String getTipoDocFiscal() {
+
+	public ProblemaEmpresaEnum getProblemaEmpresa() {
+		return problemaEmpresa;
+	}
+
+	public void setProblemaEmpresa(ProblemaEmpresaEnum problemaEmpresa) {
+		this.problemaEmpresa = problemaEmpresa;
+	}
+
+	public TipoDocumentoFiscalEnum getTipoDocFiscal() {
 		return tipoDocFiscal;
 	}
-	
-	public void setTipoDocFiscal(String tipoDocFiscal) {
+
+	public void setTipoDocFiscal(TipoDocumentoFiscalEnum tipoDocFiscal) {
 		this.tipoDocFiscal = tipoDocFiscal;
 	}
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_cadastro")
-	private Date dataCadastro;
-	
+
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
@@ -88,24 +116,15 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
-	
-	
-	@Column(name = "inscricaoEstadual")
-	private String inscricaoEstadual;
-	
+
 	public String getInscricaoEstadual() {
 		return inscricaoEstadual;
 	}
 
-	public void setInscricaoEstaudal(String inscricaoEstadual) {
+	public void setInscricaoEstadual(String inscricaoEstadual) {
 		this.inscricaoEstadual = inscricaoEstadual;
 	}
 
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dataEmissaoDocFiscal")
-	private Date dataEmissaoDocFiscal;
-	
 	public Date getDataEmissaoDocFiscal() {
 		return dataEmissaoDocFiscal;
 	}
@@ -113,10 +132,7 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	public void setDataEmissaoDocFiscal(Date dataEmissaoDocFiscal) {
 		this.dataEmissaoDocFiscal = dataEmissaoDocFiscal;
 	}
-	
-	@Column(name = "numeroDocFiscal")
-	private String numeroDocFiscal;
-	
+
 	public String getNumeroDocFiscal() {
 		return numeroDocFiscal;
 	}
@@ -124,10 +140,7 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	public void setNumeroDocFiscal(String numeroDocFiscal) {
 		this.numeroDocFiscal = numeroDocFiscal;
 	}
-	
-	@Column(name = "valorDocFiscal")
-	private Double valorDocFiscal;
-	
+
 	public Double getValorDocFiscal() {
 		return valorDocFiscal;
 	}
@@ -135,29 +148,11 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	public void setValorDocFiscal(Double valorDocFiscal) {
 		this.valorDocFiscal = valorDocFiscal;
 	}
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "problemaEmpresa")
-	private String problemaEmpresa;
-	
-	public String getProblemaEmpresa() {
-		return problemaEmpresa;
-	}
 
-	public void setProblemaEmpresa(String problemaEmpresa) {
-		this.problemaEmpresa = problemaEmpresa;
-	}
-	
-	
-	
-	
-	
-	
-	
+		
 
 	
-
-
-
+	
+	
 
 }
