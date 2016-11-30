@@ -40,7 +40,6 @@ public class ReclamacaoController extends BaseController{
 
     @RequestMapping("/consultar/{numeroCnpj}")
     public ModelAndView consultar(@PathVariable(value="numeroCnpj")String numeroCnpj) {
-
         ModelAndView modelAndView = new ModelAndView("/reclamacao/consultar");
 
         modelAndView.addObject("numeroCnpj", numeroCnpj);
