@@ -9,7 +9,7 @@ public enum TipoDocumentoFiscalEnum {
 	NOTA_FISCAL_ELETRONICA(2,"Nota Fiscal Eletrônica"),
 	CUPOM_FISCAL(3,"Cupom Fiscal");
 	
-	private int codigo;
+	private Integer codigo;
 	private String label;
 	
 	private TipoDocumentoFiscalEnum(int codigo, String label){
@@ -17,12 +17,21 @@ public enum TipoDocumentoFiscalEnum {
 		this.codigo = codigo;
 		this.label = label;
 	}
+	
+	public static TipoDocumentoFiscalEnum convertCodTipoDocumentoFiscalParaEnum(Integer codigoMotivo) {
+		for (TipoDocumentoFiscalEnum mr : values()) {
+			if (mr.getCodigo().equals(codigoMotivo)) {
+				return mr;
+			}
+		}
+		return null;
+	}
 
-	public int getCodigo() {
+	public Integer getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(int codigo) {
+	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
 

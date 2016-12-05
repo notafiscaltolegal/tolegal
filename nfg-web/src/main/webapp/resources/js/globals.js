@@ -147,8 +147,7 @@ function trataErroDoServidor(xhr) {
             }catch (e){}
         }
     } else {
-        var mensagem = "O sistema se comportou de forma inesperada - " + moment().format('DD/MM/YYYY HH:mm:ss') + ". ";
-        mensagem += "Tente novamente após 5 minutos.";
+        var mensagem = "O sistema se comportou de forma inesperada - " + moment().format('DD/MM/YYYY HH:mm:ss') + ". Tente novamente após 5 minutos.";
         nfgMensagens.show(ALERT_TYPES.ERROR, mensagem);
     }
     hideLoading();

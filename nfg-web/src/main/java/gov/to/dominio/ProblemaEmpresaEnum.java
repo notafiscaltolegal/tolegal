@@ -12,7 +12,7 @@ public enum ProblemaEmpresaEnum {
 	EMPRESA_ALEGOU_NAO_PARTICIPAR(5,"Alegou não participar do programa.");
 
 	
-	private int codigo;
+	private Integer codigo;
 	private String label;
 	
 	private ProblemaEmpresaEnum(int codigo, String label){
@@ -20,12 +20,21 @@ public enum ProblemaEmpresaEnum {
 		this.codigo = codigo;
 		this.label = label;
 	}
+	
+	public static ProblemaEmpresaEnum convertCodProblemaEmpresaEnumParaEnum(Integer codigoMotivo) {
+		for (ProblemaEmpresaEnum mr : values()) {
+			if (mr.getCodigo().equals(codigoMotivo)) {
+				return mr;
+			}
+		}
+		return null;
+	}
 
-	public int getCodigo() {
+	public Integer getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(int codigo) {
+	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
 

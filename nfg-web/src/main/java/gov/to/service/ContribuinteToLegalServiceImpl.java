@@ -19,7 +19,7 @@ import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
 
 @Stateless
-public class ContribuinteToLegalServiceImpl implements ContribuinteToLegalService{
+public class ContribuinteToLegalServiceImpl extends ConsultasDaoJpa<ContribuinteToLegal> implements ContribuinteToLegalService{
 	
 	@EJB
 	private GenericPersistence<ContribuinteToLegal, String> genericPersistence;
@@ -123,5 +123,15 @@ public class ContribuinteToLegalServiceImpl implements ContribuinteToLegalServic
 	private static int calcInicio(Integer page, Integer max) {
 		
 		return (page * max);
+	}
+
+	@Override
+	public ContribuinteToLegal findByInscricaoEstadual(Integer inscricaoEstadual) {
+
+		FiltroContribuinteToLegal filtroContribuinteToLegal = new FiltroContribuinteToLegal();
+
+		filtroContribuinteToLegal.setInscricaoEstadual(FiltroContribuinteToLegal.inscricaoEstadualFormat(inscricaoEstadual));
+
+		return super.primeiroRegistroPorFiltro(filtroContribuinteToLegal, ContribuinteToLegal.class);
 	}
 }

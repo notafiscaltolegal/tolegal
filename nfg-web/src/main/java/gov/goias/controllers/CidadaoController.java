@@ -65,12 +65,15 @@ import gov.to.entidade.UsuarioToLegal;
 import gov.to.service.BilheteToLegalService;
 import gov.to.service.GenericService;
 import gov.to.service.PontuacaoToLegalService;
+import gov.to.service.ReclamacaoToLegalService;
 import gov.to.service.SorteioToLegalService;
 import gov.to.service.UsuarioToLegalService;
 
 @Controller
 @RequestMapping("/cidadao")
 public class CidadaoController extends BaseController {
+	
+	
 	
 	@Autowired
 	private SorteioToLegalService sorteioService;
@@ -83,6 +86,9 @@ public class CidadaoController extends BaseController {
 	
 	@Autowired
 	private ReclamacaoService reclamacaoService;
+	
+	@Autowired
+	private ReclamacaoToLegalService reclamacaoToLegalService;
 	
 	@Autowired
 	private EmpresaService empresaService;
@@ -980,7 +986,7 @@ public class CidadaoController extends BaseController {
     	 Integer max = 5;
 
          PessoaParticipante cidadao = getCidadaoLogado();
-         PaginacaoDTO<DocumentoFiscalReclamado> reclamacoesPaginate = reclamacaoService.findReclamacoesDoCidadao(cidadao, page, max);
+         PaginacaoDTO<DocumentoFiscalReclamado> reclamacoesPaginate = reclamacaoToLegalService.findReclamacoesDoCidadao(cidadao, page, max);
 
          Map<String, Object> resposta = new HashMap<String, Object>();
          Map<String, Object> pagination = new HashMap<String, Object>();
@@ -996,7 +1002,8 @@ public class CidadaoController extends BaseController {
          return resposta;
     }
 
-    @RequestMapping("salvarNovaReclamacao")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping("salvarNovaReclamacao")
 //    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public @ResponseBody Map salvarNovaReclamacao(
             Integer tipoDocFiscalReclamacao,
@@ -1006,20 +1013,32 @@ public class CidadaoController extends BaseController {
             Integer iEReclamacao,
             Double valorReclamacao,
             boolean dataDentroDoPrazo,
+            Integer problemaEmpresaReclamacao,
             @RequestParam("file") MultipartFile fileReclamacao
     ) {
 
     	PessoaParticipante cidadao = getCidadaoLogado();
-        Boolean sucesso = reclamacaoService.cadastraNovaReclamacao(tipoDocFiscalReclamacao, codgMotivo, dataEmissaoDocFiscal, numeroReclamacao, iEReclamacao, valorReclamacao, fileReclamacao, cidadao,dataDentroDoPrazo);
-
-        if(sucesso){
-            setSuccessMessage("A sua reclamaç&#225;o foi registrada com sucesso e a empresa será notificada. Acompanhe o processo pelo painel Minhas Reclamações.");
-        }
+        Map retorno = new HashMap();
         
-        Map<String, Boolean> retorno = new HashMap<>();
-        retorno.put("sucesso",sucesso);
+    	try{   		
+    		
+    		reclamacaoToLegalService.cadastraNovaReclamacao(tipoDocFiscalReclamacao, codgMotivo, dataEmissaoDocFiscal, numeroReclamacao, iEReclamacao, valorReclamacao, fileReclamacao, cidadao,dataDentroDoPrazo, problemaEmpresaReclamacao);
+    		
+    		setSuccessMessage("A sua reclamação foi registrada com sucesso e a empresa será notificada. Acompanhe o processo pelo painel Minhas Reclamações.");
+            retorno.put("sucesso",Boolean.TRUE);
+    	}catch (NFGException nx)
+    	{
+    		nx.printStackTrace();
+    		retorno.put("sucesso",Boolean.FALSE);
+    		retorno.put("msg_erro", nx.getMessage());
+    	}
+    	
+    	catch (Exception ex){
+    		ex.printStackTrace();
+    		retorno.put("sucesso",Boolean.FALSE);
+    	}
 
-        return retorno;
+    	return retorno;
     }
 
     @RequestMapping("alterarSituacaoReclamacao")
@@ -1071,7 +1090,7 @@ public class CidadaoController extends BaseController {
     public @ResponseBody Map<String, Object> listarAndamentoReclamacao(@PathVariable(value = "page") Integer page, Integer idReclamacao,BindException bind) throws ParseException {
     	Integer max = 5;
 
-        PaginacaoDTO<SituacaoDocumentoFiscalReclamado> reclamacoesPaginate = reclamacaoService.andamentoDaReclamacao(idReclamacao, page, max);
+        PaginacaoDTO<SituacaoDocumentoFiscalReclamado> reclamacoesPaginate = new PaginacaoDTO<>();//reclamacaoToLegalService.andamentoDaReclamacao(idReclamacao, page, max);
 
         Map<String, Object> resposta = new HashMap<String, Object>();
         Map<String, Object> pagination = new HashMap<String, Object>();

@@ -284,6 +284,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 		pessoaParticipante.setGenPessoaFisica(genPessoaFisica);
 		pessoaParticipante.setEmailPreCadastro(usuario.getEmail());
 		pessoaParticipante.setTelefonePreCadastro(usuario.getTelefone());
+		pessoaParticipante.setId(usuario.getId().intValue());
 		
 		return pessoaParticipante;
 	}

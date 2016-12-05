@@ -14,8 +14,6 @@ import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 
 public interface ReclamacaoService {
 
-	PaginacaoDTO<DocumentoFiscalReclamado> findReclamacoesDoCidadao(PessoaParticipante cidadao, Integer page, Integer max);
-
 	PaginacaoDTO<SituacaoDocumentoFiscalReclamado> andamentoDaReclamacao(Integer idReclamacao, Integer page, Integer max);
 
 	DocumentoFiscalReclamado reclamacaoPorId(Integer idReclamacao);
@@ -24,10 +22,6 @@ public interface ReclamacaoService {
 			DocumentoFiscalReclamado reclamacao);
 
 	Boolean alteracaoDeSituacaoReclamacaoPorCidadao(DocumentoFiscalReclamado reclamacao, Integer novoCodgTipoCompl, String infoReclamacao, PessoaParticipante cidadao);
-
-	Boolean cadastraNovaReclamacao(Integer tipoDocFiscalReclamacao, Integer codgMotivo, Date dataEmissaoDocFiscal,
-			Integer numeroReclamacao, Integer iEReclamacao, Double valorReclamacao, MultipartFile fileReclamacao,
-			PessoaParticipante cidadao, boolean dataDentroDoPrazo);
 
 	PaginacaoDTO<DocumentoFiscalReclamado> listDocumentoFiscalReclamadoPorCNPJ(String numeroCnpj, Integer max,
 			Integer page);

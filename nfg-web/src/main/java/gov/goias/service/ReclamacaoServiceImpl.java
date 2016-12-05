@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import gov.goias.entidades.ComplSituacaoReclamacao;
 import gov.goias.entidades.DocumentoFiscalReclamado;
@@ -18,15 +17,6 @@ import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 
 @Service
 public class ReclamacaoServiceImpl implements ReclamacaoService {
-
-	//TODO Reclamação cidadão
-	@Override
-	public PaginacaoDTO<DocumentoFiscalReclamado> findReclamacoesDoCidadao(PessoaParticipante cidadao, Integer page, Integer max) {
-		
-		PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDTO = new PaginacaoDTO<>();
-		
-		return paginacaoDTO;
-	}
 
 	private PaginacaoDTO<DocumentoFiscalReclamado> getPaginacaoDocumentoFiscalReclamado() {
 		
@@ -119,16 +109,6 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 			Integer novoCodgTipoCompl, String infoReclamacao, PessoaParticipante cidadao) {
 		
 		System.out.println("Alteracao reclamaç&#225;o por cidad&#225;o DocumentoFiscalReclamado mock");
-		
-		return true;
-	}
-
-	@Override
-	public Boolean cadastraNovaReclamacao(Integer tipoDocFiscalReclamacao, Integer codgMotivo,
-			Date dataEmissaoDocFiscal, Integer numeroReclamacao, Integer iEReclamacao, Double valorReclamacao,
-			MultipartFile fileReclamacao, PessoaParticipante cidadao, boolean dataDentroDoPrazo) {
-		
-		System.out.println("Cadastrado nova Reclamaç&#225;o DocumentoFiscalReclamado mock");
 		
 		return true;
 	}

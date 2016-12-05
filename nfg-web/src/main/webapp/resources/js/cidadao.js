@@ -1175,9 +1175,7 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
         var motivoReclamacao = $("input[type='radio'][name='radioMotivoReclamacao']:checked").val();
         var problemaEmpresaReclamacao = $("input[type='radio'][name='radioProblemaEmpresa']:checked").val();
 
-        if(motivoReclamacao=='2'){
-            motivoReclamacao=problemaEmpresaReclamacao;
-        }
+        
 
         var tipoDocFiscalReclamacao = $("input[type='radio'][name='radioTipoDocReclamacao']:checked").val();
 
@@ -1185,7 +1183,7 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
         var numeroReclamacao = $("#numeroDocFiscalReclamacao").val();
 
         //tratamento para os fins devidos, devido tipo input number do html5
-        numeroReclamacao = Math.abs(parseInt(numeroReclamacao));
+        //numeroReclamacao = Math.abs(parseInt(numeroReclamacao));
 
         var iEReclamacao     = me.removeMascaraIE($("#ieDocFiscalReclamacao").val());
         var valorReclamacao  = me.removeMascaraValorTotal($("#valorDocFiscalReclamacao").val());
@@ -1228,7 +1226,7 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
             return;
         }
         if(dataEmissaoDocFiscal==null || dataEmissaoDocFiscal== "__/__/____"){
-            nfgMensagens.show(ALERT_TYPES.ERROR, "Preencha o campo Data de Emiss&#225;o.",true);
+            nfgMensagens.show(ALERT_TYPES.ERROR, "Preencha o campo Data de Emissão.",true);
             $("#dataEmissaoDocFiscalReclamacao").focus();
             return;
         }else{
@@ -1260,6 +1258,15 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
                 return;
             }
         }
+        
+        if($('#fileReclamacao').val()==''){
+            
+           
+                nfgMensagens.show(ALERT_TYPES.ERROR, "Insira um anexo de documento.",true);
+                return;
+           
+        }
+        
 
         var urlBusca = enderecoSite+"/cidadao/buscarEmpresaPorIe";
         me.buscarEmpresaPorIe(urlBusca, iEReclamacao);
@@ -1274,6 +1281,7 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
         formData.append("iEReclamacao",iEReclamacao);
         formData.append("valorReclamacao",valorReclamacao);
         formData.append("dataDentroDoPrazo",dataDentroDoPrazo);
+        formData.append("problemaEmpresaReclamacao", problemaEmpresaReclamacao);
 
         me.concluirInclusaoReclamacao(formData);
     });
@@ -1300,7 +1308,15 @@ Cidadao.prototype.concluirInclusaoReclamacao = function(formData){
                     $("#btnReclamacoes").click();
 
                 }else{
-                    nfgMensagens.show(ALERT_TYPES.ERROR,response.error,true);
+                	if(response.msg_erro==null || response.msg_erro==undefined)
+                	{
+                		nfgMensagens.show(ALERT_TYPES.ERROR,'O sistema se comportou de forma inesperada - ' + moment().format('DD/MM/YYYY HH:mm:ss') + '. Tente novamente após 5 minutos.',true);
+                	}else
+                		{
+                			nfgMensagens.show(ALERT_TYPES.ERROR,response.msg_erro,true);
+                		}
+                	//
+                    //O sistema se comportou de forma inesperada - ' + moment().format('DD/MM/YYYY HH:mm:ss') + '. Tente novamente após 5 minutos.
                 }
             }
         });
