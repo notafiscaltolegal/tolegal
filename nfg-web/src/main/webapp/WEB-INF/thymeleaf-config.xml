@@ -41,6 +41,9 @@
      <jee:local-slsb id="contribuinteToLegalService" jndi-name="java:module/ContribuinteToLegalServiceImpl" 
       business-interface="gov.to.service.ContribuinteToLegalService"/>
       
+      <jee:local-slsb id="reclamacaoToLegalService" jndi-name="java:module/ReclamacaoToLegalServiceImpl" 
+      business-interface="gov.to.service.ReclamacaoToLegalService"/>
+      
     <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/views/" />
         <property name="suffix" value=".html" />
