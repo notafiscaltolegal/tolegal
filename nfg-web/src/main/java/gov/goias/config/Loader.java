@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Loader implements ApplicationListener<ContextRefreshedEvent> {
 
 //    @Autowired
-//    DocumentoFiscalReclamado reclamacaoRepository;
+//    DocumentoFiscalReclamadoToLegal reclamacaoRepository;
 
     public void executeWhenRootContextStarts() {
 //        if (System.getProperty("spring.profiles.active").equals("homolog")) {

@@ -626,7 +626,7 @@ Cidadao.prototype.senhaValida = function(senha,senhaConfirma,senhaAtual,modal){
         nfgMensagens.show(ALERT_TYPES.ERROR, "Preencha o campo Senha !",modal);
         $("#passCidadao").focus();
     }else if(senhaConfirma==null || senhaConfirma==""){
-        nfgMensagens.show(ALERT_TYPES.ERROR, "Preencha o campo de confirmaç&#225;o de Senha !",modal);
+        nfgMensagens.show(ALERT_TYPES.ERROR, "Preencha o campo de confirmaç&atilde;o de Senha !",modal);
         $("#passCidadaoConfirm").focus();
     }else if(senha.length != 10) {
         nfgMensagens.show(ALERT_TYPES.ERROR, "A senha deve conter 10 caracteres!",modal);
@@ -638,7 +638,7 @@ Cidadao.prototype.senhaValida = function(senha,senhaConfirma,senhaAtual,modal){
         nfgMensagens.show(ALERT_TYPES.ERROR, "A senha deve conter um ou mais n&#250;meros!",modal);
         $("#passCidadao").focus();
     }else if(senhaConfirma!=senha){
-        nfgMensagens.show(ALERT_TYPES.ERROR, "A senha deve coincidir com a sua confirmaç&#225;o!",modal);
+        nfgMensagens.show(ALERT_TYPES.ERROR, "A senha deve coincidir com a sua confirmaç&atilde;o!",modal);
         $("#passCidadaoConfirm").focus();
     }else{
         return true;
@@ -875,7 +875,7 @@ Cidadao.prototype.carregaDadosPremiacao = function(){
             $("#textUsuarioPremiado").html("Você foi sorteado!");
             me.listarPremiacao();
         }else{
-            $("#textUsuarioPremiado").html("Você n&#225;o foi sorteado.");
+            $("#textUsuarioPremiado").html("Você n&atilde;o foi sorteado.");
         }
     });
 }
@@ -1081,11 +1081,11 @@ Cidadao.prototype.carregaDadosSorteio = function(sorteioId){
             function(response){
                 $("#dtSorteio").html(response.sorteio.dataRealizacaoStr);
                 $("#textDtLoteria").html(response.sorteio.dataExtracaoLoteriaStr);
-                $("#textSorteioRealizado").html(response.sorteio.realizadoBoolean? "Sim":"N&#225;o");
+                $("#textSorteioRealizado").html(response.sorteio.realizadoBoolean? "Sim":"N&atilde;o");
                 $("#textTotalDocsPeriodo").html(response.totalDocs);
-                $("#textTotalPontos").html(response.sorteio.status == "1" ? ("Aguardando geraç&#225;o de bilhetes.").fontcolor("goldenrod") :
+                $("#textTotalPontos").html(response.sorteio.status == "1" ? ("Aguardando geraç&atilde;o de bilhetes.").fontcolor("goldenrod") :
                     response.sorteio.status == "2" ? ("Gerando bilhetes.").fontcolor("goldenrod") : response.totalPontos);
-                $("#textTotalBilhetes").html(response.sorteio.status == "1" ? ("Aguardando geraç&#225;o de Bilhetes.").fontcolor("goldenrod") :
+                $("#textTotalBilhetes").html(response.sorteio.status == "1" ? ("Aguardando geraç&atilde;o de Bilhetes.").fontcolor("goldenrod") :
                     response.sorteio.status == "2" ? ("Gerando bilhetes.").fontcolor("goldenrod") : response.totalBilhetes);
                 $("#textNumeroLoteria").html(response.sorteio.numeroLoteria);
 
@@ -1201,13 +1201,13 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
         switch (motivoReclamacao) {
             case '1':
                 document.getElementById("txtMotivoReclamacao").innerHTML =
-                    "Cupom Fiscal/Nota Fiscal/Nota Fiscal de Consumidor Eletrônica com meu CPF n&#225;o consta no painel Minhas Notas do Portal do Cidad&#225;o";
+                    "Cupom Fiscal/Nota Fiscal/Nota Fiscal de Consumidor Eletrônica com meu CPF n&atilde;o consta no painel Minhas Notas do Portal do Cidad&atilde;o";
                 break;
             case '2':
-                document.getElementById("txtMotivoReclamacao").innerHTML = "N&#225;o perguntou se eu desejava incluir o CPF na nota/cupom fiscal";
+                document.getElementById("txtMotivoReclamacao").innerHTML = "N&atilde;o perguntou se eu desejava incluir o CPF na nota/cupom fiscal";
                 break;
             case '3':
-                document.getElementById("txtMotivoReclamacao").innerHTML = "Exigiu a elaboraç&#225;o de um cadastro para a colocaç&#225;o do CPF";
+                document.getElementById("txtMotivoReclamacao").innerHTML = "Exigiu a elaboraç&atilde;o de um cadastro para a colocaç&atilde;o do CPF";
                 break;
             case '4':
                 document.getElementById("txtMotivoReclamacao").innerHTML = "Alegou problema com equipamento ou sistema";
@@ -1216,7 +1216,7 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
                 document.getElementById("txtMotivoReclamacao").innerHTML = "Dificultou o fornecimento do documento fiscal com CPF";
                 break;
             case '6':
-                document.getElementById("txtMotivoReclamacao").innerHTML = "Alegou n&#225;o participar do programa.";
+                document.getElementById("txtMotivoReclamacao").innerHTML = "Alegou n&atilde;o participar do programa.";
                 break;
         }
 
@@ -1254,7 +1254,7 @@ Cidadao.prototype.salvaNovaReclamacao = function(){
         if($('#fileReclamacao').val()!=null && $('#fileReclamacao').val().length>0){
             var ext = $('#fileReclamacao').val().split('.').pop().toLowerCase();
             if($.inArray(ext, ['pdf','png','jpg','jpeg']) == -1) {
-                nfgMensagens.show(ALERT_TYPES.ERROR, "Extens&#225;o de imagem inválida! O arquivo deve estar em uma das seguinte extensões: jpg, pdf ou png.",true);
+                nfgMensagens.show(ALERT_TYPES.ERROR, "Extens&atilde;o de imagem inválida! O arquivo deve estar em uma das seguinte extensões: jpg, pdf ou png.",true);
                 return;
             }
         }
@@ -1356,7 +1356,7 @@ Cidadao.prototype.alterarReclamacao = function(){
     $("body").on("click", "#btnAlterarReclamacao", function() {
         var tipoCompl = $("#selectNovoStatusReclamacao option:selected").text();
 
-        var title        = "<strong>Confirmaç&#225;o</strong>";
+        var title        = "<strong>Confirmaç&atilde;o</strong>";
         var botaoConfirmar     = "<div class='col-sm-1'></div><a class='btn btn-default col-sm-5 fechaModalConfirmacao' >N&atilde;o</a>";
         var botaoCancelar     = "<a class='btn btn-primary col-sm-5 fechaModalConfirmacao' id='btnConfirmaAlteracaoReclamacao'>Sim</a><div class='col-sm-1'></div>";
 
@@ -1379,9 +1379,9 @@ Cidadao.prototype.ConfirmaAlteracaoReclamacao = function(){
             function(response){
 
                 if(response.sucesso){
-                    nfgMensagens.show(ALERT_TYPES.SUCCESS,"Reclamaç&#225;o atualizada com sucesso. Continue acompanhando-a na listagem de andamento da reclamaç&#225;o.",true);
+                    nfgMensagens.show(ALERT_TYPES.SUCCESS,"Reclamaç&atilde;o atualizada com sucesso. Continue acompanhando-a na listagem de andamento da reclamaç&atilde;o.",true);
                 }else{
-                    nfgMensagens.show(ALERT_TYPES.ERROR,"Erro ao tentar atualizar a situaç&#225;o da reclamaç&#225;o. Tente de novo posteriormente.",true);
+                    nfgMensagens.show(ALERT_TYPES.ERROR,"Erro ao tentar atualizar a situaç&atilde;o da reclamaç&atilde;o. Tente de novo posteriormente.",true);
                 }
 
                 $("#btnAndamentoReclamacao").click();

@@ -13,6 +13,7 @@ function FrameCidadao() {
     $(".textTelefone").html(toTelFormat($(".textTelefone").html()));
     $(".textCep").html(toCepFormat($(".textCep").html()));
 
+    me.loginSubmit();
     me.linkCadastrar();
     me.linkCertificado();
     me.linkLogout();
@@ -63,7 +64,7 @@ FrameCidadao.prototype.linkCertificado = function(){
 
 FrameCidadao.prototype.loginSubmit = function( ){
     var me = this;
-    $("#loginSubmit").click(function(e) {
+    $("#loginSubmit").click(function() {
         var challenge = null;
         var captchaResponse = null;
 

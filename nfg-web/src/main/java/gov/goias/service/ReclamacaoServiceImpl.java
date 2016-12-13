@@ -4,27 +4,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
+
 import org.springframework.stereotype.Service;
 
 import gov.goias.entidades.ComplSituacaoReclamacao;
-import gov.goias.entidades.DocumentoFiscalReclamado;
 import gov.goias.entidades.GENPessoaJuridica;
-import gov.goias.entidades.MotivoReclamacao;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.SituacaoDocumentoFiscalReclamado;
-import gov.goias.entidades.enums.TipoMotivoReclamacao;
 import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
+import gov.to.goias.DocumentoFiscalReclamadoToLegal;
+import gov.to.service.ContribuinteToLegalService;
+import gov.to.service.ReclamacaoToLegalService;
 
 @Service
 public class ReclamacaoServiceImpl implements ReclamacaoService {
 
-	private PaginacaoDTO<DocumentoFiscalReclamado> getPaginacaoDocumentoFiscalReclamado() {
+	@EJB
+	private ContribuinteToLegalService serviceContribuinte;
+	
+	@EJB
+	private ReclamacaoToLegalService serviceReclamacao;
+	
+	private PaginacaoDTO<DocumentoFiscalReclamadoToLegal> getPaginacaoDocumentoFiscalReclamadoToLegal() {
 		
-		List<DocumentoFiscalReclamado> list = new ArrayList<>();
+		List<DocumentoFiscalReclamadoToLegal> list = new ArrayList<>();
 		
-		DocumentoFiscalReclamado dcFiscalReclamadao = getDocumentoFiscalReclamado();
+		DocumentoFiscalReclamadoToLegal dcFiscalReclamadao = getDocumentoFiscalReclamadoToLegal(1);
 		
-		PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDTO = new PaginacaoDTO<DocumentoFiscalReclamado>();
+		PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDTO = new PaginacaoDTO<DocumentoFiscalReclamadoToLegal>();
 		
 		paginacaoDTO.setCount(1);
 		list.add(dcFiscalReclamadao);
@@ -32,33 +40,22 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 		return paginacaoDTO;
 	}
 
-	private DocumentoFiscalReclamado getDocumentoFiscalReclamado() {
-		DocumentoFiscalReclamado dcFiscalReclamadao = new DocumentoFiscalReclamado();
+	private DocumentoFiscalReclamadoToLegal getDocumentoFiscalReclamadoToLegal(Integer idReclamacao) {
 		
-		dcFiscalReclamadao.setDataDocumentoFiscal(new Date());
-		dcFiscalReclamadao.setDataReclamacao(new Date());
-		dcFiscalReclamadao.setDisableRadioBtn("N");
-		dcFiscalReclamadao.setId(1);
-		dcFiscalReclamadao.setImgDocumentoFiscal(null);
-		dcFiscalReclamadao.setInscricaoEmpresa("123456");
-		dcFiscalReclamadao.setListaAndamentoStr("Lista de andamento mock");
+		DocumentoFiscalReclamadoToLegal dcFiscalReclamado = new DocumentoFiscalReclamadoToLegal();
 		
-		MotivoReclamacao motivoReclamacao = new MotivoReclamacao();
-		motivoReclamacao.setDescricao("Descriç&#225;o mock");
-		motivoReclamacao.setTipoMotivo(TipoMotivoReclamacao.EMPRESA_ALEGOU_PROBLEMA);
+		dcFiscalReclamado = serviceReclamacao.findReclamacoesPorIdReclamacao(idReclamacao);
+
 		
-		dcFiscalReclamadao.setMotivoReclamacao(motivoReclamacao);
-		dcFiscalReclamadao.setNomeFantasiaEmpresa("Casas Bahia mock");
-		dcFiscalReclamadao.setNumero(123457);
-		dcFiscalReclamadao.setNumeroCnpjEmpresa("0000000000000");
-		dcFiscalReclamadao.setPessoaParticipante(MockCidadao.getPessoaParticipante(""));
-		dcFiscalReclamadao.setRazaoSocial("Raz&#225;o social mock");
-		dcFiscalReclamadao.setReclamacaoResolvida("N");
-		dcFiscalReclamadao.setStatusAndamentoStr("Status Mock");
-		dcFiscalReclamadao.setTipoDocumentoFiscal(1);
-		dcFiscalReclamadao.setTipoExtensao(1);
-		dcFiscalReclamadao.setValor(1234.5);
-		return dcFiscalReclamadao;
+		
+		
+	
+		
+		
+		
+	
+		
+		return dcFiscalReclamado;
 	}
 
 	@Override
@@ -66,18 +63,18 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 		
 		PaginacaoDTO<SituacaoDocumentoFiscalReclamado> paginacaoDTO = new PaginacaoDTO<SituacaoDocumentoFiscalReclamado>();
 		
-		SituacaoDocumentoFiscalReclamado situacaoDocumentoFiscalReclamado = new SituacaoDocumentoFiscalReclamado();
+		SituacaoDocumentoFiscalReclamado situacaoDocumentoFiscalReclamadoToLegal = new SituacaoDocumentoFiscalReclamado();
 		
-		situacaoDocumentoFiscalReclamado.setId(1);
-		situacaoDocumentoFiscalReclamado.setDataCadastroSituacao(new Date());
-		situacaoDocumentoFiscalReclamado.setDocumentoFiscalReclamado(getDocumentoFiscalReclamado());
-		situacaoDocumentoFiscalReclamado.setInfo("Info Teste");
-		situacaoDocumentoFiscalReclamado.setPerfilCadastro(TipoPerfilCadastroReclamacao.CIDADAO);
-		situacaoDocumentoFiscalReclamado.setTipoPerfil(TipoPerfilCadastroReclamacao.CIDADAO.getValue());
+		situacaoDocumentoFiscalReclamadoToLegal.setId(1);
+		situacaoDocumentoFiscalReclamadoToLegal.setDataCadastroSituacao(new Date());
+		situacaoDocumentoFiscalReclamadoToLegal.setDocumentoFiscalReclamadoToLegal(getDocumentoFiscalReclamadoToLegal(idReclamacao));
+		situacaoDocumentoFiscalReclamadoToLegal.setInfo("Info Teste");
+		situacaoDocumentoFiscalReclamadoToLegal.setPerfilCadastro(TipoPerfilCadastroReclamacao.CIDADAO);
+		situacaoDocumentoFiscalReclamadoToLegal.setTipoPerfil(TipoPerfilCadastroReclamacao.CIDADAO.getValue());
 		
 		List<SituacaoDocumentoFiscalReclamado> list = new ArrayList<>();
 		
-		list.add(situacaoDocumentoFiscalReclamado);
+		list.add(situacaoDocumentoFiscalReclamadoToLegal);
 		
 		paginacaoDTO.setCount(1);
 		paginacaoDTO.setList(list);
@@ -86,50 +83,57 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 	}
 
 	@Override
-	public DocumentoFiscalReclamado reclamacaoPorId(Integer idReclamacao) {
-		return getDocumentoFiscalReclamado();
+	public DocumentoFiscalReclamadoToLegal reclamacaoPorId(Integer idReclamacao) {
+		return getDocumentoFiscalReclamadoToLegal(idReclamacao);
 	}
 
 	@Override
-	public List<ComplSituacaoReclamacao> acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao cidadao, DocumentoFiscalReclamado reclamacao) {
+	public List<ComplSituacaoReclamacao> acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao cidadao, DocumentoFiscalReclamadoToLegal reclamacao) {
 		
 		ComplSituacaoReclamacao csr = new ComplSituacaoReclamacao();
 		
 		csr.setCodigo(1);
-		csr.setDescricao("Descricao Mock");
+		csr.setDescricao("Teste Mock");
+		
+		
 		
 		List<ComplSituacaoReclamacao> list = new ArrayList<>();
+		list.add(csr);
+		
+		csr = new ComplSituacaoReclamacao();
+		csr.setCodigo(11);
+		csr.setDescricao("teste");
 		list.add(csr);
 		
 		return list;
 	}
 
 	@Override
-	public Boolean alteracaoDeSituacaoReclamacaoPorCidadao(DocumentoFiscalReclamado reclamacao,
+	public Boolean alteracaoDeSituacaoReclamacaoPorCidadao(DocumentoFiscalReclamadoToLegal reclamacao,
 			Integer novoCodgTipoCompl, String infoReclamacao, PessoaParticipante cidadao) {
 		
-		System.out.println("Alteracao reclamaç&#225;o por cidad&#225;o DocumentoFiscalReclamado mock");
+		System.out.println("Alteracao reclamaç&#225;o por cidad&#225;o DocumentoFiscalReclamadoToLegal mock");
 		
 		return true;
 	}
 
 	@Override
-	public PaginacaoDTO<DocumentoFiscalReclamado> listDocumentoFiscalReclamadoPorCNPJ(String numeroCnpj, Integer max, Integer page) {
+	public PaginacaoDTO<DocumentoFiscalReclamadoToLegal> listDocumentoFiscalReclamadoToLegalPorCNPJ(String numeroCnpj, Integer max, Integer page) {
 
-		return getPaginacaoDocumentoFiscalReclamado();
+		return getPaginacaoDocumentoFiscalReclamadoToLegal();
 	}
 
 	@Override
-	public Boolean alteracaoDeSituacaoReclamacaoPorEmpresa(DocumentoFiscalReclamado reclamacao, Integer codigoAcao, String descricaoComplemento, GENPessoaJuridica pessoaJuridica) {
+	public Boolean alteracaoDeSituacaoReclamacaoPorEmpresa(DocumentoFiscalReclamadoToLegal reclamacao, Integer codigoAcao, String descricaoComplemento, GENPessoaJuridica pessoaJuridica) {
 		
-		System.out.println("Alterado Situacao Reclamaç&#225;o por empresa DocumentoFiscalReclamado mock");
+		System.out.println("Alterado Situacao Reclamaç&#225;o por empresa DocumentoFiscalReclamadoToLegal mock");
 		
 		return true;
 	}
 
 	@Override
-	public DocumentoFiscalReclamado documentoFiscalReclamadoPorId(Integer idDocumento) {
-		return getDocumentoFiscalReclamado();
+	public DocumentoFiscalReclamadoToLegal DocumentoFiscalReclamadoToLegalPorId(Integer idDocumento) {
+		return getDocumentoFiscalReclamadoToLegal(idDocumento);
 	}
 
 }

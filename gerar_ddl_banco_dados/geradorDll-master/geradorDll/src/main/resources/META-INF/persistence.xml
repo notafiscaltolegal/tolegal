@@ -19,6 +19,11 @@
 		<class>entidade.UsuarioToLegal</class>
 		<class>entidade.MunicipioToLegal</class>
 		<class>entidade.ReclamacaoToLegal</class>
+		<class>entidade.ReclamacaoLogToLegal</class>
+
+
+		
+		
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

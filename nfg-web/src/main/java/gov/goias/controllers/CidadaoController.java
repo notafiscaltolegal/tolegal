@@ -37,7 +37,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import gov.goias.dtos.DTOMinhasNotas;
 import gov.goias.entidades.BilhetePessoa;
 import gov.goias.entidades.ComplSituacaoReclamacao;
-import gov.goias.entidades.DocumentoFiscalReclamado;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.RegraSorteio;
@@ -62,9 +61,12 @@ import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.EnderecoToLegal;
 import gov.to.entidade.MunicipioToLegal;
 import gov.to.entidade.UsuarioToLegal;
+import gov.to.goias.DocumentoFiscalReclamadoToLegal;
+import gov.to.goias.ReclamacaoLogDTO;
 import gov.to.service.BilheteToLegalService;
 import gov.to.service.GenericService;
 import gov.to.service.PontuacaoToLegalService;
+import gov.to.service.ReclamacaoLogToLegalService;
 import gov.to.service.ReclamacaoToLegalService;
 import gov.to.service.SorteioToLegalService;
 import gov.to.service.UsuarioToLegalService;
@@ -91,6 +93,9 @@ public class CidadaoController extends BaseController {
 	private ReclamacaoToLegalService reclamacaoToLegalService;
 	
 	@Autowired
+	private ReclamacaoLogToLegalService reclamacaoLogToLegalService;
+	
+	@Autowired
 	private EmpresaService empresaService;
 	
 	@Autowired
@@ -112,6 +117,7 @@ public class CidadaoController extends BaseController {
 	private GenericService<MunicipioToLegal, Long> genericMunicipioService;
 	
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    
 
     @RequestMapping("voltar")
     public String voltar() {
@@ -986,7 +992,7 @@ public class CidadaoController extends BaseController {
     	 Integer max = 5;
 
          PessoaParticipante cidadao = getCidadaoLogado();
-         PaginacaoDTO<DocumentoFiscalReclamado> reclamacoesPaginate = reclamacaoToLegalService.findReclamacoesDoCidadao(cidadao, page, max);
+         PaginacaoDTO<DocumentoFiscalReclamadoToLegal> reclamacoesPaginate = reclamacaoToLegalService.findReclamacoesDoCidadao(cidadao, page, max);
 
          Map<String, Object> resposta = new HashMap<String, Object>();
          Map<String, Object> pagination = new HashMap<String, Object>();
@@ -1044,10 +1050,8 @@ public class CidadaoController extends BaseController {
     @RequestMapping("alterarSituacaoReclamacao")
 //    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public @ResponseBody Map alterarSituacaoReclamacao(Integer idReclamacao,Integer novoCodgTipoCompl, String infoReclamacao ) {
-    	PessoaParticipante cidadao = getCidadaoLogado();
-        DocumentoFiscalReclamado reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
        
-        Boolean sucesso = reclamacaoService.alteracaoDeSituacaoReclamacaoPorCidadao(reclamacao, novoCodgTipoCompl, infoReclamacao, cidadao);
+        Boolean sucesso = reclamacaoToLegalService.alterarStatusReclamacao(idReclamacao, novoCodgTipoCompl);
 
         Map<String, Boolean> retorno = new HashMap<>();
         retorno.put("sucesso",sucesso);
@@ -1058,7 +1062,7 @@ public class CidadaoController extends BaseController {
 	@RequestMapping("selectAcoesDisponiveis")
 	public @ResponseBody Map selectAcoesDisponiveis(Integer idReclamacao) {
 
-		DocumentoFiscalReclamado reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
+		DocumentoFiscalReclamadoToLegal reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
 		Map retorno = new HashMap<>();
 		List<ComplSituacaoReclamacao> acoesDisponiveis = reclamacaoService
 				.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CIDADAO, reclamacao);
@@ -1072,25 +1076,24 @@ public class CidadaoController extends BaseController {
     	ModelAndView modelAndView;
         modelAndView = new ModelAndView("cidadao/reclamacaoDetalhe");
 
-        DocumentoFiscalReclamado reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
+        DocumentoFiscalReclamadoToLegal reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
 
         List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CIDADAO,reclamacao);
 
         modelAndView.addObject("reclamacao", reclamacao);
         modelAndView.addObject("statusDisponiveis", statusDisponiveis);
-        String nomeFantasia = empresaService.nomeFantasiaPeloCnpj(reclamacao.getNumeroCnpjEmpresa());
-        modelAndView.addObject("nomeFantasia", nomeFantasia != null ? nomeFantasia : "");
+        modelAndView.addObject("nomeFantasia", reclamacao.getNomeFantasiaEmpresa());
         modelAndView.addObject("dataEmissaoStr", simpleDateFormat.format(reclamacao.getDataDocumentoFiscal()));
         modelAndView.addObject("dataReclamacaoStr", simpleDateFormat.format(reclamacao.getDataReclamacao()));
 
         return modelAndView;
     }
 
-    @RequestMapping("listarAndamentoReclamacao/{page}")
+	@RequestMapping("listarAndamentoReclamacao/{page}")
     public @ResponseBody Map<String, Object> listarAndamentoReclamacao(@PathVariable(value = "page") Integer page, Integer idReclamacao,BindException bind) throws ParseException {
     	Integer max = 5;
 
-        PaginacaoDTO<SituacaoDocumentoFiscalReclamado> reclamacoesPaginate = new PaginacaoDTO<>();//reclamacaoToLegalService.andamentoDaReclamacao(idReclamacao, page, max);
+        PaginacaoDTO<ReclamacaoLogDTO> reclamacoesPaginate = reclamacaoLogToLegalService.logReclamacaoPorIdReclamacao(idReclamacao, page, max);
 
         Map<String, Object> resposta = new HashMap<String, Object>();
         Map<String, Object> pagination = new HashMap<String, Object>();

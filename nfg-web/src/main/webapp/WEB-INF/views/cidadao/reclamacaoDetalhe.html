@@ -55,7 +55,7 @@
         <div class="row">
             <div class="col-md-10" >
                 <label  >Motivo da reclama&ccedil;&atilde;o:</label>
-                <p style="display: inline-block" th:text="${reclamacao.motivoReclamacao.tipoMotivoDescricao}" />
+                <p style="display: inline-block" th:text="${reclamacao.motivoReclamacao}" />
             </div>
         </div>
         <div class="row">
@@ -81,7 +81,7 @@
 </div>
 
 
-<form id="formReclamacaoDetalhe" name="formReclamacaoDetalhe" class="form-horizontal " >
+	<form id="formReclamacaoDetalhe" name="formReclamacaoDetalhe" class="form-horizontal " >
     <input type="hidden" th:value="${reclamacao.id}" id="idReclamacao"/>
     <input type="hidden" th:value="${reclamacao.codgUltimaSituacao}" id="codgSituacaoReclamacao"/>
 

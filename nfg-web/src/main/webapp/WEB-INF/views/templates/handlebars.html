@@ -1229,7 +1229,7 @@
                     <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
                     <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Raz&atilde;o Social: {{razaoSocial}}"><div class="truncText" style="width: 100px;">{{razaoSocial}}</div></td>
                     <td>{{prettifyDate dataReclamacao}}</td>
-                    <td title="{{descUltimaSituacao}}"><div style="width: 150px;" class="truncText">{{descUltimaSituacao}}</div></td>
+                    <td title="{{statusAndamentoStr}}"><div style="width: 150px;" class="truncText">{{statusAndamentoStr}}</div></td>
                     <td align="center" class="abrirReclamacaoLink"><a href="#"><img src="/nfg-web/images/edit-small.png" title="Abrir detalhes da reclama&ccedil;&atilde;o do documento {{numero}}" class="tooltip-info" width="20px;"></a></td>
                     <td class="idReclamacaoLink" style="display: none" >{{id}}</td>
                 </tr>
@@ -1357,7 +1357,7 @@
                     <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
                     <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Raz&atilde;o Social: {{razaoSocial}}"><div class="truncText" style="width: 100px;">{{razaoSocial}}</div></td>
                     <td>{{prettifyDate dataReclamacao}}</td>
-                    <td title="{{descUltimaSituacao}}"><div style="width: 150px;" class="truncText">{{descUltimaSituacao}}</div></td>
+                    <td title="{{statusAndamentoStr}}"><div style="width: 150px;" class="truncText">{{statusAndamentoStr}}</div></td>
                     <td align="center" class="abrirReclamacaoLink"><a href="#"><img src="/nfg-web/images/edit-small.png" title="Abrir detalhes da reclama&ccedil;&atilde;o do documento {{numero}}" class="tooltip-info" width="20px;"></a></td>
                     <td class="idReclamacaoLink" style="display: none" >{{id}}</td>
                 </tr>
@@ -1439,7 +1439,6 @@
                     <th>Perfil</th>
                     <th>Data</th>
                     <th>Status</th>
-                    <th title="Passe o mouse sobre o comentário para ver a descis&atilde;o completa."><a>Coment&aacute;rio(?)</a></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -1447,10 +1446,7 @@
                 <tr >
                     <td >{{perfilDescricao}}</td>
                     <td>{{prettifyDate dataCadastroSituacao}}</td>
-                    <td >{{complSituacaoReclamacao.tipoSituacaoDescricao}}</td>
-                    <!--<td title="{{info}}"><div class="truncText">{{info}}</div></td>-->
-                    <td title="{{info}}">{{info}}</td>
-
+                    <td >{{complSituacaoReclamacao}}</td>
                 </tr>
                 {{/each}}
                 </tbody>

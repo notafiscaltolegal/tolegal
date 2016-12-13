@@ -706,14 +706,15 @@ ModaisCidadao.prototype.eventoReclamacaoDetalhe = function(){
         bloqueioDeTela("#divPaineisTelaInicial");
         setTimeout(function () {
             $("#modalHome").modal('show');
-            me.carregaGridAndamentoReclamacao();
+            me.carregaGridAndamentoReclamacao(idReclamacaoLink);
             me.cidadao.resetaElementosAcaoReclamacao();
             $("#divPaineisTelaInicial").unblock();
         }, 1000);
     });
 }
 
-ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(){
+ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(idReclamacao){
+    
     var me = this;
     me.pagination = new NFGPagination({
         url: enderecoSite + "/cidadao/listarAndamentoReclamacao",
@@ -723,13 +724,15 @@ ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(){
         btnFilterSelector: "#btnAndamentoReclamacao",
         beforeLoad: function(data) {
             if(data){
-                data.idReclamacao = $("#idReclamacao").val();
+                data.idReclamacao = idReclamacao;
             }
+        },
+        afterLoad: function(data) {
+        	
+        	if (data) ;
         }
     });
-    var hash = window.location.hash.replace("#","");
-    var page = parseInt(hash) ? parseInt(hash) : 1;
-    me.pagination.init(page);
+    me.pagination.init(0);
 }
 
 ModaisCidadao.prototype.inicializaEnderecoAtualizaPerfil = function(){

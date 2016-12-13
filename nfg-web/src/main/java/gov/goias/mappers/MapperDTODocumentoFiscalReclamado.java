@@ -1,11 +1,11 @@
 package gov.goias.mappers;
 
-import gov.goias.dtos.DTODocumentoFiscalReclamado;
-import org.apache.commons.io.IOUtils;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import gov.goias.dtos.DTODocumentoFiscalReclamado;
 
 /**
  * Created by bruno-cff on 15/10/2015.

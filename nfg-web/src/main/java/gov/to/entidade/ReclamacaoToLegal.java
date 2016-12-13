@@ -1,6 +1,7 @@
 package gov.to.entidade;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,6 +21,7 @@ import javax.persistence.TemporalType;
 
 import gov.to.dominio.MotivoReclamacaoEnum;
 import gov.to.dominio.ProblemaEmpresaEnum;
+import gov.to.dominio.ReclamacaoStatusEnum;
 import gov.to.dominio.TipoDocumentoFiscalEnum;
 import gov.to.persistencia.EntidadeBasica;
 
@@ -73,6 +76,21 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 	@Lob
 	@Column(name = "anexo_nota")
 	private byte[] anexoNota;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="status_reclamacao")
+	private ReclamacaoStatusEnum statusReclamacao;	
+	
+	@OneToMany(mappedBy="reclamacaoToLegal")
+	private List<ReclamacaoLogToLegal> listLogReclamacao;
+
+	public ReclamacaoStatusEnum getStatusReclamacao() {
+		return statusReclamacao;
+	}
+
+	public void setStatusReclamacao(ReclamacaoStatusEnum statusReclamacao) {
+		this.statusReclamacao = statusReclamacao;
+	}
 
 	public Long getId() {
 		return id;
@@ -160,6 +178,14 @@ public class ReclamacaoToLegal extends EntidadeBasica{
 
 	public void setAnexoNota(byte[] anexoNota) {
 		this.anexoNota = anexoNota;
+	}
+
+	public List<ReclamacaoLogToLegal> getListLogReclamacao() {
+		return listLogReclamacao;
+	}
+
+	public void setListLogReclamacao(List<ReclamacaoLogToLegal> listLogReclamacao) {
+		this.listLogReclamacao = listLogReclamacao;
 	}
 
 }

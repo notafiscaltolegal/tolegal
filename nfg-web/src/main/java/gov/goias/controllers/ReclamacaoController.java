@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import gov.goias.entidades.ComplSituacaoReclamacao;
-import gov.goias.entidades.DocumentoFiscalReclamado;
 import gov.goias.entidades.GENPessoaJuridica;
 import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 import gov.goias.service.ContribuinteService;
-import gov.goias.service.PaginacaoDTO;
 import gov.goias.service.ReclamacaoService;
+import gov.to.goias.DocumentoFiscalReclamadoToLegal;
 
 /**
  * Created by bruno-cff on 30/09/2015.
@@ -53,7 +52,7 @@ public class ReclamacaoController extends BaseController{
     	
     	 ResponseEntity<InputStreamResource> response = null;
          try {
-             DocumentoFiscalReclamado documento =  reclamacaoService.documentoFiscalReclamadoPorId(idDocumento);
+             DocumentoFiscalReclamadoToLegal documento =  reclamacaoService.DocumentoFiscalReclamadoToLegalPorId(idDocumento);
              InputStreamResource inputStreamResource = new InputStreamResource(documento.getImgDocumentoFiscal().getBinaryStream());
 
              HttpHeaders headers = new HttpHeaders();
@@ -69,7 +68,7 @@ public class ReclamacaoController extends BaseController{
          }
     }
 
-    private void setContentType(DocumentoFiscalReclamado documento, HttpHeaders headers){
+    private void setContentType(DocumentoFiscalReclamadoToLegal documento, HttpHeaders headers){
         String fileName = documento.getNumero().toString();
         Integer extensaoDoArquivo = documento.getTipoExtensao();
 
@@ -99,11 +98,11 @@ public class ReclamacaoController extends BaseController{
         Map<String, Object> resposta = new HashMap<String, Object>();
         Map<String, Object> pagination = new HashMap<String, Object>();
 
-//        PaginacaoDTO<DocumentoFiscalReclamado> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoPorCNPJ(numeroCnpj, max, page);
-//        List<DocumentoFiscalReclamado> reclamacoes = paginacaoDocumentoReclamado.getList();
-        List<DocumentoFiscalReclamado> listDocumentos = new ArrayList<>();
+//        PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoToLegalPorCNPJ(numeroCnpj, max, page);
+//        List<DocumentoFiscalReclamadoToLegal> reclamacoes = paginacaoDocumentoReclamado.getList();
+        List<DocumentoFiscalReclamadoToLegal> listDocumentos = new ArrayList<>();
 
-//        for(DocumentoFiscalReclamado reclamacao : reclamacoes){
+//        for(DocumentoFiscalReclamadoToLegal reclamacao : reclamacoes){
 //            List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CONTRIBUINTE, reclamacao);
 //            if(statusDisponiveis != null && statusDisponiveis.size() > 0){
 //               reclamacao.setDisableRadioBtn("");
@@ -130,7 +129,7 @@ public class ReclamacaoController extends BaseController{
     	Map<String, Object> selectStatus(Integer idReclamacao) {
 
         Map<String, Object> resposta = new HashMap<String, Object>();
-        DocumentoFiscalReclamado reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
+        DocumentoFiscalReclamadoToLegal reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
         List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CONTRIBUINTE, reclamacao);
 
         resposta.put("statusDisponiveis", statusDisponiveis);
@@ -144,7 +143,7 @@ public class ReclamacaoController extends BaseController{
     Map<String, Object> incluirComplemento(String descricaoComplemento, Integer codigoAcao, Integer idReclamacao, String cnpj){
         Map<String, Object> resposta = new HashMap<>();
 
-        DocumentoFiscalReclamado reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
+        DocumentoFiscalReclamadoToLegal reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
         GENPessoaJuridica pessoaJuridica = contribuinteService.pessoaJuridicaPorCNPJ(cnpj);
 
         Boolean sucesso = reclamacaoService.alteracaoDeSituacaoReclamacaoPorEmpresa(reclamacao, codigoAcao, descricaoComplemento, pessoaJuridica);

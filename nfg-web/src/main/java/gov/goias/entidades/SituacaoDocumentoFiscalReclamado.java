@@ -3,6 +3,7 @@ package gov.goias.entidades;
 import java.util.Date;
 
 import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
+import gov.to.goias.DocumentoFiscalReclamadoToLegal;
 
 /**
  * Created by lucas-mp.
@@ -14,7 +15,7 @@ public class SituacaoDocumentoFiscalReclamado  {
     private String info;
     private Integer tipoPerfil;
     private TipoPerfilCadastroReclamacao perfilCadastro;
-    private DocumentoFiscalReclamado documentoFiscalReclamado;
+    private DocumentoFiscalReclamadoToLegal DocumentoFiscalReclamadoToLegal;
     private ComplSituacaoReclamacao complSituacaoReclamacao;
     private GENPessoa pessoaResponsavelCadastro;
 
@@ -43,12 +44,12 @@ public class SituacaoDocumentoFiscalReclamado  {
     }
 
 
-    public DocumentoFiscalReclamado getDocumentoFiscalReclamado() {
-        return documentoFiscalReclamado;
+    public DocumentoFiscalReclamadoToLegal getDocumentoFiscalReclamadoToLegal() {
+        return DocumentoFiscalReclamadoToLegal;
     }
 
-    public void setDocumentoFiscalReclamado(DocumentoFiscalReclamado documentoFiscalReclamado) {
-        this.documentoFiscalReclamado = documentoFiscalReclamado;
+    public void setDocumentoFiscalReclamadoToLegal(DocumentoFiscalReclamadoToLegal DocumentoFiscalReclamadoToLegal) {
+        this.DocumentoFiscalReclamadoToLegal = DocumentoFiscalReclamadoToLegal;
     }
 
     public ComplSituacaoReclamacao getComplSituacaoReclamacao() {

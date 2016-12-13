@@ -1,33 +1,30 @@
 package gov.goias.service;
 
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import gov.goias.entidades.ComplSituacaoReclamacao;
-import gov.goias.entidades.DocumentoFiscalReclamado;
 import gov.goias.entidades.GENPessoaJuridica;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.SituacaoDocumentoFiscalReclamado;
 import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
+import gov.to.goias.DocumentoFiscalReclamadoToLegal;
 
 public interface ReclamacaoService {
 
 	PaginacaoDTO<SituacaoDocumentoFiscalReclamado> andamentoDaReclamacao(Integer idReclamacao, Integer page, Integer max);
 
-	DocumentoFiscalReclamado reclamacaoPorId(Integer idReclamacao);
+	DocumentoFiscalReclamadoToLegal reclamacaoPorId(Integer idReclamacao);
 
 	List<ComplSituacaoReclamacao> acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao cidadao,
-			DocumentoFiscalReclamado reclamacao);
+			DocumentoFiscalReclamadoToLegal reclamacao);
 
-	Boolean alteracaoDeSituacaoReclamacaoPorCidadao(DocumentoFiscalReclamado reclamacao, Integer novoCodgTipoCompl, String infoReclamacao, PessoaParticipante cidadao);
+	Boolean alteracaoDeSituacaoReclamacaoPorCidadao(DocumentoFiscalReclamadoToLegal reclamacao, Integer novoCodgTipoCompl, String infoReclamacao, PessoaParticipante cidadao);
 
-	PaginacaoDTO<DocumentoFiscalReclamado> listDocumentoFiscalReclamadoPorCNPJ(String numeroCnpj, Integer max,
+	PaginacaoDTO<DocumentoFiscalReclamadoToLegal> listDocumentoFiscalReclamadoToLegalPorCNPJ(String numeroCnpj, Integer max,
 			Integer page);
 
-	Boolean alteracaoDeSituacaoReclamacaoPorEmpresa(DocumentoFiscalReclamado reclamacao, Integer codigoAcao,
+	Boolean alteracaoDeSituacaoReclamacaoPorEmpresa(DocumentoFiscalReclamadoToLegal reclamacao, Integer codigoAcao,
 			String descricaoComplemento, GENPessoaJuridica pessoaJuridica);
 
-	DocumentoFiscalReclamado documentoFiscalReclamadoPorId(Integer idDocumento);
+	DocumentoFiscalReclamadoToLegal DocumentoFiscalReclamadoToLegalPorId(Integer idDocumento);
 }
