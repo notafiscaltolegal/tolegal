@@ -597,7 +597,32 @@ ModaisCidadao.prototype.listarNotasCidadaoEmDetalhe = function() {
     var hash = window.location.hash.replace("#","");
     var page = parseInt(hash) ? parseInt(hash) : 1;
     me.pagination.init(page);
+}
 
+ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(idReclamacao){
+    
+    var me = this;
+    me.pagination = new NFGPagination({
+	url : enderecoSite + "/cidadao/listarAndamentoReclamacao",
+	containerSelector : "#containerAndamentoReclamacao",
+	templateSelector : "#tabelaAndamentoReclamacao",
+	formFilterSelector : "#formAndamentoReclamacao",
+	btnFilterSelector : "#btnAndamentoReclamacao",
+	beforeLoad : function(data) {
+		if (data) {
+			data.idReclamacao = idReclamacao;
+		}
+	},
+	afterLoad : function(data) {
+
+		if (data) {
+			data.idReclamacao = idReclamacao;
+		}
+	}
+});
+ var hash = window.location.hash.replace("#","");
+    var page = parseInt(hash) ? parseInt(hash) : 1;
+    me.pagination.init(page);
 }
 
 
@@ -704,35 +729,14 @@ ModaisCidadao.prototype.eventoReclamacaoDetalhe = function(){
         $("#modalHomeTitle").html('Reclamaç&#225;o em detalhe');
         $(".modal-dialog").attr("class","modal-dialog modal-lg"); //modal largo
         bloqueioDeTela("#divPaineisTelaInicial");
+        me.carregaGridAndamentoReclamacao(idReclamacaoLink);
         setTimeout(function () {
             $("#modalHome").modal('show');
-            me.carregaGridAndamentoReclamacao(idReclamacaoLink);
+            
             me.cidadao.resetaElementosAcaoReclamacao();
             $("#divPaineisTelaInicial").unblock();
         }, 1000);
     });
-}
-
-ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(idReclamacao){
-    
-    var me = this;
-    me.pagination = new NFGPagination({
-        url: enderecoSite + "/cidadao/listarAndamentoReclamacao",
-        containerSelector: "#containerAndamentoReclamacao",
-        templateSelector: "#tabelaAndamentoReclamacao",
-        formFilterSelector: "#formAndamentoReclamacao",
-        btnFilterSelector: "#btnAndamentoReclamacao",
-        beforeLoad: function(data) {
-            if(data){
-                data.idReclamacao = idReclamacao;
-            }
-        },
-        afterLoad: function(data) {
-        	
-        	if (data) ;
-        }
-    });
-    me.pagination.init(0);
 }
 
 ModaisCidadao.prototype.inicializaEnderecoAtualizaPerfil = function(){
