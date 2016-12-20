@@ -1085,6 +1085,8 @@ public class CidadaoController extends BaseController {
         modelAndView.addObject("nomeFantasia", reclamacao.getNomeFantasiaEmpresa());
         modelAndView.addObject("dataEmissaoStr", simpleDateFormat.format(reclamacao.getDataDocumentoFiscal()));
         modelAndView.addObject("dataReclamacaoStr", simpleDateFormat.format(reclamacao.getDataReclamacao()));
+        
+        
 
         return modelAndView;
     }
@@ -1093,6 +1095,7 @@ public class CidadaoController extends BaseController {
     public @ResponseBody Map<String, Object> listarAndamentoReclamacao(@PathVariable(value = "page") Integer page, Integer idReclamacao,BindException bind) throws ParseException {
     	Integer max = 5;
 
+    	 //PessoaParticipante cidadao = getCidadaoLogado();
         PaginacaoDTO<ReclamacaoLogDTO> reclamacoesPaginate = reclamacaoLogToLegalService.logReclamacaoPorIdReclamacao(idReclamacao, page, max);
 
         Map<String, Object> resposta = new HashMap<String, Object>();
@@ -1102,6 +1105,7 @@ public class CidadaoController extends BaseController {
         pagination.put("page", ++page);
         pagination.put("max", max);
 
+        //resposta.put("cidadao", cidadao);
         resposta.put("situacoesReclamacao", reclamacoesPaginate.getList());
         resposta.put("pagination", pagination);
 

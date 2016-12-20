@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,14 +23,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.enums.TipoComplSituacaoReclamacao;
-import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
+import gov.goias.service.PaginacaoDTO;
+import gov.to.goias.ReclamacaoLogDTO;
+import gov.to.service.ReclamacaoLogToLegalService;
 
 
 @Controller
 @RequestMapping("/portal/reclamacao/usuario")
 public class ReclamacaoUsuarioController extends BaseController{
 
+	@Autowired
+	private ReclamacaoLogToLegalService reclamacaoLogToLegalService;
     private static final Logger logger = Logger.getLogger(ReclamacaoUsuarioController.class);
 
     @RequestMapping("/index")
@@ -114,20 +120,23 @@ public class ReclamacaoUsuarioController extends BaseController{
 
     @RequestMapping("listarAndamentoReclamacao/{page}")
     public @ResponseBody Map<String, Object> listarAndamentoReclamacao(@PathVariable(value = "page") Integer page, Integer idReclamacao,BindException bind) throws ParseException {
-        Integer max = 5;
-        Integer count=0;
+    	Integer max = 5;
 
-        Map<String, Object> resposta = new HashMap<String, Object>();
-        Map<String, Object> pagination = new HashMap<String, Object>();
+   	 PessoaParticipante cidadao = getCidadaoLogado();
+       PaginacaoDTO<ReclamacaoLogDTO> reclamacoesPaginate = reclamacaoLogToLegalService.logReclamacaoPorIdReclamacao(idReclamacao, page, max);
 
-        pagination.put("total", count);
-        pagination.put("page", ++page);
-        pagination.put("max", max);
+       Map<String, Object> resposta = new HashMap<String, Object>();
+       Map<String, Object> pagination = new HashMap<String, Object>();
 
-        resposta.put("situacoesReclamacao", new ArrayList<>());
-        resposta.put("pagination", pagination);
+       pagination.put("total", reclamacoesPaginate.getCount());
+       pagination.put("page", ++page);
+       pagination.put("max", max);
 
-        return resposta;
+       resposta.put("cidadao", cidadao);
+       resposta.put("situacoesReclamacao", reclamacoesPaginate.getList());
+       resposta.put("pagination", pagination);
+
+       return resposta;
     }
 
     @RequestMapping("selectAcoesDisponiveis")

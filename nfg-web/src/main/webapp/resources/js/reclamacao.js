@@ -219,7 +219,8 @@ Reclamacao.prototype.modalReclamacaoDetalhe = function(){
 Reclamacao.prototype.carregaGridAndamentoReclamacao = function(){
     var me = this;
     me.pagination = new NFGPagination({
-        url: enderecoSite + "/portal/reclamacao/usuario/listarAndamentoReclamacao",
+    	url: enderecoSite + "/cidadao/listarAndamentoReclamacao",
+    	//url: enderecoSite + "/portal/reclamacao/usuario/listarAndamentoReclamacao",
         //url: enderecoSite + "/reclamacao/usuario/listarAndamentoReclamacao",
         containerSelector: "#containerAndamentoReclamacao",
         templateSelector: "#tabelaAndamentoReclamacao",
@@ -227,7 +228,7 @@ Reclamacao.prototype.carregaGridAndamentoReclamacao = function(){
         btnFilterSelector: "#btnAndamentoReclamacao",
         beforeLoad: function(data) {
             if(data){
-                data.idReclamacao = $("#idReclamacao").val();
+                data.idReclamacao = $("#idReclamacaoLink").val();
             }
         }
     });
