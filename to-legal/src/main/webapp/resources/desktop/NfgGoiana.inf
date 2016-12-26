@@ -1,0 +1,18 @@
+[update]
+newversion=1.2.1
+localversion=NfgGoiana.exe
+[action]
+msg= Uma nova vers&#225;o  1.2.1 do NFG-Goiana está disponível.
+query=Deseja realizar a atualizaç&#225;o ?
+
+[files]
+count=1
+
+[file1]
+url=http://app.sefaz.go.gov.br/pdw/nfgdesktop/NfgGoiana.CAB
+descr=Atualizador 
+
+[application]
+appupdate=1
+appname=NfgGoiana.exe
+appcomps=NfgGoiana.CAB

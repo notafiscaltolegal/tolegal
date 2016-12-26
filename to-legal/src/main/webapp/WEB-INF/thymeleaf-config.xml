@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:context="http://www.springframework.org/schema/context"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+               http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+               http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+               http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+	<context:annotation-config />
+	<mvc:annotation-driven />
+	<context:component-scan base-package="gov.*" />
+       
+    <jee:local-slsb id="municipioService" jndi-name="java:module/MunicipioServiceImpl" 
+      business-interface="gov.to.service.MunicipioService"/>
+      
+    <jee:local-slsb id="genericService" jndi-name="java:module/GenericServiceImpl" 
+      business-interface="gov.to.service.GenericService"/>
+      
+     <jee:local-slsb id="pessoaFisicaToLegalService" jndi-name="java:module/PessoaFisicaToLegalServiceImpl" 
+      business-interface="gov.to.service.PessoaFisicaToLegalService"/>
+      
+     <jee:local-slsb id="usuarioToLegalService" jndi-name="java:module/UsuarioToLegalServiceImpl" 
+      business-interface="gov.to.service.UsuarioToLegalService"/>
+      
+     <jee:local-slsb id="notaFiscalToLegalService" jndi-name="java:module/NotaFiscalToLegalServiceImpl" 
+      business-interface="gov.to.service.NotaFiscalToLegalService"/>
+      
+     <jee:local-slsb id="pontuacaoToLegalService" jndi-name="java:module/PontuacaoToLegalServiceImpl" 
+      business-interface="gov.to.service.PontuacaoToLegalService"/>
+      
+     <jee:local-slsb id="bilheteToLegalService" jndi-name="java:module/BilheteToLegalServiceImpl" 
+      business-interface="gov.to.service.BilheteToLegalService"/>
+      
+     <jee:local-slsb id="sorteioToLegalService" jndi-name="java:module/SorteioToLegalServiceImpl" 
+      business-interface="gov.to.service.SorteioToLegalService"/>
+      
+     <jee:local-slsb id="contribuinteToLegalService" jndi-name="java:module/ContribuinteToLegalServiceImpl" 
+      business-interface="gov.to.service.ContribuinteToLegalService"/>
+      
+      <jee:local-slsb id="reclamacaoToLegalService" jndi-name="java:module/ReclamacaoToLegalServiceImpl" 
+      business-interface="gov.to.service.ReclamacaoToLegalService"/>
+      
+         <jee:local-slsb id="reclamacaoLogToLegalService" jndi-name="java:module/ReclamacaoLogToLegalServiceImpl" 
+      business-interface="gov.to.service.ReclamacaoLogToLegalService"/>
+      
+    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="LEGACYHTML5" />
+        <property name="cacheTTLMs" value="0" />
+        <property name="characterEncoding" value="UTF-8" />
+        <property name="cacheable" value="false" />
+    </bean>
+    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />
+        <property name="additionalDialects">
+            <set>
+                <bean class="nz.net.ultraq.thymeleaf.LayoutDialect"/>
+                <bean class="com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect" />
+            </set>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="contentNegotiationManager" ref="cnManager"/>
+        <property name="viewResolvers">
+            <list>
+                <bean id="xmlViewResolver" class="gov.goias.util.MarshallingXmlViewResolver"/>
+                <bean id="jsonViewResolver" class="gov.goias.util.JsonViewResolver"/>
+                <bean id="thymeleafViewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+                    <property name="templateEngine" ref="templateEngine" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="mediaTypes">
+            <map>
+                <entry key="json" value="application/json"/>
+                <entry key="xml" value="application/xml"/>
+            </map>
+        </property>
+    </bean>
+</beans>

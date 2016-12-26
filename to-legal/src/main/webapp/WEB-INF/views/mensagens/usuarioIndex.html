@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/layout :: template">
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Cadastro de Mensagens</h2>
+        </div>
+
+
+        <div class="panel-body ">
+
+            <div class="row">
+                <div class="col-md-1">
+                    <a id="novaMensagemUsuario"  class="btn btn-primary" type="button" th:href="@{/portal/mensagens/usuario/cadastrar}"  >Nova Mensagem</a>
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+
+
+
+            <div class="row" id="dadosMensagensCadastradas" >
+                <div class="col-md-7">
+                    <form id="formMensagensUsuario" class="form-horizontal ">
+                        <div class="panel panel-default" >
+                            <div class="panel-heading" >
+                                <label>Mensagens Cadastradas</label>
+                                <button id="filtrarMensagensUsuario" style="display: none"  class="btn" type="button"  >Filtrar</button>
+                            </div>
+                            <div class="panel-body " >
+                                <div id="containerMensagensUsuario"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalhome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true"
+         >
+        <div class="modal-dialog centralizado">
+            <div class="modal-content">
+                <div class="modal-header" style="
+                background: #02397a; color:white;
+                    border-top-right-radius: 5px;
+                    border-top-left-radius: 5px; "
+                        >
+                    <button type="button" style="color:white;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalHomeTitle">...</h4>
+                </div>
+                <div class="centralizado" id="messagesContainerModal">
+                    <div th:if="${not #strings.isEmpty(errorModal)}" class="alert alert-danger" role="alert" th:text="${errorModal}" ></div>
+                </div>
+                <div class="modal-body" id="modalHomeBody" >
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <!--<script th:src="@{/js/paginate.js}" charset="utf-8"></script>-->
+    <!--<script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>-->
+    <!--<script th:src="@{/js/dialogs.js}" charset="utf-8"></script>-->
+    <script th:src="@{/js/mensagens.js}" charset="utf-8"></script>
+
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Mensagens({tela:'usuarioIndex'});
+    </script>
+</div>
+
+</html>

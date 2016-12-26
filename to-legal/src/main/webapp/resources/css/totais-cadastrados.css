@@ -1,0 +1,12 @@
+.totais-cadastrados-main-body {
+    padding: 10px;
+    max-width: 800px;
+}
+
+form#formDatasTotaisCadastrados {
+    padding: 10px;
+}
+
+form#formDatasTotaisCadastrados .form-group:not(:last-child) {
+    margin-right: 10px;
+}

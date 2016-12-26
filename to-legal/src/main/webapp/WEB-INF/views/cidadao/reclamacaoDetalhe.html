@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Dados da Reclama&ccedil;&atilde;o:
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-10" >
+                <label >N&uacute;mero da reclama&ccedil;&atilde;o:</label>
+                <p style="display: inline-block" th:text="${reclamacao.id}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10" >
+                <label >Data da reclama&ccedil;&atilde;o:</label>
+                <p style="display: inline-block" th:text="${dataReclamacaoStr}"/>
+            </div>
+        </div>
+        <!--<div class="row">&nbsp;</div>-->
+        <!--<hr/>-->
+        <div class="row">
+            <div class="col-md-10" >
+                <label >N&uacute;mero do documento fiscal:</label>
+                <p style="display: inline-block" th:text="${reclamacao.numero}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10" >
+                <label  >Empresa:</label>
+                <p style="display: inline-block" th:text="${reclamacao.numeroCnpjEmpresa}" class="textCnpj"/>
+
+                <p style="display: inline-block" th:if="${nomeFantasia}" th:text="${'- '+nomeFantasia}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10" >
+                <label  >Data de emiss&atilde;o do documento:</label>
+                <p style="display: inline-block" th:text="${dataEmissaoStr}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10" >
+                <label  >Valor do documento:</label>
+                <p style="display: inline-block" th:text="${reclamacao.valor}" class="textMoney"/>
+            </div>
+        </div>
+        <!--<div class="row">&nbsp;</div>-->
+        <!--<hr/>-->
+        <div class="row">
+            <div class="col-md-10" >
+                <label  >Motivo da reclama&ccedil;&atilde;o:</label>
+                <p style="display: inline-block" th:text="${reclamacao.motivoReclamacao}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10" >
+                <label  >Atual situa&ccedil;&atilde;o da reclama&ccedil;&atilde;o:</label>
+                <p style="display: inline-block" th:text="${reclamacao.descUltimaSituacao}" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Andamento da Reclama&ccedil;&atilde;o:
+           
+    </div>
+    <div class="panel-body">
+        <form id="formAndamentoReclamacao" >
+            <button id="btnAndamentoReclamacao" style="display: none">btnAndamentoReclamacao</button>                
+        </form>
+        
+<div id="containerAndamentoReclamacao">
+ 
+
+</div>
+         
+       
+    </div>
+</div>
+
+
+	<form id="formReclamacaoDetalhe" name="formReclamacaoDetalhe" class="form-horizontal " >
+    <input type="hidden" th:value="${reclamacao.id}" id="idReclamacao"/>
+    <input type="hidden" th:value="${reclamacao.codgUltimaSituacao}" id="codgSituacaoReclamacao"/>
+
+    <div class="panel panel-default" id="painelAcoesCidadaoReclamacao">
+        <div class="panel-body">
+            <div class="row">
+                <label class="col-md-2 text-right control-label">A&ccedil;&otilde;es dispon&iacute;veis:</label>
+                <div class="col-md-7">
+                    <select  class=" form-control no-padding" name="selectNovoStatusReclamacao" id="selectNovoStatusReclamacao" title="Selecione o novo status da Reclamaç&#225;o.">
+                        <option class="opcao-tipo-documento" th:value="${-1}">Aguardar</option>
+                        <option th:each="stdisp : ${statusDisponiveis}" th:value="${stdisp.codigo}" th:text="${stdisp.tipoSituacaoAcao}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row" style="display: none" id="divInfoReclamacao">
+                <label class="col-md-2 text-right control-label">Coment&aacute;rio:</label>
+                <div class="col-md-7">
+                    <textarea rows="4" cols="70" maxlength="200" id="infoReclamacao"/>
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row" >
+                <div class="col-md-12 centralizado">
+                    <a class="btn btn-primary" id="btnAlterarReclamacao" style="display: none;">Concluir</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+
+</body>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+   
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({});
+       
+       
+    </script>
+</div>
+</html>

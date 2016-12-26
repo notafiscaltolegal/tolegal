@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2 :: site2">
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content" >
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        if (window.parent != window) {
+            window.parent.location = window.location;
+        }
+    </script>
+    <!--1ªLINHA DE PAINEIS DO DASHBOARD-->
+    <div class="row" style="overflow-x:auto" id="divPaineisTelaInicial">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <table width="100%">
+                <tr >
+                    <!--PRIMEIRA COLUNA-->
+                    <td  align="center" width="49%">
+                        <table width="100%">
+                            <tr>
+                                <td align="center">
+                                    <div class="panel panel-warning centralizado " >
+                                        <div class="panel-heading ">
+                                            Meu Perfil
+                                        </div>
+                                        <div class="panel-body panelTelaInicial" align="left">
+
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <label for="cpfShow" >CPF:</label>
+                                                    <p style="display: inline-block" class="textCpf" id="cpfShow" th:text="${cidadao.genPessoaFisica.cpf}" />
+                                                </div>
+
+                                                <div class="col-sm-5">
+                                                    <label for="participa" >Participando dos sorteios:</label>
+                                                    <p style="display: inline-block" id="participa" th:text="${cidadao.participaSorteioString}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <label for="telefone" >Telefone: </label>
+                                                    <p style="display: inline-block" id="telefone" th:text="${cidadao.genPessoaFisica.telefone}" />
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <label for="recebeEmail" >Recebe E-mail:</label>
+                                                    <p style="display: inline-block" id="recebeEmail" th:text="${cidadao.recebeEmailString}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <label for="nome" >Nome:</label>
+                                                    <p style="display: inline-block" id="nome" th:text="${cidadao.genPessoaFisica.nome}" />
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <label for="email" >E-mail:</label>
+                                                    <p style="display: inline-block" id="email" th:text="${cidadao.genPessoaFisica.email}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label for="cep" >CEP:</label>
+                                                    <p style="display: inline-block" class="textCep" id="cep" th:text="${endereco['cep']}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label>Logradouro:</label>
+                                                    <p style="display: inline-block" th:text="${endereco['nomeLogradouro']}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <label for="numero" >N&uacute;mero:</label>
+                                                    <p style="display: inline-block" id="numero" th:text="${endereco['numero']}" />
+                                                </div>
+
+                                                <div class="col-sm-5">
+                                                    <label for="bairro" >Bairro:</label>
+                                                    <p style="display: inline-block"  id="bairro" th:text="${endereco['nomeBairro']}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label>Complemento:</label>
+                                                    <p style="display: inline-block" id="complemento" th:text="${endereco['complemento']}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <label for="cidade" >Cidade:</label>
+                                                    <p style="display: inline-block" id="cidade" th:text="${endereco['nomeMunicipio']}" />
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <label for="uf" >UF:</label>
+                                                    <p style="display: inline-block" id="uf" th:text="${endereco['nomeUf']}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div>
+
+                                            <div class="row">
+                                                <div class="col-sm-7">
+                                                    <div th:if="${not #strings.isEmpty(cidadao.dataCadastroStr)}" >
+                                                        <label >
+                                                            Realizou o cadastro no dia <p style="display: inline-block" id="dtCadastro" th:text="${cidadao.dataCadastroStr+'.'}" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!--<div class="row">&nbsp;</div>-->
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div th:if="${cidadao.excluidoDosSorteios}" >
+                                                        <br/>
+                                                        <label style="color: red">
+                                                            Aten&ccedil;&atilde;o: seu cadastro est&aacute; na lista de CPFs exclu&iacute;dos dos sorteios.
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">&nbsp;</div><hr> <!--divisoria-->
+
+                                            <div class="row" align="center">
+                                                <a class="btn btn-primary" id="linkHomeAtualizarPerfil" href="#">Atualizar Perfil</a>
+                                                <!--<a class="btn btn-default" id="linkHomeAlterarSenha" href="#" style="background: slategray; color: white;" >Alterar Senha</a>-->
+                                                <a class="btn btn-primary" id="linkHomeAlterarSenha" href="#" >Alterar Senha</a>
+
+                                                <!--<a class="btn btn-danger" th:href="@{/cidadao/efetuarlogout}" >Encerrar Sess&atilde;o</a>-->
+                                            </div>
+                                        </div>
+                                </td>
+                            </tr>
+
+
+
+                            <tr>
+                                <td align="center">
+                                    <div class="panel centralizado panel-warning " >
+                                        <div class="panel-heading ">
+                                            Sorteios
+                                        </div>
+                                        <div class="panel-body centralizado panelTelaInicial panelSorteios" align="left" >
+                                            <div class="row"  align="left">
+                                                <label class=" col-sm-3"><br/>Selecione o Sorteio:</label>
+                                                <div class="col-sm-7">
+                                                    <select style="display: inline-block"  class="form-control no-padding"  name="selectSorteios" id="selectSorteios" title="Selecione o sorteio.">
+                                                        <option th:each="s : ${sorteios}" th:value="${s.id}" th:text="${s.informacao}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div id="dadosSorteioSelecionado" align="left">
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label >Data de Extra&ccedil;&atilde;o da Loteria Federal:</label>
+                                                        <p style="display: inline-block" id="textDtLoteria" />
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label >Total de Pontos:</label>
+                                                        <p style="display: inline-block" id="textTotalPontos"   />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">&nbsp;</div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label >Data do Sorteio:</label>
+                                                        <p style="display: inline-block" id="dtSorteio"   />
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label >Total de Documentos no Per&iacute;odo:</label>
+                                                        <p style="display: inline-block"   id="textTotalDocsPeriodo"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">&nbsp;</div>
+
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label >N&uacute;mero de Extra&ccedil;&atilde;o da Loteria Federal:</label>
+                                                        <p style="display: inline-block"   id="textNumeroLoteria"/>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label >Total de Bilhetes:</label>
+                                                        <p style="display: inline-block" id="textTotalBilhetes"   />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">&nbsp;</div>
+
+                                            </div>
+
+                                            <!--<div class="row">&nbsp;</div>-->
+                                            <!--<a target="_blank"   href="http://www.localhost/post/ver/182326/legislacao">Entenda melhor a pontua&ccedil;&atilde;o clicando aqui.</a>-->
+
+                                            <hr>
+                                            <div class="row">&nbsp;</div>
+                                            <div  class="row">
+                                                <button class="btn btn-primary" id="linkDetalhamentoBilhetes" href="#" >Bilhetes Nesse Sorteio</button>
+                                                <button class="btn btn-primary" id="linkDetalhamentoPontos"   href="#">Pontua&ccedil;&atilde;o Nesse Sorteio</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="center">
+                                    <div class="panel panel-warning centralizado" >
+                                        <div class="panel-heading ">
+                                            Meu Cart&atilde;o
+                                        </div>
+                                        <div class="panel-body panelTelaInicial" align="left">
+                                            Impress&atilde;o de cart&atilde;o personalizado com c&oacute;digo de barras.
+                                            <div class="row">&nbsp;</div><hr> <!--divisoria-->
+                                            <div class="row" align="center">
+                                                <!--<a  href="#" ></a>-->
+                                                <a class="btn btn-primary" target="_blank" th:href="@{/cidadao/geraCartao}">Imprimir Meu Cart&atilde;o</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td   align="center">
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td width="2%"></td>
+
+                    <!--SEGUNDA COLUNA-->
+                    <td align="center" width="49%">
+                        <table width="100%" >
+                            <tr>
+                                <td align="center">
+                                    <div class="panel panel-warning centralizado " >
+                                        <div class="panel-heading  ">
+                                            Minhas Notas
+                                        </div>
+                                        <div class="panel-body panelTelaInicial" align="left" id="dadosMinhasNotas" >
+                                            <div id="contentMinhasNotas" style="display: none">
+
+
+                                                <div class="panel-body dadosMinhasNotas" >
+                                                    <div id="containerMinhasNotas"></div>
+
+                                                </div>
+
+
+                                                <div class="row">&nbsp;</div>
+
+                                                <form id="formMinhasNotas" class="form-horizontal ">
+                                                    <input  type="hidden" name="cpfFiltro" id="cpfFiltro" th:value="${cidadao.genPessoaFisica.cpf}">
+                                                </form>
+
+                                                <div class="row">&nbsp;</div>
+
+                                                <div class="row" align="left">
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    Aten&ccedil;&atilde;o: O prazo para importa&ccedil;&atilde;o das notas &eacute; at&eacute; o &uacute;ltimo dia do m&ecirc;s posterior ao da compra.
+                                                </div>
+
+                                                <hr/>
+
+                                                <div class="row" align="center">
+                                                    <a class="btn btn-primary" id="linkMinhasNotasEmDetalhe" href="#" >Consultar Minhas Notas em Detalhe</a>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="center">
+                                    <div class="panel centralizado panel-warning ">
+                                        <div class="panel-heading">
+                                            Premiação
+                                        </div>
+                                        <div class="panel-body centralizado panelTelaInicial panelPremiacao"  align="left">
+                                            <div class="panel-body panelTelaInicial" id="dadosPremiacao" align="center">
+                                                <p style="..." id="textUsuarioPremiado"/>
+                                            </div>
+                                            <div class="panel-body dadosPremiacao" >
+                                                <form id="formPremiacao">
+                                                    <div id="containerPremiacao"></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td align="center">
+                                    <div class="panel panel-warning centralizado" >
+                                        <div class="panel-heading ">
+                                            Minhas Reclama&ccedil;&otilde;es
+                                        </div>
+                                        <div class="panel-body panelTelaInicial" id="dadosReclamacoes" align="left">
+                                            <div class="panel-body dadosMinhasNotas" >
+                                                <form id="formReclamacoes">
+                                                    <button id="btnReclamacoes" style="display: none">btnReclamacoes</button>
+                                                </form>
+                                                <div id="containerReclamacoes"></div>
+                                            </div>
+
+                                            <hr> <!--divisoria-->
+                                            <div class="row" align="center">
+												<a class="btn btn-primary" id="btnNovaReclamacao" href="#">Fazer
+													Nova Reclama&ccedil;&atilde;o</a>
+											</div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+        <div class="col-sm-1">&nbsp;</div>
+    </div>
+
+    <!-- Modal Padrao-->
+    <div class="modal fade" id="modalHome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true">
+        <div class="modal-dialog centralizado">
+            <div class="modal-content">
+                <div class="modal-header" style="
+                background: #02397a; color:white;
+                    /*background: #fcf8e3;*/
+                    /*color:#8a6d3b;*/
+                    border-top-right-radius: 5px;
+                    border-top-left-radius: 5px; "
+                        >
+                    <button type="button" style="color:white;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalHomeTitle">...</h4>
+                </div>
+                <div class="centralizado" id="messagesContainerModal">
+                    <div th:if="${not #strings.isEmpty(errorModal)}" class="alert alert-danger" role="alert" th:text="${errorModal}" ></div>
+                </div>
+                <div class="modal-body scrollModal" id="modalHomeBody" >
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/plugins/jquery.maskMoney.min.js}" charset="utf-8"></script>
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/dialogs.js}" charset="utf-8"></script>
+    <script th:src="@{/js/generic-modal.js}" charset="utf-8"></script>
+    <script th:src="@{/js/cidadao.js}" charset="utf-8"></script>
+    <script th:src="@{/js/modaisCidadao.js}" charset="utf-8"></script>
+    <script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Cidadao({
+            nomeTela: [[${'telaInicial'}]]
+        });
+    </script>
+</div>
+</html>

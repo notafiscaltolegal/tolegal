@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/layout :: template">
+
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default centralizado">
+        <div class="panel-heading">
+            Digite para filtrar.
+        </div>
+        <div class="panel-body" id="panelFiltroDestinatario">
+
+
+            <div class="row">
+                <div class="col-md-9">
+
+                    <div id="adicionarDestCidadao" style="display: none;">
+                        <div class="row">
+                            <label class="col-md-6 control-label">Filtrar por CPF:</label>
+                            <div class="col-md-6">
+                                <input type="text" id="cpfDestinatario" class="form-control campoFiltroDestinatario" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-6 control-label">Filtrar por Nome:</label>
+                            <div class="col-md-6">
+                                <input type="text" id="nomeDestinatario" class="form-control campoFiltroDestinatario" >
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div id="adicionarDestEmpresa" style="display: none;">
+                        <div class="row">
+                            <label class="col-md-6 control-label">Filtrar por CNPJ:</label>
+                            <div class="col-md-6">
+                                <input type="text"  id="cnpjDestinatario" class="form-control campoFiltroDestinatario" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+
+            <div id="containerFiltroDestinatario"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+    </script>
+</div>
+</html>

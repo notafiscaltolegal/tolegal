@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      layout:replace="templates/site2 :: site2">
+<div layout:fragment="styles">
+    <link rel="stylesheet" th:href="@{/css/plugins/jquery.datetimepicker.css}">
+</div>
+
+<div layout:fragment="content">
+
+    <div id="divContribuinteList" class="panel panel-default centralizado">
+        <div class="panel-heading">
+            <div class="row text-left">
+                <form id="formFiltroContribuinte" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-lg-3 no-padding col-md-3 padding-b">
+                            <label class="col-md-4 control-label">Inscri&#231;&#227;o:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="inscricao" class="form-control inputInscricao" placeholder="99.999.999-99">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 no-padding col-md-3 padding-b">
+                            <label class="col-md-4 control-label">Empresa:</label>
+                            <div class="col-md-8">
+                                <input type="text" name="nome" class="form-control" placeholder="Nome empresa">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 no-padding col-md-3 padding-b">
+                            <label class="col-md-4 control-label">CNPJ:</label>
+                            <div class="col-md-8    ">
+                                <input type="text" name="cnpj" class="form-control inputCnpj" placeholder="CNPJ ou CNPJ Base" title="CNPJ ou CNPJ Base">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 padding-b">
+                            <div class="col-md-12">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary" id="filtrarContribuinte" type="submit">Pesquisar</button>
+                                    <button class="btn btn-default" type="reset">Limpar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="containerContribuintes"></div>
+        </div>
+    </div>
+
+    <!-- Modal Padrao-->
+    <div class="modal fade" id="modalHome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true">
+        <div class="modal-dialog centralizado">
+            <div class="modal-content">
+                <div class="modal-header" style="
+                background: #02397a; color:white;
+                    /*background: #fcf8e3;*/
+                    /*color:#8a6d3b;*/
+                    border-top-right-radius: 5px;
+                    border-top-left-radius: 5px; "
+                        >
+                    <button type="button" style="color:white;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalHomeTitle">...</h4>
+                </div>
+                <div class="centralizado" id="messagesContainerModal">
+                    <div th:if="${not #strings.isEmpty(errorModal)}" class="alert alert-danger" role="alert" th:text="${errorModal}" ></div>
+                </div>
+                <div class="modal-body" id="modalHomeBody" >
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="scripts">
+    <script th:src="@{/js/plugins/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/jquery.datetimepicker.js}"></script>
+    <script th:src="@{/js/contribuinte.js}" charset="utf-8"></script>
+    <script th:src="@{/js/paginate.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+        new Contribuinte({
+            urlCadastrar: [[${urlCadastrar}]],
+            urlAlterar: [[${urlAlterar}]],
+            urlListar: [[${urlListar}]]
+        }).initListar();
+    </script>
+</div>
+</html>

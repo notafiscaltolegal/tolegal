@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:replace="templates/admin :: template">
+
+<div layout:fragment="styles"></div>
+
+<div layout:fragment="content" class="processamento page">
+    <div class="page-header text-center">
+        <h1 id="forms">CADASTRO DE PARAMETROS</h1>
+    </div>
+    <div class="col-md-12">
+            <div class="col-md-12 text-center">
+                <button id="updateAll" class="btn btn-flat btn-primary">ATUALIZAR TODOS<i class="mdi-navigation-refresh fix-icon-btn"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script th:src="@{/js/processamento.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:inline="javascript" charset="utf-8">
+    </script>
+</div>
+</html>
