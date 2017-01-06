@@ -149,4 +149,16 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 
         return listOfMapResults;
 	}
+
+	@Override
+	public boolean notaEmpresaPontuada(Integer idNotaEmpresa) {
+		
+		FiltroPontuacaoToLegal filtroPontuacaoToLegal = new FiltroPontuacaoToLegal();
+		
+		filtroPontuacaoToLegal.setIdNotaEmpresa(idNotaEmpresa.longValue());
+		
+		List<PontuacaoToLegal> resultList = reposiroty.filtrarPesquisa(filtroPontuacaoToLegal, PontuacaoToLegal.class);
+		
+		return resultList.isEmpty();
+	}
 }

@@ -34,4 +34,6 @@ public interface PontuacaoToLegalService {
 	List<Map<String, Object>> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page);
 
 	List<Map<String, Object>> pontuacaoBonus(Integer idSorteio, String cpf, Integer max, Integer page);
+
+	boolean notaEmpresaPontuada(Integer idNotaEmpresa);
 }

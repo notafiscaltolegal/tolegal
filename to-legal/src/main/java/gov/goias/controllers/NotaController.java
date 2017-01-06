@@ -22,6 +22,8 @@ import gov.goias.exceptions.NFGException;
 import gov.goias.service.EmpresaService;
 import gov.goias.service.NotaService;
 import gov.goias.util.ValidacaoDeCpf;
+import gov.to.goias.DocumentoFiscalDigitadoToLegal;
+import gov.to.service.NotaEmpresaService;
 
 @Controller
 @RequestMapping(value = { "/contador/nota", "/contribuinte/nota" })
@@ -32,6 +34,9 @@ public class NotaController extends BaseController {
 	
 	@Autowired
 	private NotaService notaService;
+	
+	@Autowired
+	private NotaEmpresaService notaEmpresaService;
 	
 	@RequestMapping("/cadastro/{inscricao}")
 	public ModelAndView cadastro(@PathVariable(value = "inscricao") Integer inscricao) {
@@ -94,28 +99,28 @@ public class NotaController extends BaseController {
             throw new NFGException("CPF Inválido!");
 
         try {
-            DocumentoFiscalDigitado ultimaNotaValida = notaService.ultimaNotaValida(
+            DocumentoFiscalDigitadoToLegal ultimaNotaValida = notaEmpresaService.ultimaNotaValida(
                     inscricaoEstadual, numeroDocumentoFiscal,
                     serieNotaFiscal, subSerieNotaFiscal,
                     dataEmissao, tipoDocumentoFiscal
             );
 
             if(ultimaNotaValida == null) {
-                CCEContribuinte contribuinte = empresaService.contribuintePorInstricaoEstadual(inscricaoEstadual);
 
-                notaService.cadastrarNota(
+                notaEmpresaService.cadastrarNota(
                         numeroDocumentoFiscal, serieNotaFiscal, subSerieNotaFiscal,
-                        dataEmissao, cpf, valorTotal, tipoDocumentoFiscal, contribuinte,
+                        dataEmissao, cpf, valorTotal, tipoDocumentoFiscal, 
                         new Date(), inscricaoEstadual
                 );
                 resposta.put("message","Nota Salva!");
                 resposta.put("success",true);
             } else {
-                if (existePontuacaoParaODocumento(ultimaNotaValida)){
+            	
+                if (notaEmpresaService.existePontuacaoParaODocumento(ultimaNotaValida)){
                     resposta.put("success",false);
-                    resposta.put("message","Este documento n&#225;o pode ser alterado, pois já está vinculado á pontuaç&#225;o!!");
+                    resposta.put("message","Este documento não pode ser alterado, pois já está vinculado á pontuação!!");
                 }else{
-                    notaService.atualizarNota(
+                	notaEmpresaService.atualizarNota(
                             ultimaNotaValida, numeroDocumentoFiscal, serieNotaFiscal,
                             subSerieNotaFiscal, dataEmissao, cpf, valorTotal, tipoDocumentoFiscal,inscricaoEstadual
                     );
@@ -133,11 +138,6 @@ public class NotaController extends BaseController {
         return resposta;
 	}
 	
-	private boolean existePontuacaoParaODocumento(DocumentoFiscalDigitado ultimaNotaValida) {
-	       
-    	return false;
-    }
-
 	@RequestMapping(method = RequestMethod.GET, value = "/get-layout-params")
 	public @ResponseBody Map<String, Object> obterParametrosLayout(Integer inscricaoEstadual,
 			Integer numeroDocumentoFiscal, Date dataEmissao, Integer serieNotaFiscal, String subSerieNotaFiscal,
@@ -145,7 +145,7 @@ public class NotaController extends BaseController {
 
 		Map<String,Object> resposta = new HashMap<String,Object>();
 
-        DocumentoFiscalDigitado ultimaNotaNaoRemovida = notaService.ultimaNotaValida(
+        DocumentoFiscalDigitadoToLegal ultimaNotaNaoRemovida = notaEmpresaService.ultimaNotaValida(
                 inscricaoEstadual, numeroDocumentoFiscal,
                 serieNotaFiscal, subSerieNotaFiscal,
                 dataEmissao, tipoDocumentoFiscal
@@ -156,7 +156,7 @@ public class NotaController extends BaseController {
         //todo retirar mock
         if (!empresaService.inscricaoEstadualValida(inscricaoEstadual)) {
             resposta.put("error",true);
-            resposta.put("errorMessage","Inscriç&#225;o Estadual Inválida!");
+            resposta.put("errorMessage","Inscrição Estadual Inválida!");
         }
 
         if (ultimaNotaNaoRemovida == null) {
@@ -177,6 +177,9 @@ public class NotaController extends BaseController {
 
             resposta.put("valorTotal",true);
             resposta.put("paramValorTotal",ultimaNotaNaoRemovida.getValorTotal());
+            
+            resposta.put("subserie", ultimaNotaNaoRemovida.getSubSerieNotaFiscal());
+            
         }
 		return resposta;
 	}
@@ -187,11 +190,11 @@ public class NotaController extends BaseController {
 	public @ResponseBody Map<String, Object> excluirNota(Integer idDocumentoFiscalDigital) throws Exception {
 		
 		Map<String,Object> resposta = new HashMap<String,Object>();
-        DocumentoFiscalDigitado documento = notaService.documentoFiscalPorId(idDocumentoFiscalDigital);
+        DocumentoFiscalDigitadoToLegal documento = notaEmpresaService.documentoFiscalPorId(idDocumentoFiscalDigital);
 
         try {
         	
-            if (existePontuacaoParaODocumento(documento)){
+            if (notaEmpresaService.existePontuacaoParaODocumento(documento)){
             	
                 resposta.put("success", false);
                 resposta.put("message", "Este documento n&#225;o pode ser excluído, pois já está vinculado á pontuaç&#225;o!");
@@ -206,7 +209,7 @@ public class NotaController extends BaseController {
                 }
 
                 documento.setDataCancelDocumentoFiscal(new Date());
-                notaService.alterar(documento);
+                notaEmpresaService.alterar(documento);
 
                 resposta.put("success", true);
                 resposta.put("message", "Removido!");

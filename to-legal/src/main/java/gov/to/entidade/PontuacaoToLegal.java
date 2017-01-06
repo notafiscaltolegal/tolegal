@@ -40,6 +40,10 @@ public class PontuacaoToLegal extends EntidadeBasica{
 	private NotaFiscalToLegal notaFiscalToLegal;
 	
 	@ManyToOne
+	@JoinColumn(name="id_nota_empresa",  referencedColumnName="id_nota_empresa" )
+	private NotaEmpresaToLegal notaFiscalEmpresaToLegal;
+	
+	@ManyToOne
 	@JoinColumn(name="ID_SORTEIO", referencedColumnName="id_sorteio")
 	private SorteioToLegal sorteioToLegal;
 	
@@ -109,5 +113,13 @@ public class PontuacaoToLegal extends EntidadeBasica{
 
 	public void setSituacaoPontuacao(SituacaoPontuacaoNota situacaoPontuacao) {
 		this.situacaoPontuacao = situacaoPontuacao;
+	}
+
+	public NotaEmpresaToLegal getNotaFiscalEmpresaToLegal() {
+		return notaFiscalEmpresaToLegal;
+	}
+
+	public void setNotaFiscalEmpresaToLegal(NotaEmpresaToLegal notaFiscalEmpresaToLegal) {
+		this.notaFiscalEmpresaToLegal = notaFiscalEmpresaToLegal;
 	}
 }
