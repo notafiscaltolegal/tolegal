@@ -45,15 +45,6 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 		DocumentoFiscalReclamadoToLegal dcFiscalReclamado = new DocumentoFiscalReclamadoToLegal();
 		
 		dcFiscalReclamado = serviceReclamacao.findReclamacoesPorIdReclamacao(idReclamacao);
-
-		
-		
-		
-	
-		
-		
-		
-	
 		
 		return dcFiscalReclamado;
 	}

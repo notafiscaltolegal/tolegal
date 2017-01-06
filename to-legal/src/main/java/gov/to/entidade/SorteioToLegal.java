@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import gov.to.dominio.Situacao;
 import gov.to.persistencia.EntidadeBasica;
 
 @Entity
@@ -42,6 +45,10 @@ public class SorteioToLegal extends EntidadeBasica{
 	
 	@Column(name="num_sorteio")
 	private Integer numeroSorteio;
+	
+	@Column(name="situacao")
+	@Enumerated(EnumType.STRING)
+	private Situacao situacao;
 	
 	public Long getId() {
 		return id;

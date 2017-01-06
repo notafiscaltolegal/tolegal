@@ -402,6 +402,12 @@ Nota.prototype.consultaCarregarParametros = function(self,formParams)
             {
                 $("#valorTotal").val(self.normalizeValor(resposta.paramValorTotal));
             }
+            
+            if(resposta.subserie) {
+                $("#subSerieNotaFiscalInput").val(resposta.subserie);
+            }
+            
+            
 
             self.apliqueMaskFilter();
 

@@ -18,6 +18,9 @@ public class FiltroPontuacaoToLegal implements Filtro{
 	@EntityProperty(pesquisaExata=true,value="situacaoPontuacao",ignoraCaseSensitive=false)
 	private SituacaoPontuacaoNota situacaoPontuacaoNota;
 	
+	@EntityProperty("notaFiscalEmpresaToLegal.id")
+	private Long idNotaEmpresa;
+	
 	public String getCpf() {
 		return cpf;
 	}
@@ -48,5 +51,13 @@ public class FiltroPontuacaoToLegal implements Filtro{
 
 	public void setSituacaoPontuacaoNota(SituacaoPontuacaoNota situacaoPontuacaoNota) {
 		this.situacaoPontuacaoNota = situacaoPontuacaoNota;
+	}
+
+	public Long getIdNotaEmpresa() {
+		return idNotaEmpresa;
+	}
+
+	public void setIdNotaEmpresa(Long idNotaEmpresa) {
+		this.idNotaEmpresa = idNotaEmpresa;
 	}
 }

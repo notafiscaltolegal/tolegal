@@ -36,5 +36,6 @@ public interface BilheteToLegalService {
 	Integer geraNumeroBilhete();
 
 	void processaBilhetePorPontuacao(SorteioToLegal sorteio, PontuacaoToLegal pontuacao);
+	
 	void processaBilhetePorPontuacaoBonus(SorteioToLegal sorteioToLegal, PontuacaoBonusToLegal pontuacaoBonus);
 }
