@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import gov.to.dominio.Situacao;
 import gov.to.persistencia.EntidadeBasica;
@@ -49,6 +50,54 @@ public class SorteioToLegal extends EntidadeBasica{
 	@Column(name="situacao")
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
+	
+	public SorteioToLegal() {
+		situacao = Situacao.INATIVO;
+	}
+	
+	@Transient
+	public boolean getAtivo() {
+		
+		return Situacao.ATIVO.equals(situacao);
+	}
+	
+	@Transient
+	public boolean getInativo() {
+		
+		return Situacao.INATIVO.equals(situacao);
+	}
+	
+	@Transient
+	public boolean getSorteado() {
+		
+		return Situacao.SORTEADO.equals(situacao);
+	}
+	
+	@Transient
+	public String getDataExtracaoFormat() {
+		
+		String dataFormat = null;
+		
+		if (this.getDataExtracaoLoteria() != null){
+			
+			dataFormat = formataData(this.getDataExtracaoLoteria(), "dd/MM/yyyy");
+		}
+		
+		return dataFormat;
+	}
+	
+	@Transient
+	public String getDataSorteioFormat() {
+		
+		String dataFormat = null;
+		
+		if (this.getDataSorteio() != null){
+			
+			dataFormat = formataData(this.getDataSorteio(), "dd/MM/yyyy");
+		}
+		
+		return dataFormat;
+	}
 	
 	public Long getId() {
 		return id;
@@ -92,5 +141,13 @@ public class SorteioToLegal extends EntidadeBasica{
 
 	public boolean isSorteioRealizado() {
 		return numeroExtracao != null;
+	}
+
+	public Situacao getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(Situacao situacao) {
+		this.situacao = situacao;
 	}
 }
