@@ -3,6 +3,7 @@ package gov.to.dominio;
 public enum Situacao {
 
 	ATIVO("Ativo"),
+	SORTEADO("SORTEADO"),
 	INATIVO("Inativo");
 	
 	private String descricao;
