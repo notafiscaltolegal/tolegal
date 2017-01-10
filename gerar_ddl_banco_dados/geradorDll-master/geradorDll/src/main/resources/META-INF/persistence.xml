@@ -20,10 +20,9 @@
 		<class>entidade.MunicipioToLegal</class>
 		<class>entidade.ReclamacaoToLegal</class>
 		<class>entidade.ReclamacaoLogToLegal</class>
-
-
-		
-		
+		<class>entidade.BloqueioCpfToLegal</class>
+		<class>entidade.MensagemEmpresaToLegal</class>
+		<class>entidade.MensagemVisualizadaEmpresaToLegal</class>
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

@@ -15,7 +15,7 @@
     </modules>
 
     <properties>
-        <version.java>1.7</version.java>
+        <version.java>1.8</version.java>
         <version.eclipselink>2.5.2</version.eclipselink>
         <version.hibernate>4.3.6.Final</version.hibernate>
         <version.openjpa>2.3.0</version.openjpa>
@@ -105,7 +105,7 @@
                     <source>${version.java}</source>
                     <target>${version.java}</target>
                     <fork>true</fork>
-               		<executable>C:\Program Files\Java\jdk1.8.0_111\bin\javac.exe</executable>
+               		<executable>C:\Program Files\Java\jdk1.8.0_91\bin\javac.exe</executable>
                 </configuration>
             </plugin>
         

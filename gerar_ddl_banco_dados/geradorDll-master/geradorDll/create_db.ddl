@@ -10,6 +10,9 @@ CREATE TABLE tb_usr_to_legl (id_usr_to_legl BIGINT NOT NULL, data_ativacao TIMES
 CREATE TABLE TBCDMN (munibge BIGINT NOT NULL, ufcdg VARCHAR(255), munnom VARCHAR(255), PRIMARY KEY (munibge))
 CREATE TABLE tb_reclamacao (id_reclamacao BIGINT NOT NULL, anexo_nota BLOB(2147483647), data_cadastro TIMESTAMP, data_emissao_doc_fiscal TIMESTAMP, inscricao_estadual VARCHAR(255), motivo_reclamacao VARCHAR(255), numero_doc_fiscal VARCHAR(255), problema_empresa VARCHAR(255), tipo_doc_fiscal VARCHAR(255), valor_doc_fiscal FLOAT, id_usuario BIGINT, PRIMARY KEY (id_reclamacao))
 CREATE TABLE tb_reclamacao_log (id_reclamacao_log BIGINT NOT NULL, data_reclamacao TIMESTAMP, perfil VARCHAR(255), status_reclamacao VARCHAR(255), id_reclamacao BIGINT, PRIMARY KEY (id_reclamacao_log))
+CREATE TABLE tb_bloqueio_cpf (id_bloqueio_cpf BIGINT NOT NULL, cpf VARCHAR(255), cpf_adm_logado VARCHAR(255), dt_hora_bloqueio TIMESTAMP, motivo_bloqueio VARCHAR(255), nome VARCHAR(255), nome_adm_logado VARCHAR(255), situacao VARCHAR(255), PRIMARY KEY (id_bloqueio_cpf))
+CREATE TABLE tb_msg_empresa (id_msg_empresa BIGINT NOT NULL, cpf_adm_logado VARCHAR(255), data_envio TIMESTAMP, mensagem VARCHAR(255), nome_adm_logado VARCHAR(255), situacao VARCHAR(255), titulo VARCHAR(255), PRIMARY KEY (id_msg_empresa))
+CREATE TABLE tb_msg_visu_empresa (id_msg_visu_empresa BIGINT NOT NULL, data_leitura TIMESTAMP, inscricao_estadual VARCHAR(255), mensagem VARCHAR(255), titulo VARCHAR(255), PRIMARY KEY (id_msg_visu_empresa))
 ALTER TABLE tb_bilhete ADD CONSTRAINT tbblhtSRTTLGLdsrto FOREIGN KEY (SORTEIOTOLEGAL_id_sorteio) REFERENCES tb_sorteio (id_sorteio)
 ALTER TABLE tb_endereco ADD CONSTRAINT tbndrcoMNCPmunibge FOREIGN KEY (MUNICIPIO_munibge) REFERENCES TBCDMN (munibge)
 ALTER TABLE tb_pes_fisica ADD CONSTRAINT tbpsfscNDRCdndreco FOREIGN KEY (ENDERECO_id_endereco) REFERENCES tb_endereco (id_endereco)
@@ -20,12 +23,15 @@ ALTER TABLE tb_usr_to_legl ADD CONSTRAINT tbsrtlPSSFSCdpsfsc FOREIGN KEY (PESSOA
 ALTER TABLE tb_reclamacao ADD CONSTRAINT tbrclamacaodsuario FOREIGN KEY (id_usuario) REFERENCES tb_usr_to_legl (id_usr_to_legl)
 ALTER TABLE tb_reclamacao_log ADD CONSTRAINT tbrclmcologdrclmco FOREIGN KEY (id_reclamacao) REFERENCES tb_reclamacao (id_reclamacao)
 CREATE SEQUENCE seq_reclamacao START WITH 1
-CREATE SEQUENCE seq_pont_nota START WITH 1
-CREATE SEQUENCE seq_endereco START WITH 1
-CREATE SEQUENCE seq_sort_cidadao START WITH 1
 CREATE SEQUENCE seq_sorteio START WITH 1
-CREATE SEQUENCE seq_usr_to_legl START WITH 1
-CREATE SEQUENCE seq_bilhete START WITH 1
-CREATE SEQUENCE seq_pes_fisica START WITH 1
-CREATE SEQUENCE seq_reclamacao_log START WITH 1
+CREATE SEQUENCE seq_endereco START WITH 1
 CREATE SEQUENCE seq_pont_bonus START WITH 1
+CREATE SEQUENCE seq_msg_empresa START WITH 1
+CREATE SEQUENCE seq_bilhete START WITH 1
+CREATE SEQUENCE seq_msg_visu_empresa START WITH 1
+CREATE SEQUENCE seq_pes_fisica START WITH 1
+CREATE SEQUENCE seq_bloqueio_cpf START WITH 1
+CREATE SEQUENCE seq_reclamacao_log START WITH 1
+CREATE SEQUENCE seq_pont_nota START WITH 1
+CREATE SEQUENCE seq_usr_to_legl START WITH 1
+CREATE SEQUENCE seq_sort_cidadao START WITH 1
