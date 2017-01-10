@@ -3,7 +3,6 @@ package gov.goias.controllers;
 import java.net.BindException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import gov.goias.entidades.CCEContribuinte;
 import gov.goias.entidades.DocumentoFiscalDigitado;
 import gov.goias.entidades.DocumentoFiscalParticipante;
 import gov.goias.entidades.enums.StatusProcessamentoDocumentoFiscal;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.EmpresaService;
 import gov.goias.service.NotaService;
+import gov.goias.service.PaginacaoDTO;
 import gov.goias.util.ValidacaoDeCpf;
 import gov.to.goias.DocumentoFiscalDigitadoToLegal;
 import gov.to.service.NotaEmpresaService;
@@ -116,17 +115,17 @@ public class NotaController extends BaseController {
                 resposta.put("success",true);
             } else {
             	
-                if (notaEmpresaService.existePontuacaoParaODocumento(ultimaNotaValida)){
-                    resposta.put("success",false);
-                    resposta.put("message","Este documento não pode ser alterado, pois já está vinculado á pontuação!!");
-                }else{
+               //if (notaEmpresaService.existePontuacaoParaODocumento(ultimaNotaValida)){
+                 //   resposta.put("success",false);
+                   // resposta.put("message","Este documento não pode ser alterado, pois já está vinculado á pontuação!!");
+               // }else{
                 	notaEmpresaService.atualizarNota(
                             ultimaNotaValida, numeroDocumentoFiscal, serieNotaFiscal,
                             subSerieNotaFiscal, dataEmissao, cpf, valorTotal, tipoDocumentoFiscal,inscricaoEstadual
                     );
                     resposta.put("message","Nota Atualizada!");
                     resposta.put("success", true);
-                }
+                //}
             }
         }
         catch(Exception e) {
@@ -229,19 +228,23 @@ public class NotaController extends BaseController {
 			String cpfFiltro, Integer nrDocFiltro, String dataEmissaoFiltro, BindException bind) {
 		Integer max = 10;
         String dataEmissao = dataEmissaoFiltro != null ? dataEmissaoFiltro : null;
+        
+        if(ieFiltro == null){
+        	return null;
+        }
 
-        List<DocumentoFiscalDigitado> ultimasNotasInseridas = notaService.ultimasNotasInseridas(ieFiltro,nrDocFiltro, dataEmissao,cpfFiltro,page * max, max);
+        PaginacaoDTO<DocumentoFiscalDigitadoToLegal> ultimasNotasInseridas = notaEmpresaService.ultimasNotasInseridas(ieFiltro,nrDocFiltro, dataEmissao,cpfFiltro,page, max);
 
-        int notasInseridas = notaService.countUltimosInseridos(ieFiltro,nrDocFiltro,dataEmissao,cpfFiltro);
+      //  int notasInseridas = notaService.countUltimosInseridos(ieFiltro,nrDocFiltro,dataEmissao,cpfFiltro);
 
         Map<String, Object> resposta = new HashMap<String, Object>();
         Map<String, Object> pagination = new HashMap<String, Object>();
 
-        pagination.put("total",  notasInseridas);
+        pagination.put("total",  ultimasNotasInseridas.getCount());
         pagination.put("page", ++page);
         pagination.put("max", max);
 
-        resposta.put("ultimasNotasInseridas",ultimasNotasInseridas);
+        resposta.put("ultimasNotasInseridas",ultimasNotasInseridas.getList());
         resposta.put("pagination", pagination);
 
         return resposta;
