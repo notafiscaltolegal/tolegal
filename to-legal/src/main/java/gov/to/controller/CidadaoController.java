@@ -75,8 +75,6 @@ import gov.to.service.UsuarioToLegalService;
 @RequestMapping("/cidadao")
 public class CidadaoController extends BaseController {
 	
-	
-	
 	@Autowired
 	private SorteioToLegalService sorteioService;
 	
