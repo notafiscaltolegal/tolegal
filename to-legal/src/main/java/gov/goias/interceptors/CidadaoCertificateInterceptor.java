@@ -13,8 +13,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import gov.goias.auth.Certificado;
 import gov.goias.auth.util.CertificadoExtrator;
-import gov.goias.controllers.BaseController;
 import gov.goias.exceptions.NFGException;
+import gov.to.controller.BaseController;
 
 /**
  * @author henrique-rh

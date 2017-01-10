@@ -9,10 +9,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import gov.goias.controllers.BaseController;
 import gov.goias.entidades.GENEmpresa;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.EmpresaService;
+import gov.to.controller.BaseController;
 
 /**
  * @author henrique-rh

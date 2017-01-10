@@ -11,10 +11,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import gov.goias.controllers.BaseController;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.PessoaFisicaService;
+import gov.to.controller.BaseController;
 
 /**
  * Created by diogo-rs on 7/21/2014.

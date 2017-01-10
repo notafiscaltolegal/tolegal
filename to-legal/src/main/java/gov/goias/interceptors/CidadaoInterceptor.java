@@ -10,10 +10,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import gov.goias.controllers.BaseController;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.CidadaoService;
+import gov.to.controller.BaseController;
 
 @Component
 public class CidadaoInterceptor extends HandlerInterceptorAdapter {
