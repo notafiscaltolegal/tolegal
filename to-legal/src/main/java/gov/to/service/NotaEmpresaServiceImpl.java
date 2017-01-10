@@ -1,10 +1,13 @@
 package gov.to.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import gov.goias.service.PaginacaoDTO;
 import gov.to.dominio.SerieEnum;
 import gov.to.dominio.TipoDocumentoEnum;
 import gov.to.entidade.NotaEmpresaToLegal;
@@ -56,6 +59,7 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 			doc.setValorTotal(nota.getValor());
 			doc.setSubSerieNotaFiscal(nota.getSubSerie());
 			doc.setTipoDocumentoFiscal(nota.getTipoDocumento().getCodigo());
+			doc.setId(nota.getId().intValue());
 		}
 		// doc.setCpf("97464104153");
 		return doc;
@@ -85,6 +89,20 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 			Integer serieNotaFiscal, String subSerieNotaFiscal, Date dataEmissao, String cpf, Double valorTotal,
 			Integer tipoDocumentoFiscal, Integer inscricaoEstadual) {
 		
+        NotaEmpresaToLegal nota=new NotaEmpresaToLegal();
+		
+		nota.setNumeroDocumento(numeroDocumentoFiscal.toString());
+		nota.setSerie(SerieEnum.convertCodTipoDocumentoFiscalParaEnum(serieNotaFiscal));
+		nota.setSubSerie(subSerieNotaFiscal);
+		nota.setDataEmissao(dataEmissao);
+		nota.setCpfDestinatario(cpf);
+		nota.setValor(valorTotal);
+		nota.setTipoDocumento(TipoDocumentoEnum.convertCodTipoDocumentoFiscalParaEnum(tipoDocumentoFiscal));
+		nota.setInscricaoEstadual(inscricaoEstadual.toString());
+		nota.setId(ultimaNotaValida.getId().longValue());
+		servicoNotaEmpresa.merge(nota);
+		
+		
 	}
 
 	@Override
@@ -101,6 +119,69 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 	@Override
 	public void alterar(DocumentoFiscalDigitadoToLegal documento) {
 		
+	}
+
+	@Override
+	public PaginacaoDTO<DocumentoFiscalDigitadoToLegal> ultimasNotasInseridas(Integer ieFiltro, Integer nrDocFiltro,
+			String dataEmissao, String cpfFiltro, int ig, Integer max) {
+		
+		PaginacaoDTO<DocumentoFiscalDigitadoToLegal> paginacaoDTO = new PaginacaoDTO<>();
+		
+		FiltroNotaEmpresaToLegal filtro = new FiltroNotaEmpresaToLegal();
+		
+		filtro.setInscricaoEstadual(ieFiltro.toString());
+		
+		List<NotaEmpresaToLegal> listNotaEmpresa = super.filtrarPesquisa(filtro, NotaEmpresaToLegal.class);
+		
+		int inicio = calcInicio(ig, max);
+		int fim = calcPagFim(ig, max);
+
+		if (listNotaEmpresa != null) {
+			paginacaoDTO.setCount(listNotaEmpresa.size());
+		}
+
+		List<DocumentoFiscalDigitadoToLegal> listsDocs = new ArrayList<>();
+		;
+		
+		for (int i = inicio; i < fim; i++) {
+
+			DocumentoFiscalDigitadoToLegal doc = new DocumentoFiscalDigitadoToLegal();
+
+			if (i == listNotaEmpresa.size()) {
+				break;
+			}
+
+			NotaEmpresaToLegal not = listNotaEmpresa.get(i);
+		//	ContribuinteToLegal contribuinte = serviceContribuinte
+			//		.findByInscricaoEstadual(Integer.valueOf(rec.getInscricaoEstadual()));
+			if (not != null) {
+
+				doc.setCpf(not.getCpfDestinatario());
+				doc.setNumeroDocumentoFiscal(Integer.valueOf(not.getNumeroDocumento()));
+				doc.setDataEmissao(not.getDataEmissao());
+				doc.setValorTotal(not.getValor());
+				doc.setSerieNotaFiscal(not.getSerie().getCodigo());
+				doc.setSubSerieNotaFiscal(not.getSubSerie());
+				doc.setTipoDocumentoFiscal(not.getTipoDocumento().getCodigo());
+				listsDocs.add(doc);
+			}
+		}
+		
+		paginacaoDTO.setList(listsDocs);
+		;
+		// TODO Auto-generated method stub
+		return paginacaoDTO;
+	}
+	
+	
+	private static int calcPagFim(Integer page, Integer max) {
+
+		return (calcInicio(page, max) + max) - 1;
+	}
+
+	private static int calcInicio(Integer page, Integer max) {
+
+		return (page * max);
 	}
 
 	
