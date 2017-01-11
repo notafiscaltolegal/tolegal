@@ -15,12 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import gov.goias.entidades.DocumentoFiscalDigitado;
 import gov.goias.entidades.DocumentoFiscalParticipante;
-import gov.goias.entidades.enums.StatusProcessamentoDocumentoFiscal;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.EmpresaService;
 import gov.goias.service.NotaService;
 import gov.goias.service.PaginacaoDTO;
 import gov.goias.util.ValidacaoDeCpf;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.goias.DocumentoFiscalDigitadoToLegal;
 import gov.to.service.NotaEmpresaService;
 
@@ -78,7 +78,7 @@ public class NotaController extends BaseController {
         String urlRedirect = request.getRequestURI().contains("contador") ? "/contador/contribuintes/cadastro" : "/contribuinte/cadastro";
         
         if (!inscricaoCompativel) 
-        	throw new NFGException("Nenhum usuário logado ou inscriç&#225;o n&#225;o condizente com nenhum usuário logado!", urlRedirect);
+        	throw new NFGException("Nenhum usuário logado ou inscrição condizente com nenhum usuário logado!", urlRedirect);
     }
 
 	@RequestMapping(method = RequestMethod.POST, value = "/cadastrar")
@@ -91,9 +91,9 @@ public class NotaController extends BaseController {
         Map<String,Object> resposta = new HashMap<String,Object>();
         
         if(!empresaService.inscricaoEstadualValida(inscricaoEstadual))
-            throw new NFGException("Inscriç&#225;o Estadual Inválida!");
+            throw new NFGException("Inscrição Estadual Inválida!");
         if(dataEmissao!= null && dataEmissao.after(new Date()))
-            throw new NFGException("Data de Emiss&#225;o Inválida!");
+            throw new NFGException("Data de Emissão Inválida!");
         if(!new ValidacaoDeCpf(cpf).isCpfValido())
             throw new NFGException("CPF Inválido!");
 
@@ -189,35 +189,33 @@ public class NotaController extends BaseController {
 	public @ResponseBody Map<String, Object> excluirNota(Integer idDocumentoFiscalDigital) throws Exception {
 		
 		Map<String,Object> resposta = new HashMap<String,Object>();
-        DocumentoFiscalDigitadoToLegal documento = notaEmpresaService.documentoFiscalPorId(idDocumentoFiscalDigital);
 
         try {
         	
-            if (notaEmpresaService.existePontuacaoParaODocumento(documento)){
+            //if (notaEmpresaService.existePontuacaoParaODocumento(documento)){
             	
-                resposta.put("success", false);
-                resposta.put("message", "Este documento n&#225;o pode ser excluído, pois já está vinculado á pontuaç&#225;o!");
+              //  resposta.put("success", false);
+               // resposta.put("message", "Este documento n&#225;o pode ser excluído, pois já está vinculado á pontuaç&#225;o!");
             
-            }else{
-            	
-                DocumentoFiscalParticipante docParticipanteList = notaService.documentoFiscalParticipantePorIdDocumentoFiscalDigital(documento.getId());
+          //  }else{
+            	NotaEmpresaToLegal nota=notaEmpresaService.buscarNotaEmpresaToLegalPorId(idDocumentoFiscalDigital);
+                //DocumentoFiscalParticipante docParticipanteList = notaService.documentoFiscalParticipantePorIdDocumentoFiscalDigital(documento.getId());
                 
-                if (docParticipanteList != null && docParticipanteList.getId() != null){
-                	docParticipanteList.setStatusProcessamento(StatusProcessamentoDocumentoFiscal.CANCELADO.getValue());
-                	notaService.alterarDocumentoFiscalParticipante(docParticipanteList);
-                }
+                //if (docParticipanteList != null && docParticipanteList.getId() != null){
+                	//docParticipanteList.setStatusProcessamento(StatusProcessamentoDocumentoFiscal.CANCELADO.getValue());
+                //	notaService.alterarDocumentoFiscalParticipante(docParticipanteList);
+                //}
 
-                documento.setDataCancelDocumentoFiscal(new Date());
-                notaEmpresaService.alterar(documento);
+                notaEmpresaService.excluir(nota);
 
                 resposta.put("success", true);
                 resposta.put("message", "Removido!");
-            }
+            //}
         } catch (Exception e) {
             e.printStackTrace();
 
             resposta.put("success", false);
-            resposta.put("message", "N&#225;o foi possível remover esta nota!");
+            resposta.put("message", "Não foi possível remover esta nota!");
         }
         
         return resposta;

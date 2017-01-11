@@ -1,5 +1,7 @@
 package gov.to.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -129,7 +131,39 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 		
 		FiltroNotaEmpresaToLegal filtro = new FiltroNotaEmpresaToLegal();
 		
+		try {
+			filtro.setCpfDestinatario(cpfFiltro);
+		} catch (Exception e) {
+			
+		}		
+		
+		try
+		{
+		filtro.setNumeroDocumento(nrDocFiltro.toString());
+		}catch(Exception ex)
+		{			
+			
+		}
+		
+		Date date=new Date();
+		try		
+		{
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		date = (Date)formatter.parse(dataEmissao);
+		filtro.setDataEmissao(date);
+		}catch(Exception ex)
+		{
+			
+		}
+		
+		
+		try
+		{
 		filtro.setInscricaoEstadual(ieFiltro.toString());
+		}catch(Exception ex)
+		{			
+			
+		}
 		
 		List<NotaEmpresaToLegal> listNotaEmpresa = super.filtrarPesquisa(filtro, NotaEmpresaToLegal.class);
 		
@@ -182,6 +216,20 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 	private static int calcInicio(Integer page, Integer max) {
 
 		return (page * max);
+	}
+
+	@Override
+	public void excluir(NotaEmpresaToLegal nota) {		
+		servicoNotaEmpresa.excluir(nota);		
+	}
+
+	@Override
+	public NotaEmpresaToLegal buscarNotaEmpresaToLegalPorId(Integer idDocumentoFiscalDigital) {
+		
+		NotaEmpresaToLegal nota=servicoNotaEmpresa.getById(NotaEmpresaToLegal.class, idDocumentoFiscalDigital.longValue());
+		
+		
+		return nota;
 	}
 
 	

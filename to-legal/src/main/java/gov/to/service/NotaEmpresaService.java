@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.ejb.Local;
 
 import gov.goias.service.PaginacaoDTO;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.goias.DocumentoFiscalDigitadoToLegal;
 
 /**
@@ -36,5 +37,9 @@ public interface NotaEmpresaService {
 
 	PaginacaoDTO<DocumentoFiscalDigitadoToLegal> ultimasNotasInseridas(Integer ieFiltro, Integer nrDocFiltro, String dataEmissao,
 			String cpfFiltro, int ig, Integer max);
+
+	void excluir(NotaEmpresaToLegal nota);
+
+	NotaEmpresaToLegal buscarNotaEmpresaToLegalPorId(Integer idDocumentoFiscalDigital);
 	
 }

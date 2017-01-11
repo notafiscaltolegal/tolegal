@@ -19,7 +19,18 @@ public class FiltroNotaEmpresaToLegal implements Filtro{
 	@EntityProperty("inscricaoEstadual")
 	private String inscricaoEstadual;
 	
+	@EntityProperty("cpfDestinatario")
+	private String cpfDestinatario;
 	
+	
+
+	public String getCpfDestinatario() {
+		return cpfDestinatario;
+	}
+
+	public void setCpfDestinatario(String cpfDestinatario) {
+		this.cpfDestinatario = cpfDestinatario;
+	}
 
 	public String getInscricaoEstadual() {
 		return inscricaoEstadual;

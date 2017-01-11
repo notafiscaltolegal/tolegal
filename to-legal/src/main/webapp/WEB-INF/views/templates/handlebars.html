@@ -166,9 +166,9 @@
                 <thead>
                 {{#if ultimasNotasInseridas}}
                 <tr>
-                    <th>N&uacute;ºmero do Documento</th>
+                    <th>N&uacute;mero do Documento</th>
                     <th>Tipo de Documento</th>
-                    <th>S&atilde;rie</th>
+                    <th>S&eacute;rie</th>
                     <th>Subs&atilde;rie</th>
                     <th>Data de Emiss&atilde;o</th>
                     <th>CPF Destinat&atilde;rio</th>
@@ -187,8 +187,8 @@
                     </td>
                     <td class="serieList">
                         {{#compare serieNotaFiscal 1 operator="=="}}D{{/compare}}
-                        {{#compare serieNotaFiscal 2 operator="=="}}D - &atilde;šnica{{/compare}}
-                        {{#compare serieNotaFiscal 3 operator="=="}}&atilde;šnica{{/compare}}
+                        {{#compare serieNotaFiscal 2 operator="=="}}D - &uacute;nica{{/compare}}
+                        {{#compare serieNotaFiscal 3 operator="=="}}&uacute;nica{{/compare}}
                     </td>
                     <td class="subSerieList">{{subSerieNotaFiscal}}</td>
                     <td class="dataEmissaoList">{{prettifyDate dataEmissao}}</td>
