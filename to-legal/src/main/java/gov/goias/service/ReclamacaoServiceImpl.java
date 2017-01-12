@@ -30,7 +30,7 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 		
 		List<DocumentoFiscalReclamadoToLegal> list = new ArrayList<>();
 		
-		DocumentoFiscalReclamadoToLegal dcFiscalReclamadao = getDocumentoFiscalReclamadoToLegal(1);
+		DocumentoFiscalReclamadoToLegal dcFiscalReclamadao = getDocumentoFiscalReclamadoToLegal(63);
 		
 		PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDTO = new PaginacaoDTO<DocumentoFiscalReclamadoToLegal>();
 		

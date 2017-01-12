@@ -46,17 +46,17 @@ public class ReclamacaoToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoToLe
 
 		DocumentoFiscalReclamadoToLegal paginacaoDTO = new DocumentoFiscalReclamadoToLegal();
 
-		// FiltroReclamacaoToLegal filtro = new FiltroReclamacaoToLegal();
+		 FiltroReclamacaoToLegal filtro = new FiltroReclamacaoToLegal();
 
-		// filtro.setIdReclamacao(Long.valueOf(idReclamacao));
+		 filtro.setIdReclamacao(Long.valueOf(idReclamacao));
 
-		// ReclamacaoToLegal Reclamacao =
-		// super.primeiroRegistroPorFiltro(filtro, ReclamacaoToLegal.class);
-		// ReclamacaoToLegal Reclamacao = super.filtrarPesquisa(filtro,
-		// ReclamacaoToLegal.class, "reclamacaoToLegal").get(0);
-		// ReclamacaoToLegal reclamacao =
-		// servicoReclamacao.getById(ReclamacaoToLegal.class,
-		// Long.valueOf(idReclamacao),"listLogReclamacao");
+//		 ReclamacaoToLegal Reclamacao =
+//		 super.primeiroRegistroPorFiltro(filtro, ReclamacaoToLegal.class);
+//		 ReclamacaoToLegal Reclamacao = super.filtrarPesquisa(filtro,
+//		 ReclamacaoToLegal.class, "reclamacaoToLegal").get(0);
+//		 ReclamacaoToLegal reclamacao =
+//		 servicoReclamacao.getById(ReclamacaoToLegal.class,
+//		 Long.valueOf(idReclamacao),"listLogReclamacao");
 		ReclamacaoToLegal reclamacao = servicoReclamacao.getById(ReclamacaoToLegal.class, Long.valueOf(idReclamacao));
 
 		paginacaoDTO.setDataDocumentoFiscal(reclamacao.getDataEmissaoDocFiscal());
