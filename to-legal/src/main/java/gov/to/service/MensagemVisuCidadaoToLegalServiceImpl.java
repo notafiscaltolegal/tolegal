@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import gov.goias.entidades.Mensagem;
 import gov.goias.service.PaginacaoDTO;
@@ -25,12 +26,13 @@ public class MensagemVisuCidadaoToLegalServiceImpl extends ConsultasDaoJpa<Mensa
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Long> ids() {
+	public List<Long> ids(String cpf) {
 		
 		Criteria criteria = getSession().createCriteria(MensagemVisualizadaCidadaoToLegal.class);
 		
 		List<Long> ids = (List<Long>) criteria
 				.setProjection(Projections.property("id"))
+				.add(Restrictions.eq("cpf", cpf))
 				.list();
 		
 		return ids;

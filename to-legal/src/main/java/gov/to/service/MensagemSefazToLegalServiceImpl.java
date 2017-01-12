@@ -37,7 +37,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 	@Override
 	public Integer qntMensagemNaoLidaCidadao(String cpf) {
 		
-		List<Long> listMensagensCidadao = mensagemVisuCidadaoService.ids();
+		List<Long> listMensagensCidadao = mensagemVisuCidadaoService.ids(cpf);
 		List<Long> listMensagemCidadaoSefaz = idsCidadao();
 		
 		if (listMensagemCidadaoSefaz == null || listMensagemCidadaoSefaz.isEmpty()){
@@ -72,7 +72,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 	@Override
 	public void gravarLeituraDasMensagens(String cpf) {
 		
-		List<Long> listMensagensCidadao = mensagemVisuCidadaoService.ids();
+		List<Long> listMensagensCidadao = mensagemVisuCidadaoService.ids(cpf);
 		List<Long> listMensagemCidadaoSefaz = idsCidadao();
 		
 		if (listMensagemCidadaoSefaz == null || listMensagemCidadaoSefaz.isEmpty()){
