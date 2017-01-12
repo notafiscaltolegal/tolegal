@@ -3,13 +3,13 @@ package gov.to.filtro;
 import gov.to.persistencia.DataFiltroBetween;
 import gov.to.persistencia.EntityProperty;
 
-public class FiltroMensagemVisuEmpresaToLegalDTO {
+public class FiltroMensagemVisuCidadaoToLegalDTO {
 	
 	@EntityProperty(value="id")
 	private Long id;
 	
-	@EntityProperty(value="dataEnvio")
-	private DataFiltroBetween dataEnvio;
+	@EntityProperty(value="dataLeitura")
+	private DataFiltroBetween dataLeitura;
 	
 	@EntityProperty(value="titulo")
 	private String titulo;
@@ -17,11 +17,11 @@ public class FiltroMensagemVisuEmpresaToLegalDTO {
 	@EntityProperty(value="mensagem")
 	private String mensagem;
 	
-	@EntityProperty(value="inscricaoEstadual")
-	private String inscricaoEstadual;
+	@EntityProperty(value="cpf")
+	private String cpf;
 	
-	public FiltroMensagemVisuEmpresaToLegalDTO() {
-		dataEnvio = new DataFiltroBetween();
+	public FiltroMensagemVisuCidadaoToLegalDTO() {
+		dataLeitura = new DataFiltroBetween();
 	}
 
 	public Long getId() {
@@ -32,12 +32,12 @@ public class FiltroMensagemVisuEmpresaToLegalDTO {
 		this.id = id;
 	}
 
-	public DataFiltroBetween getDataEnvio() {
-		return dataEnvio;
+	public DataFiltroBetween getDataLeitura() {
+		return dataLeitura;
 	}
 
-	public void setDataEnvio(DataFiltroBetween dataEnvio) {
-		this.dataEnvio = dataEnvio;
+	public void setDataLeitura(DataFiltroBetween dataLeitura) {
+		this.dataLeitura = dataLeitura;
 	}
 
 	public String getTitulo() {
@@ -56,11 +56,11 @@ public class FiltroMensagemVisuEmpresaToLegalDTO {
 		this.mensagem = mensagem;
 	}
 
-	public String getInscricaoEstadual() {
-		return inscricaoEstadual;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setInscricaoEstadual(String inscricaoEstadual) {
-		this.inscricaoEstadual = inscricaoEstadual;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 }

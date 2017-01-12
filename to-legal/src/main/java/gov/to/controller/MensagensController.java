@@ -16,8 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import gov.goias.entidades.Mensagem;
 import gov.goias.entidades.PessoaParticipante;
+import gov.goias.exceptions.NFGException;
 import gov.goias.service.MensagemService;
 import gov.goias.service.PaginacaoDTO;
+import gov.to.service.MensagemSefazToLegalService;
+import gov.to.service.MensagemVisuCidadaoToLegalService;
 
 /**
  * @author lucas-mp
@@ -29,6 +32,12 @@ public class MensagensController extends BaseController{
     
 	@Autowired
 	private MensagemService mensagemService;
+	
+	@Autowired
+	private MensagemSefazToLegalService mensagemSefazToLegalService;
+	
+	@Autowired
+	private MensagemVisuCidadaoToLegalService mensagemVisuCidadaoToLegalService;
 	
     @RequestMapping("viewMensagens")
     public ModelAndView viewMensagens(){
@@ -42,9 +51,8 @@ public class MensagensController extends BaseController{
         Integer max = 5;
 
         PessoaParticipante cidadao = getCidadaoLogado();
-        Integer idPessoa = cidadao.getGenPessoaFisica().getIdPessoa();
 
-        PaginacaoDTO<Mensagem> mensagemPaginate = new PaginacaoDTO<>(); //mensagemService.findMensagensCaixaDeEntrada(max, page, idPessoa);
+        PaginacaoDTO<Mensagem> mensagemPaginate = mensagemVisuCidadaoToLegalService.findMensagensCaixaDeEntrada(max, page, cidadao.getGenPessoaFisica().getCpf());
 
         resposta.put("mensagens", mensagemPaginate.getList());
 
@@ -58,12 +66,19 @@ public class MensagensController extends BaseController{
     }
 
     @RequestMapping("/gravarLeituraDasMensagens")
-//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public @ResponseBody Map<String, Object> gravarLeituraDasMensagens(BindException bind) throws ParseException {
-    	 Map<String, Object> resposta = new HashMap<String, Object>();
-         PessoaParticipante cidadaoLogado = (PessoaParticipante) request.getSession().getAttribute(BaseController.SESSION_CIDADAO_LOGADO);
-         boolean sucesso = mensagemService.gravarLeituraDasMensagens(cidadaoLogado);
-         resposta.put("sucesso",sucesso);
+    	 
+    	Map<String, Object> resposta = new HashMap<String, Object>();
+         PessoaParticipante cidadaoLogado = getCidadaoLogado();
+         
+         try{
+        	 mensagemSefazToLegalService.gravarLeituraDasMensagens(cidadaoLogado.getGenPessoaFisica().getCpf());
+             resposta.put("sucesso",Boolean.TRUE);
+         }catch(Exception ex){
+        	 ex.printStackTrace();
+        	 resposta.put("sucesso",Boolean.FALSE);
+         }
+        
          return resposta;
     }
 
@@ -100,13 +115,15 @@ public class MensagensController extends BaseController{
     @RequestMapping("/mensagensNaoLidasCidadao")
     public @ResponseBody Map<String, Object> getMensagensNaoLidasCidadao() {
     	Map<String, Object> resposta = new HashMap<String, Object>();
-//        PessoaParticipante cidadao = (PessoaParticipante) request.getSession().getAttribute(BaseController.SESSION_CIDADAO_LOGADO);
-//        if (cidadao != null && cidadao.getGenPessoaFisica() != null) {
-//            Integer numeroDeMensagensNaoLidasPeloCidadao = mensagemService.findNumeroDeMensagensNaoLidasPeloCidadao(cidadao);
-//            if(numeroDeMensagensNaoLidasPeloCidadao>0){
-                resposta.put("nrMensagensNovas",null);
-//            }
-//        }
+    	
+    	PessoaParticipante usuarioLogado = getCidadaoLogado();
+    	
+    	if (usuarioLogado == null){
+    		return null;
+    	}
+    	
+        resposta.put("nrMensagensNovas",mensagemSefazToLegalService.qntMensagemNaoLidaCidadao(usuarioLogado.getGenPessoaFisica().getCpf()));
+        
         return resposta;
     }
 

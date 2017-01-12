@@ -85,8 +85,8 @@ Mensagens.prototype.modalMensagens = function() {
         bloqueioDeTela("#divPaineisTelaInicial");
         setTimeout(function () {
             $("#modalHome").modal('show');
-            me.listarMensagens();
             me.gravarLeituraDasMensagens();
+            me.listarMensagens();
             $("#divPaineisTelaInicial").unblock();
         }, 1000);
     });
@@ -102,9 +102,13 @@ Mensagens.prototype.fecharModal = function () {
 
 Mensagens.prototype.gravarLeituraDasMensagens = function() {
     var me = this;
+    
     $.ajax({
         url: enderecoSite + "/mensagens/gravarLeituraDasMensagens",
-        type: 'POST'
+        type: 'POST',
+        success:function(response){
+        	me.listarMensagens();
+        }
     });
 }
 
