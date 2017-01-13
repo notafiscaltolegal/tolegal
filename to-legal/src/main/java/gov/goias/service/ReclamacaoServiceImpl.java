@@ -34,6 +34,10 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 		
 		PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDTO = new PaginacaoDTO<DocumentoFiscalReclamadoToLegal>();
 		
+		
+		
+		
+		
 		paginacaoDTO.setCount(1);
 		list.add(dcFiscalReclamadao);
 		paginacaoDTO.setList(list);
@@ -111,6 +115,12 @@ public class ReclamacaoServiceImpl implements ReclamacaoService {
 	@Override
 	public PaginacaoDTO<DocumentoFiscalReclamadoToLegal> listDocumentoFiscalReclamadoToLegalPorCNPJ(String numeroCnpj, Integer max, Integer page) {
 
+
+		
+		
+		
+		
+		
 		return getPaginacaoDocumentoFiscalReclamadoToLegal();
 	}
 

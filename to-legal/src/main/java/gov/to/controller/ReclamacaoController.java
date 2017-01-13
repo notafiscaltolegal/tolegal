@@ -99,6 +99,9 @@ public class ReclamacaoController extends BaseController{
         Map<String, Object> resposta = new HashMap<String, Object>();
         Map<String, Object> pagination = new HashMap<String, Object>();
 
+        
+        
+        
         PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoToLegalPorCNPJ(numeroCnpj, max, page);
         List<DocumentoFiscalReclamadoToLegal> reclamacoes = paginacaoDocumentoReclamado.getList();
         List<DocumentoFiscalReclamadoToLegal> listDocumentos = new ArrayList<>();

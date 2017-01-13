@@ -102,7 +102,7 @@ Reclamacao.prototype.eventoListar = function(url, cnpj){
     var me = this;
     me.pagination = new NFGPagination({
         url: enderecoSite + url + "listar",
-        containerSelector: "#containerReclamacao",
+        containerSelector: "#containerReclamacao", 
         templateSelector:  "#tabelaReclamacaoEmpresaContador"
     });
 
