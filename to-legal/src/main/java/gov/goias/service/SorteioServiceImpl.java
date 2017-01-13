@@ -199,7 +199,6 @@ public class SorteioServiceImpl implements SorteioService {
 		
 		int valorMaxSorteio = 99999;
 		int valorMaxBilhetes = 100000;
-		int numeroGanhadores = 1;
 		
 		int valorSorteado = RandomUtils.nextInt(1, valorMaxSorteio);
 		
@@ -218,14 +217,14 @@ public class SorteioServiceImpl implements SorteioService {
 		BigDecimal resultado = maxBilhete.multiply(vlSorteioRound.divide(porcentagem, MathContext.DECIMAL32));
 		
 		int inicioBilhetePremiado = resultado.intValue();
-		int fimBilhetePremiado = inicioBilhetePremiado + numeroGanhadores;
+		int fimBilhetePremiado = inicioBilhetePremiado + 1;
 		
 		if (valorMaxBilhetes < fimBilhetePremiado){
 			
 			int diferenca = fimBilhetePremiado - valorMaxBilhetes;
 			
 			inicioBilhetePremiado = inicioBilhetePremiado - diferenca;
-			fimBilhetePremiado = inicioBilhetePremiado + numeroGanhadores;
+			fimBilhetePremiado = inicioBilhetePremiado + 1;
 		}
 		
 		System.out.println("Bilhetes sorteados de "+inicioBilhetePremiado+" até "+ fimBilhetePremiado);

@@ -257,6 +257,10 @@ public class ProcessamentoNotas implements Job {
 		
 		SorteioToLegal sorteioToLegal = sorteioToLegalService.sorteioAtual();
 		
+		if (sorteioToLegal == null || !sorteioToLegal.getAtivo()){
+			return;
+		}
+		
 		processaNotaLegalParaGerarPontuacao(sorteioToLegal);
 		
 		getSession().flush();

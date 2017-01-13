@@ -1,14 +1,15 @@
 package gov.to.dominio;
 
-public enum Situacao {
+public enum SituacaoSorteio {
 
 	ATIVO("Ativo"),
-	SORTEADO("SORTEADO"),
+	AGUARDANDO_SORTEIO("Aguardando Sorteio"),
+	SORTEADO("Sorteado"),
 	INATIVO("Inativo");
 	
 	private String descricao;
 	
-	private Situacao(String descricao){
+	private SituacaoSorteio(String descricao){
 		this.descricao = descricao;
 	}
 

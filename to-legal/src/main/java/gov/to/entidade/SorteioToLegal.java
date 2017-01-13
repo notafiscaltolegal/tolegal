@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import gov.to.dominio.Situacao;
+import gov.to.dominio.SituacaoSorteio;
 import gov.to.persistencia.EntidadeBasica;
 
 @Entity
@@ -49,28 +49,34 @@ public class SorteioToLegal extends EntidadeBasica{
 	
 	@Column(name="situacao")
 	@Enumerated(EnumType.STRING)
-	private Situacao situacao;
+	private SituacaoSorteio situacao;
 	
 	public SorteioToLegal() {
-		situacao = Situacao.INATIVO;
+		situacao = SituacaoSorteio.INATIVO;
 	}
 	
 	@Transient
 	public boolean getAtivo() {
 		
-		return Situacao.ATIVO.equals(situacao);
+		return SituacaoSorteio.ATIVO.equals(situacao);
 	}
 	
 	@Transient
 	public boolean getInativo() {
 		
-		return Situacao.INATIVO.equals(situacao);
+		return SituacaoSorteio.INATIVO.equals(situacao);
 	}
 	
 	@Transient
 	public boolean getSorteado() {
 		
-		return Situacao.SORTEADO.equals(situacao);
+		return SituacaoSorteio.SORTEADO.equals(situacao);
+	}
+	
+	@Transient
+	public boolean getAguardandoSorteio() {
+		
+		return SituacaoSorteio.AGUARDANDO_SORTEIO.equals(situacao);
 	}
 	
 	@Transient
@@ -143,11 +149,11 @@ public class SorteioToLegal extends EntidadeBasica{
 		return numeroExtracao != null;
 	}
 
-	public Situacao getSituacao() {
+	public SituacaoSorteio getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(Situacao situacao) {
+	public void setSituacao(SituacaoSorteio situacao) {
 		this.situacao = situacao;
 	}
 }
