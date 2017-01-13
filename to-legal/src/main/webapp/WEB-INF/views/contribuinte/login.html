@@ -13,15 +13,10 @@
 
     <div class="panel panel-default centralizado">
         <div class="panel-heading">
-            <h3>Portal do Cidad&atilde;o</h3>
+            <h3>Portal do Contribuinte</h3>
 
             <br/>
             <br/>
-            
-           	<input type="hidden" id="contaInativada" th:value="${contaInativada}" name="contaInativada" >
-           	<input type="hidden" id="contaAtivada" th:value="${contaAtivada}" name="contaAtivada" >
-			<input type="hidden" id="cadastroSucesso" th:value="${cadastroSucesso}" name="cadastroSucesso" >
-			<input type="hidden" id="cadastroErro" th:value="${cadastroErro}" name="cadastroErro" >
             
             <form id="formLoginCidadao" name="formLoginCidadao" role="form" class="form-horizontal">
 
@@ -29,9 +24,9 @@
                 <div class="row">
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <label for="loginCpf" class="col-sm-6 control-label">CPF</label>
+                            <label for="loginCpf" class="col-sm-6 control-label">Inscri&ccedil;&atilde;o Estadual</label>
                             <div class="col-sm-6">
-                                <input type="text" name="loginCpf" class="form-control inputCpf" id="loginCpf" placeholder="CPF">
+                                <input id="loginIE" type="text" name="loginIE" class="form-control inputInscricao" placeholder="99.999.999-9">
                             </div>
                         </div>
                     </div>
@@ -68,34 +63,6 @@
 
                 <div class="row">&nbsp;</div>
                 <div class="row">&nbsp;</div>
-                <!--RECUPERACAO DE SENHA-->
-                <div class="row">
-                    <div class="col-sm-4">&nbsp;</div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <div class="col-sm-8" >
-                                <a href="#" id="linkRecuperarSenha" title="Clique para informar o e-mail cadastrado para recupera&ccedil;&atilde;o de senha." >Esqueci minha senha</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--RECUPERACAO DE SENHA-->
-                <div class="row" >
-                    <div class="col-sm-4">&nbsp;</div>
-                    <div class="col-sm-6" >
-                        <div class="form-group" >
-                            <div style="display: none" class="formEmailRecuperacaoSenha">
-                                <div class="col-sm-7" >
-                                    <input type="text" name="cpfRecuperacao" class="form-control inputCpf" id="cpfRecuperacao" placeholder="Informe o CPF cadastrado">
-                                </div>
-                                <div class="col-sm-1" >
-                                    <a href="#"  id="submitEmailRecuperarSenha" class="btn btn-default " >Enviar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!--BOTAO SUBMIT-->
                 <div id="btnsTelaLogin">
@@ -104,22 +71,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <div class="col-sm-8">
-									<button type="button" id="loginSubmit" class="btn btn-primary btn-block btn-submitform" title="Se voc&ecirc; j&aacute; efetuou o cadasto e j&aacute; possui senha, preencha os campos de login e clique para acessar.">Entrar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--BOTAO LINK CADASTRAR-->
-                    <div class="row">
-                        <div class="col-sm-4">&nbsp;</div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <div class="col-sm-8">
-                                    <!--<a class="btn btn-default btn-block" style="background: #3278b3; color: white;" th:href="@{/cidadao/cadastrar}" >Primeiro Acesso</a>-->
-                                    <!--<a class="btn btn-default btn-block" style="background: mediumseagreen; color: whitesmoke;" th:href="@{/cidadao/cadastrar}" title="Se este é seu primeiro acesso, clique para se cadastrar." >Primeiro Acesso</a>-->
-                                    <!--<a class="btn btn-default btn-block" style="background: seagreen; color: whitesmoke;" th:href="@{/cidadao/cadastrar}" title="Se este é seu primeiro acesso, clique para se cadastrar." >Primeiro Acesso</a>-->
-                                    <a class="btn btn-success btn-block"   th:href="@{/cidadao/cadastrar}" title="Se este &eacute; seu primeiro acesso, clique para se cadastrar." >Primeiro Acesso</a>
+									<button type="button" id="loginSubmitEmpresa" class="btn btn-primary btn-block btn-submitform" title="Se voc&ecirc; j&aacute; efetuou o cadasto e j&aacute; possui senha, preencha os campos de login e clique para acessar.">Entrar</button>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +84,7 @@
                             <div class="form-group">
                                 <div class="col-sm-8">
                                     <!--<a class="btn btn-default btn-block"  style="background: darkkhaki; color: white;" th:href="@{/cidadao/certificado}" >Acesso com Certificado Digital</a>-->
-                                    <a class="btn btn-default btn-block"   th:href="@{/cidadao/certificado}" title="Acesso restrito ao contribuinte." >Acessar como Empresa</a>
+                                    <a class="btn btn-default btn-block"   th:href="@{/cidadao/login}" title="Login do cidad&atilde;o." >Portal do cidad&atilde;o</a>
                                     <!--<br/>-->
                                     <!--<br/>-->
                                     <!--<hr/>-->

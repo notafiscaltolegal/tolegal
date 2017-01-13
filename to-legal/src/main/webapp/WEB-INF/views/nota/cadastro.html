@@ -15,7 +15,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="text-left col-lg-12">
-				<a th:href="${urlRetorno}">Voltar para a tela anterior</a> <br /> <label
+				<a href="javascript:history.back()">Voltar para a tela anterior</a> <br /> <label
 					class="control-label"
 					th:text="'Inscri&ccedil;&atilde;o Estadual:  '+${inscricaoEstadual}"></label>
 			</div>
@@ -27,8 +27,7 @@
 			class="form-horizontal" method="post">
 			<div class="panel panel-default " title="This is my tooltip">
 				<div class="panel-heading">
-					<label style="font-size: medium;">Campos-chave para inserir
-						ou alterar Documento</label>
+					<label style="font-size: medium;">Campos-chave para inserir	ou alterar um documento fiscal</label>
 
 				</div>
 

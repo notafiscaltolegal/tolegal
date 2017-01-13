@@ -252,6 +252,18 @@ var toCpfFormat = function(cpf){
     return masked;
 };
 
+var toIEFormat = function(cpf){
+    if(cpf==null) return "";
+    var element = document.createElement("input");
+    $(element).css("display", "none");
+    document.body.appendChild(element);
+    $(element).val(cpf);
+    $(element).mask("99.999.999-9");
+    var masked = $(element).val();
+    document.body.removeChild(element);
+    return masked;
+};
+
 var toTelFormat = function(tel){
     if(tel==null) return "";
     var element = document.createElement("input");

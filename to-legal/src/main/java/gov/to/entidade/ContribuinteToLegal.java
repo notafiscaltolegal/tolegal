@@ -30,6 +30,9 @@ public class ContribuinteToLegal extends EntidadeBasica{
 	@Column(name = "CONINSCNPJ")
 	private String cnpj;
 	
+	@Column(name = "consenhanv")
+	private String senha;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CONDATINIA")
 	private Date dataVigencia;
@@ -64,5 +67,13 @@ public class ContribuinteToLegal extends EntidadeBasica{
 
 	public void setDataVigencia(Date dataVigencia) {
 		this.dataVigencia = dataVigencia;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 }

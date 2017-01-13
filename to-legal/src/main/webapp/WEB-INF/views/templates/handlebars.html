@@ -25,7 +25,6 @@
                     <th>Data In&iacute;cio Vig&ecirc;ncia</th>
                     <th>A&ccedil;&otilde;es</th>
                     <th></th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,14 +45,6 @@
                         <a href="/to-legal/contribuinte/reclamacao/consultar/{{numeroCnpjSemMask}}" type="button" title="Reclama&#231;&#245;es"
                            class="btn btn-danger btn-md btn-reclamacao" data-numcnpj="{{numeroCnpj}}"><span  class="glyphicon glyphicon-bullhorn"></span>
                         </a>
-                    </td>
-                    <td>
-                        <a class="iconGlobe">
-                            {{#compare qtdMensagens 0 operator=">"}}
-                            <span class="notification-count" >{{qtdMensagens}}</span>
-                            {{/compare}}
-                        </a>
-                        <button type="button" class="btn btn-info btn-md btn-mensagem" data-idpessoa="{{idPessoa}}"><span title="Mensagens" class="glyphicon glyphicon-envelope"></span></button>
                     </td>
                 </tr>
                 {{/each}}

@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import gov.goias.entidades.DocumentoFiscalDigitado;
-import gov.goias.entidades.DocumentoFiscalParticipante;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.EmpresaService;
-import gov.goias.service.NotaService;
 import gov.goias.service.PaginacaoDTO;
 import gov.goias.util.ValidacaoDeCpf;
 import gov.to.entidade.NotaEmpresaToLegal;
@@ -32,14 +30,10 @@ public class NotaController extends BaseController {
 	private EmpresaService empresaService;
 	
 	@Autowired
-	private NotaService notaService;
-	
-	@Autowired
 	private NotaEmpresaService notaEmpresaService;
 	
 	@RequestMapping("/cadastro/{inscricao}")
 	public ModelAndView cadastro(@PathVariable(value = "inscricao") Integer inscricao) {
-		verificaCompatibilidadeInscricao(inscricao);
 
 		ModelAndView modelAndView = new ModelAndView("/nota/cadastro");
 
@@ -71,16 +65,6 @@ public class NotaController extends BaseController {
 		return modelAndView;
 	}
 	
-	public void verificaCompatibilidadeInscricao(Integer inscricao){
-        boolean inscricaoCompativel = false;
-        inscricaoCompativel |= empresaService.inscricaoCompativelContador(getContadorLogado(), inscricao);
-        inscricaoCompativel |= empresaService.inscricaoCompativelContribuinte(getEmpresaLogada(), inscricao);
-        String urlRedirect = request.getRequestURI().contains("contador") ? "/contador/contribuintes/cadastro" : "/contribuinte/cadastro";
-        
-        if (!inscricaoCompativel) 
-        	throw new NFGException("Nenhum usuário logado ou inscrição condizente com nenhum usuário logado!", urlRedirect);
-    }
-
 	@RequestMapping(method = RequestMethod.POST, value = "/cadastrar")
 	// @Transactional(propagation = Propagation.REQUIRED, rollbackFor =
 	// Exception.class)

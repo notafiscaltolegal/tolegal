@@ -1,25 +1,22 @@
 package gov.to.controller;
 
+import java.net.BindException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import gov.goias.dtos.DTOContribuinte;
-import gov.goias.exceptions.NFGException;
-import gov.goias.interceptors.CertificateInterceptor;
-import gov.goias.service.ContribuinteService;
-import gov.goias.service.MensagemService;
+import gov.goias.util.Captcha;
 import gov.to.dto.PaginacaoContribuinteDTO;
+import gov.to.entidade.ContribuinteToLegal;
 import gov.to.service.ContribuinteToLegalService;
 
 /**
@@ -31,14 +28,58 @@ import gov.to.service.ContribuinteToLegalService;
 public class ContribuinteController extends BaseController {
 
 	@Autowired
-	private ContribuinteService contribuinteService;
-	
-	@Autowired
 	private ContribuinteToLegalService contribuinteToLegalService;
 	
 	@Autowired
-	private MensagemService mensagemService;
+    private Captcha captcha;
+	
+	@RequestMapping("/login")
+    public ModelAndView login() throws Exception {
+        ModelAndView model = new ModelAndView("contribuinte/login");
+        return model;
+    }
+	
+	@RequestMapping("/inicioSite")
+    public ModelAndView inicio() throws Exception {
+		
+		if (super.getEmpresaLogada() == null){
+			return login();
+		}
+		
+        ModelAndView model = new ModelAndView("contribuinte/inicioSiteEmpresa");
+        return model;
+    }
+	
+	 @RequestMapping("efetuarlogin")
+	    public @ResponseBody Map<?,?> efetuarLoginEmpresa(String ie, String senha,String challenge,String captchaResponse) throws BindException {
+	    	
+	    	captcha.validarCaptchaSeAtivo(request, challenge, captchaResponse);
+	    	
+	    	 Map<String, Object> resposta = new HashMap<String, Object>();
+	    	 
+			try {
+				ContribuinteToLegal retornoAutenticacao = contribuinteToLegalService.autenticaCidadao(ie, senha);
+				
+				if (retornoAutenticacao == null){
+					resposta.put("loginInvalido", "Inscrição Estadual ou Senha incorretos.");
+					return resposta;
+				}
+	
+				setSuccessMessage("Bem-vindo(a) ao To Legal!");
+				resposta.put("urlRedirect", "/contribuinte/inicioSite");
 
+				request.getSession().setAttribute(SESSION_EMPRESA_LOGADO, retornoAutenticacao);
+	
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				resposta.put("loginInvalido", "Falha na autenticação");
+			}
+	        
+	        resposta.put("ativarCaptchaLogin", Captcha.verificarAtivacaoCaptcha("numeroDeTentativasLogin", request));
+	        
+	        return resposta;
+	    }
+	
     @RequestMapping("/cadastro")
     public ModelAndView listContribuintes() throws Exception {
         ModelAndView model = new ModelAndView("contribuinte/list");
@@ -52,16 +93,8 @@ public class ContribuinteController extends BaseController {
     public @ResponseBody Map list(@PathVariable(value="page") Integer page) {
 
     	 Integer max = 10;
-         String inscricao = request.getParameter("inscricao");
-         inscricao = inscricao != null ? inscricao.replaceAll("[^0-9]", "") : null;
-         Integer numrInscricao = StringUtils.isEmpty(inscricao) ? null : Integer.parseInt(inscricao);
-         String cnpjBase = getEmpresaLogada().getNumeroCnpjBase();
-
-         String cnpj = request.getParameter("cnpj");
-         cnpj = cnpj != null ? cnpj.replaceAll("[^0-9]", "") : null;
-         String nome = request.getParameter("nome");
          
-         PaginacaoContribuinteDTO pagDTO = contribuinteToLegalService.findContribuintes(page, max, cnpjBase, numrInscricao, cnpj, nome);
+         PaginacaoContribuinteDTO pagDTO = contribuinteToLegalService.findContribuintes(page, max, super.getEmpresaLogada().getId());
 
          List<DTOContribuinte> resultado = pagDTO.getListContribuinteDTO();
          
@@ -80,34 +113,10 @@ public class ContribuinteController extends BaseController {
          return retorno;
     }
 
-    @RequestMapping(value = "/alterar", method = RequestMethod.POST)
-//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ModelAndView alterar(Integer inscricao, String dataInicio) throws NFGException {
-    	String redirectUrl = "/contribuinte/cadastro";
-
-        contribuinteService.alterarPelaEmpresa(getEmpresaLogada(), inscricao, dataInicio, redirectUrl);
-
-        setMessage("Cadastro alterado com sucesso. A nova data de início da sua vigência é: " + dataInicio);
-        RedirectView redirectView = new RedirectView(redirectUrl, true);
-        redirectView.setExposeModelAttributes(false);
-        return new ModelAndView(redirectView);
-    }
-
-    @RequestMapping(value = "/cadastrar", method = RequestMethod.POST)
-//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ModelAndView cadastrar(Integer inscricao, String dataInicio, String termoDeAcordo) throws NFGException {
-    	 String redirectUrl = "/contribuinte/cadastro";
-         contribuinteService.cadastrarPelaEmpresa(getEmpresaLogada(), inscricao, dataInicio, termoDeAcordo, redirectUrl);
-
-         setMessage("Cadastro efetuado com sucesso. A data de início da sua vigência é: " + dataInicio);
-         RedirectView redirectView = new RedirectView(redirectUrl, true);
-         redirectView.setExposeModelAttributes(false);
-         return new ModelAndView(redirectView);
-    }
-
     @RequestMapping("efetuarlogoutSite")
     public ModelAndView efetuarLogout() {
-    	request.getSession().setAttribute(CertificateInterceptor.SESSION_EMPRESA_LOGADA, null);
+    	request.getSession().setAttribute(BaseController.SESSION_EMPRESA_LOGADO, null);
+    	request.getSession().invalidate();
         return new ModelAndView(new RedirectView("/to-legal"));
     }
 

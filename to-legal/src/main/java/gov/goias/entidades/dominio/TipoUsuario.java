@@ -2,7 +2,7 @@ package gov.goias.entidades.dominio;
 
 public enum TipoUsuario {
 
-	CIDADAO("Cidad&#225;o",1), CONTADOR("Contador",2), EMPRESA("Empresa",3);
+	CIDADAO("Cidadão",1), CONTADOR("Contador",2), EMPRESA("Empresa",3);
 	
 	private String label;
 	private Integer tipo;

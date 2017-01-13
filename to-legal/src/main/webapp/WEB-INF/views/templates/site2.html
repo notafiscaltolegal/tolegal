@@ -72,6 +72,14 @@
             <div class="col-md-8 col-sm-6 col-xs-6 relative" th:if="${tipoUsuario == 3}">
                 <div style="float: left; padding-right: 10px;">
                     <span class="login">&nbsp;</span><span>Olá, <strong><label th:text="${nomeUsuario}"></label></strong></span>
+                    
+                     	&nbsp;
+                        &nbsp;
+                        <a class="iconGlobe" id="nrMensagensNovasLink" style="display: none" ><span class="notification-count" id="nrMensagensNovas"></span></a>
+                        <a href="#" id="botaoMensagemEmpresa" class="btn btn-info btn-md"><span class="glyphicon glyphicon-envelope"></span></a>
+                        &nbsp;
+                        &nbsp;
+                        
                     <a class="btn btn-danger btn-sair-nfg" th:href="@{/contribuinte/efetuarlogoutSite}">Sair</a>
                 </div>
             </div>
@@ -98,7 +106,7 @@
                 </div>
 
                 <div style="margin-top: 5px; ">
-                    <a href="#" id="linkCertificado" style="color: #337ab7; text-decoration: none;">Acesso com certificado digital</a>
+                    <a href="#" id="linkCertificado" style="color: #337ab7; text-decoration: none;">Acessar como Empresa</a>
                     <img th:src="@{/images/site2/certificadoDigital.png}"/>
                 </div>
             </div>

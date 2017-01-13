@@ -33,10 +33,13 @@ function Cidadao(options) {
     $(".inputCpf").mask("999.999.999-99");
     $(".inputCep").mask("99999-999");
     $(".inputIE").mask("99.999.999-9");
+    $("#loginIE").mask("99.999.999-9");
+    
     $(".inputTelefone").mask("(99) 9999-9999?9");
     $(".mascaraValor").maskMoney();
     $(".mascaraValor").maskMoney('mask');
     $(".textCpf").html(toCpfFormat($(".textCpf").html()));
+    $("#loginIE").html(toIEFormat($("#loginIE").html()));
     $(".textCnpj").html(toCnpjFormat($(".textCnpj").html()));
     $(".textMoney").html(toMoneyFormat($(".textMoney").html()));
     $(".textTelefone").html(toTelFormat($(".textTelefone").html()));
@@ -81,9 +84,16 @@ function Cidadao(options) {
 
     if ($("#numeroDeTentativasLogin").val() > 2){
         me.ativarCaptcha("#captchaLogin","containerCaptchaLogin");
+        
         if($("#loginCpf").val() == ""){
             setTimeout(function () {
                 $("#loginCpf").focus();
+            }, 600);
+        }
+        
+        if($("#loginIE").val() == ""){
+            setTimeout(function () {
+                $("#loginIE").focus();
             }, 600);
         }
     }
@@ -100,6 +110,7 @@ function Cidadao(options) {
     me.loginCidadao();
     me.salvaNovaSenha();
     me.loginSubmit();
+    me.loginSubmitEmpresa();
     me.emailRecuperarSenha();
     me.gravaPerfil();
     me.concluirPerfil();
@@ -109,6 +120,7 @@ function Cidadao(options) {
     me.alteraSorteio();
     me.selecionaUf();
     me.limparFiltros();
+    me.apliqueMaskFilter();
 
     if(options.nomeTela == 'telaInicial'){
         new ModaisCidadao({cidadao:me});
@@ -708,6 +720,102 @@ Cidadao.prototype.loginSubmit = function( ){
         });
     });
 }
+
+Cidadao.prototype.loginSubmitEmpresa = function( ){
+    var me = this;
+    $("#loginSubmitEmpresa").click(function(e) {
+        var challenge = null;
+        var captchaResponse = null;
+
+        if  ($("#recaptcha_challenge_field").val()!=undefined){
+            challenge = $("#recaptcha_challenge_field").val();
+        }
+
+        if  ($("#recaptcha_response_field").val()!=undefined){
+            captchaResponse = $("#recaptcha_response_field").val();
+        }
+        
+        if ($("#loginIE").val() == null || $("#loginIE").val() == ''){
+        	nfgMensagens.show(ALERT_TYPES.ERROR,"Inscrição Estadual é obrigatória.");
+        	return false;
+        }
+        
+        if ($("#loginSenha").val() == null || $("#loginSenha").val() == ''){
+        	nfgMensagens.show(ALERT_TYPES.ERROR,"Senha é obrigatória.");
+        	return false;
+        }
+
+        $.ajax({
+            url: enderecoSite + "/contribuinte/efetuarlogin",
+            data:{
+                ie: me.removeMascaraIE($("#loginIE").val()),
+                senha: $("#loginSenha").val(),
+                challenge: challenge,
+                captchaResponse: captchaResponse
+            },
+            type: 'POST',
+            success: function(response) {
+                if (response.loginInvalido!=null){
+                    try{
+                        Recaptcha.reset();
+                    }catch (e){}
+
+                    setTimeout(function () {
+                        $("#loginIE").focus();
+                    }, 500);
+
+                    nfgMensagens.show(ALERT_TYPES.ERROR, response.loginInvalido)
+                    if(response.ativarCaptchaLogin){
+                        me.ativarCaptcha("#captchaLogin","containerCaptchaLogin");
+                    }
+                }else{
+                    try{
+                        Recaptcha.destroy();
+                    }catch (e){}
+                    window.location.replace(enderecoSite+response.urlRedirect);
+                }
+            }
+        });
+    });
+}
+
+Cidadao.prototype.apliqueMaskFilter = function() {
+    $(".inputInscricao").mask("99.999.999-9");
+};
+
+Cidadao.prototype.apliqueMask = function() {
+    //mask cnpj
+    $(".maskCnpj").each(function() {
+        var $campo = $(this);
+        var texto = $campo.text();
+        if(texto.length == 14) {
+            var cnpj_original = texto;
+            var cnpj = cnpj_original.substr(0,2) + "." +
+                cnpj_original.substr(2,3) + "." +
+                cnpj_original.substr(5,3) + "/" +
+                cnpj_original.substr(8,4) + "-"+
+                cnpj_original.substr(12,2);
+            texto = cnpj;
+        } else if(texto.length == 15) {
+            texto +="-" ;
+        }
+        $campo.text(texto);
+    });
+    //mask inscricao
+    $(".maskInscricao").each(function() {
+        var $campo = $(this);
+        var texto = $campo.text();
+        if(texto.length == 9) {
+            var inscricao_original = texto;
+            var inscricao = inscricao_original.substr(0,2) + "." +
+                inscricao_original.substr(2,3) + "." +
+                inscricao_original.substr(5,3) + "-" +
+                inscricao_original.substr(8,2);
+            texto = inscricao;
+        }
+        $campo.text(texto);
+    });
+};
 
 Cidadao.prototype.emailRecuperarSenha = function( ){
     var me = this;

@@ -15,6 +15,7 @@ import gov.goias.auth.Certificado;
 import gov.goias.entidades.GENEmpresa;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
+import gov.to.entidade.ContribuinteToLegal;
 
 /**
  * @author henrique-rh
@@ -25,6 +26,7 @@ public class BaseController {
 
     public static final String SESSION_ADMIN_LOGADO = "adminLogadoSession";
     public static final String SESSION_CIDADAO_LOGADO = "cidadaoLogadoSession";
+    public static final String SESSION_EMPRESA_LOGADO = "empresaLogadoSession";
     public static final String SESSION_ID_CIDADAO_SEM_CREDENC = "idCidadaoSemCredencial";
 
     /**Henrique, Diogo, Allan, Giselle, Marcio, Leonardo...*/
@@ -39,7 +41,7 @@ public class BaseController {
 
     private String message;
     
-    public GENEmpresa empresaLogada;
+    public ContribuinteToLegal empresaLogada;
     
     public GENPessoaFisica contadorLogado;
 
@@ -158,12 +160,15 @@ public class BaseController {
         this.errorMessage = errorMessage;
     }
     
-    public GENEmpresa getEmpresaLogada() {
+    public ContribuinteToLegal getEmpresaLogada() {
+    	
+    	ContribuinteToLegal empresaLogada = (ContribuinteToLegal) request.getSession().getAttribute(BaseController.SESSION_EMPRESA_LOGADO);
+    	
+    	if (empresaLogada != null){
+    		empresaLogada.setSenha(null);
+    	}
+    	
         return empresaLogada;
-    }
-
-    public void setEmpresaLogada(GENEmpresa empresaLogada) {
-        this.empresaLogada = empresaLogada;
     }
 
 	public GENPessoaFisica getContadorLogado() {

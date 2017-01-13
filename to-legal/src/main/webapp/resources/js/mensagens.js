@@ -19,8 +19,6 @@ function Mensagens(options) {
     this.mapaDestinatariosAdicionados = {};
 }
 
-
-
 Mensagens.prototype.build = function(options){
     var me = this;
     if(options != null && options.tela=='usuarioCadastrar' ){
@@ -31,8 +29,11 @@ Mensagens.prototype.build = function(options){
     }
     if(options != null && options.tela=='site2' ){
         me.modalMensagens();
+        me.modalMensagensEmpresa();
         me.fecharModal();
         me.carregaMensagensNaoLidas();
+        me.carregaMensagensNaoLidasEmpresa();
+        
     }
 
 }
@@ -41,6 +42,22 @@ Mensagens.prototype.carregaMensagensNaoLidas = function(){
     var me = this;
     $.ajax({
         url: enderecoSite + "/mensagens/mensagensNaoLidasCidadao",
+        type: 'POST',
+        success:function(response){
+            if(response.nrMensagensNovas!=null){
+                $("#nrMensagensNovasLink").css("display","inline");
+                $("#nrMensagensNovas").html(response.nrMensagensNovas);
+            }else{
+                $("#nrMensagensNovasLink").css("display","none");
+            }
+        }
+    });
+}
+
+Mensagens.prototype.carregaMensagensNaoLidasEmpresa = function(){
+    var me = this;
+    $.ajax({
+        url: enderecoSite + "/mensagens/mensagensNaoLidasEmpresa",
         type: 'POST',
         success:function(response){
             if(response.nrMensagensNovas!=null){
@@ -86,17 +103,34 @@ Mensagens.prototype.modalMensagens = function() {
         setTimeout(function () {
             $("#modalHome").modal('show');
             me.gravarLeituraDasMensagens();
-            me.listarMensagens();
             $("#divPaineisTelaInicial").unblock();
         }, 1000);
     });
+}
 
+Mensagens.prototype.modalMensagensEmpresa = function() {
+    var me = this;
+    $("#botaoMensagemEmpresa").off('click');
+    $("#botaoMensagemEmpresa").click(function(e) {
+        $("#modalHomeBody").load( enderecoSite + "/mensagens/viewEmpresaMensagens",
+            function( response, status, xhr ) {}
+        );
+        $("#modalHomeTitle").html('Minhas Mensagens');
+        $(".modal-dialog").attr("class","modal-dialog modal-lg");
+        bloqueioDeTela("#divPaineisTelaInicial");
+        setTimeout(function () {
+            $("#modalHome").modal('show');
+            me.gravarLeituraDasMensagensEmpresa();
+            $("#divPaineisTelaInicial").unblock();
+        }, 1000);
+    });
 }
 
 Mensagens.prototype.fecharModal = function () {
     var me = this;
     $('#modalHome').on('hidden.bs.modal', function () { //esse modalHome fica em telaInicialSite
-        me.carregaMensagensNaoLidas();
+    	 me.carregaMensagensNaoLidas();
+         me.carregaMensagensNaoLidasEmpresa();
     });
 }
 
@@ -112,10 +146,50 @@ Mensagens.prototype.gravarLeituraDasMensagens = function() {
     });
 }
 
+Mensagens.prototype.gravarLeituraDasMensagensEmpresa = function() {
+    var me = this;
+    
+    $.ajax({
+        url: enderecoSite + "/mensagens/gravarLeituraDasMensagensEmpresa",
+        type: 'POST',
+        success:function(response){
+        	me.listarMensagensEmpresa();
+        }
+    });
+}
+
 Mensagens.prototype.listarMensagens = function() {
     var me = this;
     me.pagination = new NFGPagination({
         url: enderecoSite + "/mensagens/listarMensagens",
+        containerSelector: "#containerMensagens",
+        templateSelector: "#tabelaMensagens",
+        beforeLoad: function(data) {
+            $("#modalHomeBody").block({
+                css: {
+                    backgroundColor: 'transparent', color: 'transparent', border: '1'
+                },
+                overlayCSS:  {
+                    backgroundColor: '#000',
+                    opacity:         0.2,
+                    cursor:          'wait'
+                }
+            });
+        },
+        afterLoad: function(data) {
+            $("#modalHomeBody").unblock();
+        }
+    });
+
+    var hash = window.location.hash.replace("#","");
+    var page = parseInt(hash) ? parseInt(hash) : 1;
+    me.pagination.init(page);
+}
+
+Mensagens.prototype.listarMensagensEmpresa = function() {
+    var me = this;
+    me.pagination = new NFGPagination({
+        url: enderecoSite + "/mensagens/listarMensagensEmpresa",
         containerSelector: "#containerMensagens",
         templateSelector: "#tabelaMensagens",
         beforeLoad: function(data) {
