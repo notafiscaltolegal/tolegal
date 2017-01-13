@@ -966,7 +966,6 @@ public class CidadaoController extends BaseController {
 
         setSuccessMessage("Nova senha gravada com sucesso!");
         
-        
         resposta.put("urlRedirect", "/cidadao/login");
         return resposta;
     }
@@ -974,7 +973,7 @@ public class CidadaoController extends BaseController {
     @RequestMapping("certificado")
     public ModelAndView certificadoDigitalDeCidadao() throws Exception {
     	
-    	ModelAndView modelAndView = new ModelAndView(new RedirectView("/to-legal/contribuinte/cadastro"));
+    	ModelAndView modelAndView = new ModelAndView(new RedirectView("/to-legal/contribuinte/login"));
 		modelAndView .addObject("isCertificado", true);
     	return modelAndView;
     }

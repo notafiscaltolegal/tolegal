@@ -28,4 +28,8 @@ public interface MensagemSefazToLegalService {
 
 	void gravarLeituraDasMensagens(String cpf);
 
+	Integer qntMensagemNaoLidaEmpresa(String inscricaoEstadual);
+
+	void gravarLeituraDasMensagensEmpresa(String id);
+
 }

@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import gov.goias.entidades.GENEmpresa;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.dominio.TipoUsuario;
-import gov.goias.interceptors.CertificateInterceptor;
 import gov.goias.interceptors.ContadorInterceptor;
+import gov.to.entidade.ContribuinteToLegal;
 
 /**
  * 
@@ -39,10 +38,9 @@ public class UsuarioController {
 		if (contador != null) {
 			return contador.getNome();
 		}
-		GENEmpresa empresa = (GENEmpresa) request.getSession()
-				.getAttribute(CertificateInterceptor.SESSION_EMPRESA_LOGADA);
+		ContribuinteToLegal empresa = (ContribuinteToLegal) request.getSession().getAttribute(BaseController.SESSION_EMPRESA_LOGADO);
 		if (empresa != null) {
-			return empresa.getNomeEmpresa();
+			return empresa.getRazaoSocial();
 		}
 		return null;
 	}
@@ -61,8 +59,8 @@ public class UsuarioController {
 		if (contador != null) {
 			return TipoUsuario.CONTADOR.getTipo();
 		}
-		GENEmpresa empresa = (GENEmpresa) request.getSession()
-				.getAttribute(CertificateInterceptor.SESSION_EMPRESA_LOGADA);
+		ContribuinteToLegal empresa = (ContribuinteToLegal) request.getSession()
+				.getAttribute(BaseController.SESSION_EMPRESA_LOGADO);
 		if (empresa != null) {
 			return TipoUsuario.EMPRESA.getTipo();
 		}

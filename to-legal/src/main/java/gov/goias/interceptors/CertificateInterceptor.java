@@ -98,9 +98,9 @@ public class CertificateInterceptor extends HandlerInterceptorAdapter {
 //            return false;
 //        }
     	
-    	GENEmpresa empresa = empresaService.findByCnpj("12345678911111");
-        request.getSession().setAttribute(SESSION_EMPRESA_LOGADA, empresa);
-        controller.setEmpresaLogada(empresa);
+//    	GENEmpresa empresa = empresaService.findByCnpj("12345678911111");
+//        request.getSession().setAttribute(SESSION_EMPRESA_LOGADA, empresa);
+//        controller.setEmpresaLogada(empresa);
         return true;
     }
 }

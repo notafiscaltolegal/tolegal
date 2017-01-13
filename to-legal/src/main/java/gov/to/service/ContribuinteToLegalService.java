@@ -14,7 +14,9 @@ import gov.to.entidade.ContribuinteToLegal;
 @Local
 public interface ContribuinteToLegalService {
 
-	PaginacaoContribuinteDTO findContribuintes(Integer page, Integer max, String cnpjBase, Integer numrInscricao, String cnpj, String nome);
+	PaginacaoContribuinteDTO findContribuintes(Integer page, Integer max, String numrInscricao);
 	
     ContribuinteToLegal findByInscricaoEstadual(Integer inscricaoEstadual);
+
+	ContribuinteToLegal autenticaCidadao(String ie, String senha);
 }

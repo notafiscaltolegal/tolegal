@@ -25,8 +25,6 @@ public class MensagemVisualizadaEmpresaToLegal extends EntidadeBasica{
 	private static final long serialVersionUID = -213797317396640166L;
 
 	@Id
-	@GeneratedValue(generator = "seq_msg_visu_empresa", strategy = GenerationType.IDENTITY)
-	@SequenceGenerator(name = "seq_msg_visu_empresa", sequenceName = "seq_msg_visu_empresa",allocationSize=1)
 	@Column(name = "id_msg_visu_empresa")
 	private Long id;
 	

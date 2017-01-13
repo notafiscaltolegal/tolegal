@@ -13,6 +13,9 @@ public class FiltroContribuinteToLegal implements Filtro{
 	@EntityProperty("razaoSocial")
 	private String razaoSocial;
 	
+	@EntityProperty("senha")
+	private String senha;
+	
 	public static String inscricaoEstadualFormat(Integer inscricaoEstaudal)
 	{
 		String ie = inscricaoEstaudal.toString();
@@ -49,5 +52,13 @@ public class FiltroContribuinteToLegal implements Filtro{
 
 	public void setRazaoSocial(String razaoSocial) {
 		this.razaoSocial = razaoSocial;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 }

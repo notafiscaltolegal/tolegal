@@ -7,26 +7,52 @@ function Contribuinte(options) {
     this.urlAlterar = options.urlAlterar;
     this.urlListar = options.urlListar;
     this.fecharModal();
+    
+    var me = this;
+    me.pagination = new NFGPagination({
+        url: enderecoSite + "/contribuinte/list",
+        containerSelector: "#containerContribuintes",
+        templateSelector: "#tabelaContribuintes",
+        formFilterSelector: "#formEmpresas",
+        beforeLoad: function(data) {
+        },
+        afterLoad: function(data) {
+        }
+    });
+    me.pagination.init(0);
+
+    $.ajax({
+        url: enderecoSite + "/mensagens/mensagensNaoLidasEmpresa",
+        type: 'POST',
+        success:function(response){
+            if(response.nrMensagensNovas!=null){
+                $("#nrMensagensNovasLink").css("display","inline");
+                $("#nrMensagensNovas").html(response.nrMensagensNovas);
+            }else{
+                $("#nrMensagensNovasLink").css("display","none");
+            }
+        }
+    });
 }
 
 Contribuinte.prototype.initListar = function() {
     var me = this;
-    me.pagination = new NFGPagination({
-        url: enderecoSite + me.urlListar,
-        containerSelector: "#containerContribuintes",
-        templateSelector: "#tabelaContribuintes",
-        formFilterSelector: "#formFiltroContribuinte",
-        btnFilterSelector: "#filtrarContribuinte",
-        afterLoad: function() {
-            me.afterLoad();
-        }
-    });
-    me.assineEventos();
-    var hash = window.location.hash.replace("#","");
-    var page = parseInt(hash) ? parseInt(hash) : 1;
-    me.pagination.init(page);
-    me.apliqueMaskFilter();
-    me.modalMensagensEmpresas();
+//    me.pagination = new NFGPagination({
+//        url: enderecoSite + me.urlListar,
+//        containerSelector: "#containerContribuintes",
+//        templateSelector: "#tabelaContribuintes",
+//        formFilterSelector: "#formFiltroContribuinte",
+//        btnFilterSelector: "#filtrarContribuinte",
+//        afterLoad: function() {
+//            me.afterLoad();
+//        }
+//    });
+//    me.assineEventos();
+//    var hash = window.location.hash.replace("#","");
+//    var page = parseInt(hash) ? parseInt(hash) : 1;
+//    me.pagination.init(page);
+//    me.apliqueMaskFilter();
+//    me.modalMensagensEmpresas();
 };
 
 
@@ -163,6 +189,10 @@ Contribuinte.prototype.initDatePicker = function($campo, dataLimite) {
     $campo.parents(".input-group").find(".datepickerIcon").click(function() {
         $campo.datetimepicker('show');
     }).css("top","0").css("cursor","pointer");
+};
+
+Contribuinte.prototype.apliqueMaskFilter = function() {
+    $(".inputInscricao").mask("99.999.999-9");
 };
 
 Contribuinte.prototype.apliqueMask = function() {
