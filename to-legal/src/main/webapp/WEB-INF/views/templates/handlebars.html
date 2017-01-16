@@ -217,12 +217,12 @@
                 <tr>
                     <th></th>
                     <th>Data Registro</th>
-                    <th>N&atilde;ºmero</th>
+                    <th>N&uacute;mero</th>
                     <th>Reclamante</th>
                     <th>Nota</th>
                     <th>Data Emiss&atilde;o</th>
                     <th>Valor</th>
-                    <th style="text-align: center">Andamento</th>
+                 
                     <th>Motivo</th>
                     <th>Status</th>
                     <th></th>
@@ -238,8 +238,8 @@
                     <td>{{numero}}</td>
                     <td>{{prettifyDate dataDocumentoFiscal}}</td>
                     <td>{{maskMoneyVirgula valor}}</td>
-                    <td style="text-align: center"><a href="#"><img src="/to-legal/images/info.png" title="{{listaAndamentoStr}}" class="tooltip-info"width="20px;"></a></td>
-                    <td>{{motivoReclamacao.descricao}}</td>
+                   
+                    <td>{{motivoReclamacao}}</td>
                     <td>{{statusAndamentoStr}}</td>
                     <td>{{#compare tipoExtensao '0' operator=">"}}<a href="{{../../urlDownload}}{{id}}"><img src="/to-legal/images/invoice2.png" title="Clique para baixar o anexo" class="tooltip-info"width="20px;"></a>{{/compare}}</td>
                 </tr>

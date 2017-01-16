@@ -202,6 +202,7 @@ public class ReclamacaoToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoToLe
 				doc.setNumeroCnpjEmpresa(contribuinte.getCnpj());
 				doc.setStatusAndamentoStr(rec.getStatusReclamacao().getLabel());
 				doc.setNome(rec.getUsuarioToLegal().getPessoaFisica().getNome());
+			    doc.setMotivoReclamacao(rec.getMotivoReclamacao().getLabel());
 
 				listsDocs.add(doc);
 			}
