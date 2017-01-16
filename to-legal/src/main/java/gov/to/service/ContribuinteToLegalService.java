@@ -19,4 +19,6 @@ public interface ContribuinteToLegalService {
     ContribuinteToLegal findByInscricaoEstadual(Integer inscricaoEstadual);
 
 	ContribuinteToLegal autenticaCidadao(String ie, String senha);
+	
+	public ContribuinteToLegal findByCNPJ(String cnpj);
 }

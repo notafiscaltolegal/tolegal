@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import gov.goias.entidades.PessoaParticipante;
@@ -154,7 +155,64 @@ public class ReclamacaoToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoToLe
 
 		return paginacaoDTO;
 	}
+	
+	@Override
+	public PaginacaoDTO<DocumentoFiscalReclamadoToLegal> findReclamacoesByInscricaoEstadual(String inscricaoEstadual,
+			Integer page, Integer max) {
 
+		PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDTO = new PaginacaoDTO<>();
+
+		FiltroReclamacaoToLegal filtro = new FiltroReclamacaoToLegal();
+		
+		filtro.setInscricaoEstadual(inscricaoEstadual.replaceAll("[^0-9]", StringUtils.EMPTY));
+
+		List<ReclamacaoToLegal> listReclamacoes = super.filtrarPesquisa(filtro, ReclamacaoToLegal.class,
+				"usuarioToLegal","usuarioToLegal.pessoaFisica");
+
+		int inicio = calcInicio(page, max);
+		int fim = calcPagFim(page, max);
+
+		if (listReclamacoes != null) {
+			paginacaoDTO.setCount(listReclamacoes.size());
+		}
+
+		List<DocumentoFiscalReclamadoToLegal> listsDocs = new ArrayList<>();
+		;
+
+		for (int i = inicio; i <= fim; i++) {
+
+			DocumentoFiscalReclamadoToLegal doc = new DocumentoFiscalReclamadoToLegal();
+
+			if (i == listReclamacoes.size()) {
+				break;
+			}
+
+			ReclamacaoToLegal rec = listReclamacoes.get(i);
+			ContribuinteToLegal contribuinte = serviceContribuinte
+					.findByInscricaoEstadual(Integer.valueOf(rec.getInscricaoEstadual()));
+			if (contribuinte != null) {
+
+				doc.setDataDocumentoFiscal(rec.getDataEmissaoDocFiscal());
+				doc.setDataReclamacao(rec.getDataCadastro());
+				doc.setInscricaoEmpresa(rec.getInscricaoEstadual());
+				doc.setNumero(Integer.valueOf(rec.getNumeroDocFiscal()));
+				doc.setValor(rec.getValorDocFiscal());
+				doc.setId(Integer.valueOf(rec.getId().intValue()));
+				doc.setRazaoSocial(contribuinte.getRazaoSocial());
+				doc.setNumeroCnpjEmpresa(contribuinte.getCnpj());
+				doc.setStatusAndamentoStr(rec.getStatusReclamacao().getLabel());
+				doc.setNome(rec.getUsuarioToLegal().getPessoaFisica().getNome());
+
+				listsDocs.add(doc);
+			}
+		}
+
+		paginacaoDTO.setList(listsDocs);
+		;
+
+		return paginacaoDTO;
+	}
+	
 	private static int calcPagFim(Integer page, Integer max) {
 
 		return (calcInicio(page, max) + max) - 1;

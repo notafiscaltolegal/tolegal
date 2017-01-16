@@ -23,7 +23,10 @@ import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 import gov.goias.service.ContribuinteService;
 import gov.goias.service.PaginacaoDTO;
 import gov.goias.service.ReclamacaoService;
+import gov.to.entidade.ContribuinteToLegal;
 import gov.to.goias.DocumentoFiscalReclamadoToLegal;
+import gov.to.service.ContribuinteToLegalService;
+import gov.to.service.ReclamacaoToLegalService;
 
 /**
  * Created by bruno-cff on 30/09/2015.
@@ -37,6 +40,12 @@ public class ReclamacaoController extends BaseController{
     
     @Autowired
     private ContribuinteService contribuinteService;
+    @Autowired
+    private ContribuinteToLegalService contribuinteToLegalService;
+    
+    @Autowired
+    private ReclamacaoToLegalService reclamacaoToLegalService;
+    
 
     @RequestMapping("/consultar/{numeroCnpj}")
     public ModelAndView consultar(@PathVariable(value="numeroCnpj")String numeroCnpj) {
@@ -100,9 +109,16 @@ public class ReclamacaoController extends BaseController{
         Map<String, Object> pagination = new HashMap<String, Object>();
 
         
+        //localizar contribuinte por cnpj e retornar inscrição estadual
+        ContribuinteToLegal contribuinte=new ContribuinteToLegal();
+        contribuinte=contribuinteToLegalService.findByCNPJ(numeroCnpj);
         
         
-        PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoToLegalPorCNPJ(numeroCnpj, max, page);
+        
+        
+       // PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDocumentoReclamado = reclamacaoService.listDocumentoFiscalReclamadoToLegalPorCNPJ(numeroCnpj, max, page);
+        PaginacaoDTO<DocumentoFiscalReclamadoToLegal> paginacaoDocumentoReclamado = reclamacaoToLegalService.findReclamacoesByInscricaoEstadual(contribuinte.getId(), page, max);
+        
         List<DocumentoFiscalReclamadoToLegal> reclamacoes = paginacaoDocumentoReclamado.getList();
         List<DocumentoFiscalReclamadoToLegal> listDocumentos = new ArrayList<>();
 

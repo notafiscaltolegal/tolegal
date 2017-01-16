@@ -47,6 +47,8 @@ public class DocumentoFiscalReclamadoToLegal {
 
 	
 	private String inscricaoEmpresa;
+	
+	private String nome;
 
 	
 	private String descUltimaSituacao;
@@ -212,8 +214,13 @@ public class DocumentoFiscalReclamadoToLegal {
 	public void setCodgUltimaSituacao(Integer codgUltimaSituacao) {
 		this.codgUltimaSituacao = codgUltimaSituacao;
 	}
-	
-	
-	
 
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	
 }

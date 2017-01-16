@@ -13,6 +13,19 @@ public class FiltroReclamacaoToLegal implements Filtro{
 	@EntityProperty("id")
 	private Long idReclamacao;
 	
+	@EntityProperty("inscricaoEstadual")
+	private String inscricaoEstadual;
+	
+	
+	
+	public String getInscricaoEstadual() {
+		return inscricaoEstadual;
+	}
+
+	public void setInscricaoEstadual(String inscricaoEstadual) {
+		this.inscricaoEstadual = inscricaoEstadual;
+	}
+
 	public Long getIdUsuario() {
 		return idUsuario;
 	}

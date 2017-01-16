@@ -28,4 +28,7 @@ public interface ReclamacaoToLegalService {
 	DocumentoFiscalReclamadoToLegal findReclamacoesPorIdReclamacao(Integer idReclamacao);
 
 	Boolean alterarStatusReclamacao(Integer idReclamacao, Integer novoCodgTipoCompl);
+	
+	public PaginacaoDTO<DocumentoFiscalReclamadoToLegal> findReclamacoesByInscricaoEstadual(String inscricaoEstadual,
+			Integer page, Integer max);
 }

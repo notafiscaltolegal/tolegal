@@ -27,6 +27,8 @@ public class ContribuinteToLegal extends EntidadeBasica{
 	@Column(name = "CONRAZSOC")
 	private String razaoSocial;
 	
+
+	
 	@Column(name = "CONINSCNPJ")
 	private String cnpj;
 	
@@ -40,6 +42,12 @@ public class ContribuinteToLegal extends EntidadeBasica{
 	public String getId() {
 		return id;
 	}
+	
+	
+
+	
+
+
 
 	public void setId(String id) {
 		this.id = id;

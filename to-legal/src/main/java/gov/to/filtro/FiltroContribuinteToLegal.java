@@ -29,7 +29,22 @@ public class FiltroContribuinteToLegal implements Filtro{
 		
 		return sb.toString();
 	}
-
+	
+	public static String cnpjlFormat(String cnpj)
+	{
+		String cnpjFormat = cnpj.toString();
+		String part1 = cnpjFormat.substring(0, 2);
+		String part2 = cnpjFormat.substring(2, 5);
+		String part3 = cnpjFormat.substring(5, 8);
+		String part4 = cnpjFormat.substring(8, 12);
+		String part5 = cnpjFormat.substring(12, 14);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(part1).append(".").append(part2).append(".").append(part3).append("/").append(part4).append("-").append(part5);
+		
+		return sb.toString();
+	}
+	
 	public String getCnpj() {
 		return cnpj;
 	}

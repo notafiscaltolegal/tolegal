@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 
 import gov.goias.dtos.DTOContribuinte;
 import gov.to.dto.PaginacaoContribuinteDTO;
@@ -90,7 +92,17 @@ public class ContribuinteToLegalServiceImpl extends ConsultasDaoJpa<Contribuinte
 
 		return super.primeiroRegistroPorFiltro(filtroContribuinteToLegal, ContribuinteToLegal.class);
 	}
+	
+	@Override
+	public ContribuinteToLegal findByCNPJ(String cnpj) {
 
+		FiltroContribuinteToLegal filtroContribuinteToLegal = new FiltroContribuinteToLegal();
+
+		filtroContribuinteToLegal.setCnpj(FiltroContribuinteToLegal.cnpjlFormat(cnpj));//(FiltroContribuinteToLegal.inscricaoEstadualFormat(inscricaoEstadual));
+
+		return super.primeiroRegistroPorFiltro(filtroContribuinteToLegal, ContribuinteToLegal.class);
+	}
+	 
 	@Override
 	public ContribuinteToLegal autenticaCidadao(String ie, String senha) {
 		
