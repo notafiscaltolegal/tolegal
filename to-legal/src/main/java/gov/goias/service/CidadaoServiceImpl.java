@@ -19,12 +19,15 @@ import gov.goias.util.Encrypter;
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.dominio.SituacaoUsuario;
 import gov.to.dto.RespostaReceitaFederalDTO;
+import gov.to.entidade.ContribuinteToLegal;
 import gov.to.entidade.EnderecoToLegal;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PessoaFisicaToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.entidade.UsuarioToLegal;
+import gov.to.filtro.FiltroNotaEmpresaToLegal;
 import gov.to.filtro.FiltroNotaFiscalToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
 import gov.to.filtro.FiltroUsuarioToLegal;
@@ -32,6 +35,7 @@ import gov.to.persistencia.DataFiltroBetween;
 import gov.to.properties.SorteioProperties;
 import gov.to.service.BilheteToLegalService;
 import gov.to.service.GenericService;
+import gov.to.service.NotaEmpresaService;
 import gov.to.service.NotaFiscalToLegalService;
 import gov.to.service.PessoaFisicaToLegalService;
 import gov.to.service.PontuacaoToLegalService;
@@ -64,6 +68,12 @@ public class CidadaoServiceImpl implements CidadaoService{
 	
 	@Autowired
 	private GenericService<PontuacaoBonusToLegal, Long> genericServicePontuacaoBonus;
+	
+	@Autowired
+	private NotaEmpresaService notaEmpresaService;
+	
+	@Autowired
+	private GenericService<ContribuinteToLegal, Long> genericServiceContribuinte;
 	
 	public PessoaParticipanteDTO consultaWebSeviceReceita(String cpf){
 		
@@ -199,12 +209,60 @@ public class CidadaoServiceImpl implements CidadaoService{
 		filtroPontuacao.setCpf(cpfFiltro);
 		
 		List<NotaFiscalToLegal> listNotaToLegal = notaFiscalToLegalService.pesquisar(filtro);
-		List<PontuacaoToLegal> listNotaToLegalPontuada = pontuacaoToLegalService.pesquisar(filtroPontuacao,"notaFiscalToLegal","sorteioToLegal");
+		List<PontuacaoToLegal> listNotaToLegalPontuada = pontuacaoToLegalService.pesquisar(filtroPontuacao,"notaFiscalToLegal","sorteioToLegal","notaFiscalEmpresaToLegal");
 		
-		return converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada);
+		Integer ultimoSorteio = sorteioToLegalService.ultimoSorteio();
+		
+		List<DTOMinhasNotas> list = converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada,ultimoSorteio);
+		
+		list.addAll(concerteNotaEmpresaParaDTO(cpfFiltro,listNotaToLegalPontuada,ultimoSorteio));
+		
+		return list;
 	}
 
-	private List<DTOMinhasNotas> converteParaDtoNota(List<NotaFiscalToLegal> listNotaToLegal, List<PontuacaoToLegal> listNotaToLegalPontuada) {
+	private  List<DTOMinhasNotas> concerteNotaEmpresaParaDTO(String cpfFiltro, List<PontuacaoToLegal> listNotaToLegalPontuada, Integer ultimoSorteio) {
+		
+		List<DTOMinhasNotas> list = new ArrayList<>();
+		
+		FiltroNotaEmpresaToLegal filtroNotaEmpresa = new FiltroNotaEmpresaToLegal();
+		filtroNotaEmpresa.setCpfDestinatario(cpfFiltro);
+		
+		List<NotaEmpresaToLegal> listNotaEmpresa = notaEmpresaService.pesquisar(filtroNotaEmpresa);
+		
+		for (NotaEmpresaToLegal nto : listNotaEmpresa){
+			
+			ContribuinteToLegal contribuinte = genericServiceContribuinte.getById(ContribuinteToLegal.class, nto.getId());
+			
+			DTOMinhasNotas dto = new DTOMinhasNotas();
+			PontuacaoToLegal pontuacao = pontuacaoPorIdNotaEmpresa(listNotaToLegalPontuada, nto.getId());
+			
+			dto.setCnpj(contribuinte.getCnpj());
+			dto.setNumero(nto.getNumeroDocumento());
+			dto.setValor(nto.getValor());
+			dto.setEstabelecimento(contribuinte.getRazaoSocial());
+			dto.setRegistro(nto.getDataEmissao());
+			dto.setEmissao(nto.getDataEmissao());
+			
+			if (pontuacao == null){
+				
+				dto.setStatusPontuacao(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO.getValor());
+				dto.setQtdePontos(BigInteger.ZERO.intValue());
+				dto.setInfoSorteioParticipado(String.valueOf(ultimoSorteio));
+			
+			}else{
+				
+				dto.setStatusPontuacao(SituacaoPontuacaoNota.PONTUADO.getValor());
+				dto.setQtdePontos(pontuacao.getQntPonto());
+				dto.setInfoSorteioParticipado(pontuacao.getSorteioToLegal().getNumeroSorteio().toString());
+			}
+			
+			list.add(dto);
+		}
+		
+		return list;
+	}
+
+	private List<DTOMinhasNotas> converteParaDtoNota(List<NotaFiscalToLegal> listNotaToLegal, List<PontuacaoToLegal> listNotaToLegalPontuada, Integer ultimoSorteio) {
 
 		List<DTOMinhasNotas> list = new ArrayList<>();
 		
@@ -228,7 +286,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 				
 				dto.setStatusPontuacao(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO.getValor());
 				dto.setQtdePontos(BigInteger.ZERO.intValue());
-				dto.setInfoSorteioParticipado(String.valueOf(SorteioProperties.getValue(SorteioProperties.NUMERO_SORTEIO)));
+				dto.setInfoSorteioParticipado(String.valueOf(ultimoSorteio));
 			
 			}else{
 				
@@ -241,6 +299,22 @@ public class CidadaoServiceImpl implements CidadaoService{
 		}
 		
 		return list;
+	}
+	
+	private PontuacaoToLegal pontuacaoPorIdNotaEmpresa(List<PontuacaoToLegal> listNotaToLegalPontuada, Long idNotaEmpresa) {
+
+		if (listNotaToLegalPontuada == null){
+			return null;
+		}
+		
+		for (PontuacaoToLegal pontuacao : listNotaToLegalPontuada){
+			
+			if (pontuacao.getNotaFiscalEmpresaToLegal().getId().equals(idNotaEmpresa)){
+				return pontuacao;
+			}
+		}
+		
+		return null;
 	}
 
 	private PontuacaoToLegal pontuacaoPorIdNota(List<PontuacaoToLegal> listNotaToLegalPontuada, Long idNota) {
@@ -314,7 +388,9 @@ public class CidadaoServiceImpl implements CidadaoService{
 		List<NotaFiscalToLegal> listNotaToLegal = notaFiscalToLegalService.pesquisar(filtro);
 		List<PontuacaoToLegal> listNotaToLegalPontuada = pontuacaoToLegalService.pesquisar(filtroPontuacao,"notaFiscalToLegal","sorteioToLegal");
 		
-		return converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada);
+		Integer ultimoSorteio = sorteioToLegalService.ultimoSorteio();
+		
+		return converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada,ultimoSorteio);
 	}
 	
 	@Override

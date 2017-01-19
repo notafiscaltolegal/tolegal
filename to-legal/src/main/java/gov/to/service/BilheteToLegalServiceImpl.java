@@ -224,7 +224,7 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 		
 		SituacaoBilhete situacao = SituacaoBilhete.VALIDO;
 		
-		Integer totalBilhetesNoSorteio = totalBilhetes(sorteioToLegal);
+		Long totalBilhetesNoSorteio = totalBilhetes(sorteioToLegal);
 		
 		FiltroBilheteToLegal filtroDTO = new FiltroBilheteToLegal();
 		filtroDTO.setSituacaoBilhete(SituacaoBilhete.AGUARDANDO_PROXIMO_SORTEIO);
@@ -232,7 +232,7 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 		
 		for (int i=BigInteger.ZERO.intValue(); i < listBilhete.size(); i++){
 			
-			Integer totalBilhetesPermitidos = totalBilhetesNoSorteio + i;
+			Long totalBilhetesPermitidos = totalBilhetesNoSorteio + i;
 			
 			if (totalBilhetesPermitidos < sorteioToLegal.getMaxBilhete() ){
 				
@@ -246,7 +246,7 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 		
 		for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
 			
-			Integer totalBilhetesPermitidos = totalBilhetesNoSorteio + i;
+			Long totalBilhetesPermitidos = totalBilhetesNoSorteio + i;
 			
 			if (totalBilhetesPermitidos > sorteioToLegal.getMaxBilhete() ){
 				
@@ -273,7 +273,7 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 		}
 	}
 	
-	private Integer totalBilhetes(SorteioToLegal sorteioToLegal) {
+	private Long totalBilhetes(SorteioToLegal sorteioToLegal) {
 		
 		Criteria criteria = getSession().createCriteria(BilheteToLegal.class);
 		
@@ -281,10 +281,10 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 		criteria.createAlias("sorteioToLegal", "sorteioToLegal");
 		criteria.add(Restrictions.eq("sorteioToLegal.id", sorteioToLegal.getId()));
 		
-		Integer count = (Integer)criteria.uniqueResult();
+		Long count = (Long)criteria.uniqueResult();
 		
 		if (count == null){
-			return BigInteger.ZERO.intValue();
+			return BigInteger.ZERO.longValue();
 		}
 		
 		return count;

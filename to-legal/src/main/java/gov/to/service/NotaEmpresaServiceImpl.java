@@ -203,7 +203,6 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 		
 		paginacaoDTO.setList(listsDocs);
 		;
-		// TODO Auto-generated method stub
 		return paginacaoDTO;
 	}
 	
