@@ -3,6 +3,7 @@ package gov.to.filtro;
 import java.util.Date;
 
 import gov.to.dominio.SerieEnum;
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.persistencia.EntityProperty;
 
 public class FiltroNotaEmpresaToLegal implements Filtro{
@@ -22,7 +23,8 @@ public class FiltroNotaEmpresaToLegal implements Filtro{
 	@EntityProperty("cpfDestinatario")
 	private String cpfDestinatario;
 	
-	
+	@EntityProperty("situacaoPontuacaoNota")
+	private SituacaoPontuacaoNota situacaoPontuacaoNota;
 
 	public String getCpfDestinatario() {
 		return cpfDestinatario;
@@ -63,8 +65,12 @@ public class FiltroNotaEmpresaToLegal implements Filtro{
 	public void setDataEmissao(Date dataEmissao) {
 		this.dataEmissao = dataEmissao;
 	}
-	
-	
 
-	
+	public SituacaoPontuacaoNota getSituacaoPontuacaoNota() {
+		return situacaoPontuacaoNota;
+	}
+
+	public void setSituacaoPontuacaoNota(SituacaoPontuacaoNota situacaoPontuacaoNota) {
+		this.situacaoPontuacaoNota = situacaoPontuacaoNota;
+	}
 }

@@ -41,11 +41,33 @@ public class SorteioToLegal extends EntidadeBasica{
 	@Column(name="data_sorteio")
 	private Date dataSorteio;
 	
+	@Temporal(TemporalType.DATE)
+	@Column(name="DATA_INICIO_SORTEIO")
+	private Date dataInicioSorteio;
+	
 	@Column(name="num_extracao")
 	private Integer numeroExtracao;
 	
+	@Column(name="num_extracao2")
+	private Integer numeroExtracao2;
+
+	@Column(name="num_extracao3")
+	private Integer numeroExtracao3;
+	
+	@Column(name="num_extracao4")
+	private Integer numeroExtracao4;
+	
+	@Column(name="num_extracao5")
+	private Integer numeroExtracao5;
+	
+	@Column(name="max_bilhete")
+	private Integer maxBilhete;
+	
 	@Column(name="num_sorteio")
 	private Integer numeroSorteio;
+	
+	@Column(name="qnt_ganhadores")
+	private Integer qntGanhadores;
 	
 	@Column(name="situacao")
 	@Enumerated(EnumType.STRING)
@@ -155,5 +177,61 @@ public class SorteioToLegal extends EntidadeBasica{
 
 	public void setSituacao(SituacaoSorteio situacao) {
 		this.situacao = situacao;
+	}
+
+	public Integer getNumeroExtracao2() {
+		return numeroExtracao2;
+	}
+
+	public void setNumeroExtracao2(Integer numeroExtracao2) {
+		this.numeroExtracao2 = numeroExtracao2;
+	}
+
+	public Integer getNumeroExtracao3() {
+		return numeroExtracao3;
+	}
+
+	public void setNumeroExtracao3(Integer numeroExtracao3) {
+		this.numeroExtracao3 = numeroExtracao3;
+	}
+
+	public Integer getNumeroExtracao4() {
+		return numeroExtracao4;
+	}
+
+	public void setNumeroExtracao4(Integer numeroExtracao4) {
+		this.numeroExtracao4 = numeroExtracao4;
+	}
+
+	public Integer getMaxBilhete() {
+		return maxBilhete;
+	}
+
+	public void setMaxBilhete(Integer maxBilhete) {
+		this.maxBilhete = maxBilhete;
+	}
+
+	public Integer getQntGanhadores() {
+		return qntGanhadores;
+	}
+
+	public void setQntGanhadores(Integer qntGanhadores) {
+		this.qntGanhadores = qntGanhadores;
+	}
+
+	public Integer getNumeroExtracao5() {
+		return numeroExtracao5;
+	}
+
+	public void setNumeroExtracao5(Integer numeroExtracao5) {
+		this.numeroExtracao5 = numeroExtracao5;
+	}
+
+	public Date getDataInicioSorteio() {
+		return dataInicioSorteio;
+	}
+
+	public void setDataInicioSorteio(Date dataInicioSorteio) {
+		this.dataInicioSorteio = dataInicioSorteio;
 	}
 }

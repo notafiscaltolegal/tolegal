@@ -64,8 +64,10 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 		
 		Long soma = (Long) criteria
 				.setProjection(Projections.sum("qntPonto"))
+				.createAlias("sorteio", "sorteio")
 				.add(Restrictions.eq("cpf", cpf)) 
 				.add(Restrictions.eq("situacaoPontuacaoNota", SituacaoPontuacaoNota.PONTUADO))
+				.add(Restrictions.eq("sorteio.id", idSorteio.longValue())) 
 				.uniqueResult();
 		
 		if (soma == null){

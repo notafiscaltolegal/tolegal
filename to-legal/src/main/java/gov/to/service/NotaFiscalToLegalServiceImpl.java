@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 
 import gov.to.entidade.NotaFiscalToLegal;
+import gov.to.entidade.PontuacaoToLegal;
 import gov.to.filtro.FiltroNotaFiscalToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 
@@ -36,13 +37,16 @@ public class NotaFiscalToLegalServiceImpl implements NotaFiscalToLegalService{
 	}
 
 	@Override
-	public int totalNotasPorCpf(String cpf) {
+	public int totalNotasPorCpf(String cpf, Integer idSorteio) {
 		
-		Criteria criteria = reposiroty.getSession().createCriteria(NotaFiscalToLegal.class);
+		Criteria criteria = reposiroty.getSession().createCriteria(PontuacaoToLegal.class);
 		
 		Long count = (Long) criteria
 				.setProjection(Projections.count("id"))
-				.add(Restrictions.eq("cpf", cpf)) 
+				.createAlias("sorteioToLegal", "sorteioToLegal")
+				.createAlias("notaFiscalToLegal", "notaFiscalToLegal")
+				.add(Restrictions.eq("sorteioToLegal.id", Long.valueOf(idSorteio))) 
+				.add(Restrictions.eq("notaFiscalToLegal.cpf", cpf)) 
 				.uniqueResult();
 		
 		return count.intValue();

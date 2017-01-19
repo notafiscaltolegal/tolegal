@@ -4,9 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,16 +21,20 @@ import org.quartz.JobExecutionException;
 
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.entidade.BilheteToLegal;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.entidade.SorteioToLegal;
+import gov.to.filtro.FiltroNotaEmpresaToLegal;
 import gov.to.filtro.FiltroNotaFiscalToLegal;
 import gov.to.filtro.FiltroPontuacaoBonusToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
 import gov.to.service.BilheteToLegalService;
+import gov.to.service.BloqueioCpfToLegalService;
+import gov.to.service.NotaEmpresaService;
 import gov.to.service.NotaFiscalToLegalService;
 import gov.to.service.PontuacaoToLegalService;
 import gov.to.service.SorteioToLegalService;
@@ -47,6 +53,9 @@ public class ProcessamentoNotas implements Job {
 	public static final String PONTUACAO_SERVICE = "pontuacaoService";
 	public static final String SORTEIO_SERVICE = "sorteioService";
 	public static final String BILHETE_SERVICE = "bilheteService";
+	public static final String BLOQUEIO_CPF_SERVICE = "bloqueioCpfService";
+	public static final String NOTA_EMPRESA_SERVICE = "notaEmpresaService";
+	public static final String NOTA_EMPRESA_PERSISTENCE = "notaEmpresaPersistence";
 	
 	private Session session;
     
@@ -72,6 +81,12 @@ public class ProcessamentoNotas implements Job {
 	
 	private BilheteToLegalService bilheteToLegalService;
 	
+	private BloqueioCpfToLegalService bloqueioCpfToLegalService;
+	
+	private NotaEmpresaService notaEmpresaService;
+	
+	private GenericPersistence<NotaEmpresaToLegal, Long> notaEmpresaPersistence;
+	
 	@Override
 	public void execute(JobExecutionContext jbContext) throws JobExecutionException {
 		
@@ -79,8 +94,14 @@ public class ProcessamentoNotas implements Job {
 		
 		try{
 			
-			this.processamentoNotas();
-			this.processaBilhetes();
+			SorteioToLegal sorteioToLegal = sorteioToLegalService.sorteioAtual();
+			
+			if (sorteioToLegal == null || !sorteioToLegal.getAtivo()){
+				return;
+			}
+			
+			this.processamentoNotas(sorteioToLegal);
+			this.processaBilhetes(sorteioToLegal);
 			
 		}catch(Exception xException){
 			xException.printStackTrace();
@@ -102,6 +123,18 @@ public class ProcessamentoNotas implements Job {
 			if (!session.isOpen()) {
 				session = session.getSessionFactory().openSession();
 			}
+    	}
+    	
+    	if (notaEmpresaPersistence == null){
+    		notaEmpresaPersistence = (GenericPersistence<NotaEmpresaToLegal, Long>) jobDataMap.get(NOTA_EMPRESA_PERSISTENCE);
+    	}
+    	
+    	if (notaEmpresaService == null){
+    		notaEmpresaService = (NotaEmpresaService) jobDataMap.get(NOTA_EMPRESA_SERVICE);
+    	}
+    	
+    	if (bloqueioCpfToLegalService == null){
+    		bloqueioCpfToLegalService = (BloqueioCpfToLegalService) jobDataMap.get(BLOQUEIO_CPF_SERVICE);
     	}
     	
     	if (bilheteToLegalService == null){
@@ -149,7 +182,7 @@ public class ProcessamentoNotas implements Job {
     	}
 	}
 
-	private void processamentoNotas() {
+	private void processamentoNotas(SorteioToLegal sorteioToLegal) {
     	
     	StringBuilder sql = new StringBuilder();
     	String dataInicioSorteio = "01/01/2016";
@@ -209,8 +242,15 @@ public class ProcessamentoNotas implements Job {
 		getSession().clear();
 		
 		int i = 1;
+		
+		List<String> cpfsBloqueados = bloqueioCpfToLegalService.cpfsBloqueados();
         
         for (NotaFiscalToLegal nota : results){
+        	
+        	if (cpfsBloqueados != null && cpfsBloqueados.contains(nota.getCpf())){
+        		System.out.println("#CPF BLOQUEADO# CPF:"+nota.getCpf()+" Data:"+new Date());
+        		continue;
+        	}
         	
     		nota.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
         	notaFiscalPersistence.salvar(nota);
@@ -253,15 +293,13 @@ public class ProcessamentoNotas implements Job {
 		return StringUtils.join(chavesAcessoComAspas, ",");
 	}
 	
-	public void processaBilhetes() {
-		
-		SorteioToLegal sorteioToLegal = sorteioToLegalService.sorteioAtual();
-		
-		if (sorteioToLegal == null || !sorteioToLegal.getAtivo()){
-			return;
-		}
+	public void processaBilhetes(SorteioToLegal sorteioToLegal) {
 		
 		processaNotaLegalParaGerarPontuacao(sorteioToLegal);
+		
+		getSession().flush();
+		
+		processaNotaEmpresaParaGerarPontuacao(sorteioToLegal);
 		
 		getSession().flush();
 		
@@ -272,6 +310,31 @@ public class ProcessamentoNotas implements Job {
 		processaPontuacaoBonusParaGerarBilhete(sorteioToLegal);
 		
 		getSession().flush();
+	}
+
+	private void processaNotaEmpresaParaGerarPontuacao(SorteioToLegal sorteioToLegal) {
+		
+		FiltroNotaEmpresaToLegal filtroNotaEmpresa = new FiltroNotaEmpresaToLegal();
+		filtroNotaEmpresa.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
+		List<NotaEmpresaToLegal> listNotaEmpresa = notaEmpresaService.pesquisar(filtroNotaEmpresa);
+		
+		List<String> cpfsBloqueados = bloqueioCpfToLegalService.cpfsBloqueados();
+		
+		for (NotaEmpresaToLegal nota : listNotaEmpresa){
+			
+			if (cpfsBloqueados != null && cpfsBloqueados.contains(nota.getCpfDestinatario())){
+				continue;
+			}
+			
+			PontuacaoToLegal pontuacao = new PontuacaoToLegal(nota);
+			pontuacao.setSorteioToLegal(sorteioToLegal);
+			pontuacaoPersistence.salvar(pontuacao);
+			
+			getSession().flush();
+			
+			nota.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.PONTUADO);
+			notaEmpresaPersistence.merge(nota);
+		}
 	}
 
 	private void processaNotaLegalParaGerarPontuacao(SorteioToLegal sorteioToLegal) {
@@ -313,10 +376,41 @@ public class ProcessamentoNotas implements Job {
 		filtroPont.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
 		List<PontuacaoToLegal> listPontuacao = pontuacaoService.pesquisar(filtroPont);
 		
+		Map<String, Integer> mapPontuacao = new HashMap<>();
+		
 		for (PontuacaoToLegal pontuacao : listPontuacao){
 			
-			bilheteToLegalService.processaBilhetePorPontuacao(sorteioToLegal, pontuacao);
+			String cpf = null;
+			
+			if (pontuacao.getNotaFiscalToLegal() == null){
+				
+				cpf = pontuacao.getNotaFiscalEmpresaToLegal().getCpfDestinatario();
+				
+			}else if (pontuacao.getNotaFiscalEmpresaToLegal() == null){
+				
+				cpf = pontuacao.getNotaFiscalToLegal().getCpf();
+			}
+			
+			if (mapPontuacao.get(cpf) == null){
+				mapPontuacao.put(cpf, pontuacao.getQntPonto());
+			}else{
+				mapPontuacao.put(cpf, mapPontuacao.get(cpf) + pontuacao.getQntPonto());
+			}
+		}
+		
+		for (Entry<String, Integer> entry : mapPontuacao.entrySet()){
+			
+			String cpf = entry.getKey();
+			Integer totalPonto = entry.getValue();
+			
+			bilheteToLegalService.processaBilhetePorPontuacao(sorteioToLegal, cpf, totalPonto);
 			getSession().flush();
+		}
+		
+		for (PontuacaoToLegal pontuacao : listPontuacao){
+			
+			pontuacao.setSituacaoPontuacao(SituacaoPontuacaoNota.PONTUADO);
+			pontuacaoPersistence.merge(pontuacao);
 		}
 	}
 

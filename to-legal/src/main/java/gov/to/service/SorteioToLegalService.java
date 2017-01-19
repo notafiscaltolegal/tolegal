@@ -21,10 +21,10 @@ public interface SorteioToLegalService {
 
 	SorteioCidadaoDTO carregaDadosDoSorteioParaCidadao(Integer idSorteio, String cpf);
 
-	Integer pontuacaoSemSorteio(Integer id);
-
 	RegraSorteio sorteioPorId(Integer idSorteio);
 
 	SorteioToLegal sorteioAtual();
+
+	Integer ultimoSorteio();
 
 }

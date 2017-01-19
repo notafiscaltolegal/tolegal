@@ -232,6 +232,12 @@ public class NotaEmpresaServiceImpl extends ConsultasDaoJpa<NotaEmpresaToLegal> 
 		return nota;
 	}
 
+	@Override
+	public List<NotaEmpresaToLegal> pesquisar(FiltroNotaEmpresaToLegal filtroNotaEmpresa) {
+		
+		return super.filtrarPesquisa(filtroNotaEmpresa, NotaEmpresaToLegal.class);
+	}
+
 	
 	
 	/*

@@ -6,6 +6,7 @@ import java.util.List;
 public enum SituacaoBilhete {
 
 	VALIDO(1,"Válido"),
+	AGUARDANDO_PROXIMO_SORTEIO(3,"Limite máximo do último sorteio atingido."),
 	INVALIDO(2,"Inválido");
 	
 	private int codigo;

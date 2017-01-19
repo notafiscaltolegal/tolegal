@@ -1,11 +1,9 @@
 package gov.goias.util;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Created by lucas-mp on 09/01/15.

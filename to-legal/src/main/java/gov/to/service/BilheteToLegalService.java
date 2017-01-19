@@ -6,7 +6,6 @@ import javax.ejb.Local;
 
 import gov.goias.entidades.BilhetePessoa;
 import gov.to.entidade.PontuacaoBonusToLegal;
-import gov.to.entidade.PontuacaoToLegal;
 import gov.to.entidade.SorteioToLegal;
 
 /**
@@ -35,7 +34,7 @@ public interface BilheteToLegalService {
 
 	Integer geraNumeroBilhete();
 
-	void processaBilhetePorPontuacao(SorteioToLegal sorteio, PontuacaoToLegal pontuacao);
-	
 	void processaBilhetePorPontuacaoBonus(SorteioToLegal sorteioToLegal, PontuacaoBonusToLegal pontuacaoBonus);
+
+	void processaBilhetePorPontuacao(SorteioToLegal sorteioToLegal, String cpf, Integer totalPonto);
 }

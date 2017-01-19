@@ -126,7 +126,7 @@ function Cidadao(options) {
         new ModaisCidadao({cidadao:me});
         me.listarNotasCidadao();
         me.listarReclamacoes();
-        me.dadosMeuPlacar();
+//        me.dadosMeuPlacar();
         me.carregaDadosPremiacao();
 
         me.salvaNovaReclamacao();

@@ -16,6 +16,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 import gov.to.entidade.BilheteToLegal;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
@@ -24,6 +25,8 @@ import gov.to.persistencia.AbstractModel;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
 import gov.to.service.BilheteToLegalService;
+import gov.to.service.BloqueioCpfToLegalService;
+import gov.to.service.NotaEmpresaService;
 import gov.to.service.NotaFiscalToLegalService;
 import gov.to.service.PontuacaoToLegalService;
 import gov.to.service.SorteioToLegalService;
@@ -64,6 +67,15 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 	
 	@EJB
 	private BilheteToLegalService bilheteToLegalService;
+	
+	@EJB
+	private BloqueioCpfToLegalService bloqueioCpfService;
+	
+	@EJB
+	private NotaEmpresaService notaEmpresaService;
+	
+	@EJB
+	private GenericPersistence<NotaEmpresaToLegal, Long> notaEmpresaToLegalPersistence;
 
 	@PostConstruct
 	public void inicio(){
@@ -84,12 +96,15 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 		jobDataMap.put(ProcessamentoNotas.PERSISTENCE_PONTUACAO_BONUS, genericPontuacaoPersistence);
 		jobDataMap.put(ProcessamentoNotas.SORTEIO_SERVICE, sorteioToLegalService);
 		jobDataMap.put(ProcessamentoNotas.BILHETE_SERVICE, bilheteToLegalService);
+		jobDataMap.put(ProcessamentoNotas.BLOQUEIO_CPF_SERVICE, bloqueioCpfService);
+		jobDataMap.put(ProcessamentoNotas.NOTA_EMPRESA_SERVICE, notaEmpresaService);
+		jobDataMap.put(ProcessamentoNotas.NOTA_EMPRESA_PERSISTENCE, notaEmpresaToLegalPersistence);
 		
 		Trigger trigger = TriggerBuilder
 			.newTrigger()
 			.withSchedule(
 				SimpleScheduleBuilder.simpleSchedule()
-					.withIntervalInSeconds(230).repeatForever())
+					.withIntervalInSeconds(60).repeatForever())
 			.build();
 		
 		Scheduler scheduler;

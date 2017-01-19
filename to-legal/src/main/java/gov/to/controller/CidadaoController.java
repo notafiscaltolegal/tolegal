@@ -40,7 +40,6 @@ import gov.goias.entidades.ComplSituacaoReclamacao;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.RegraSorteio;
-import gov.goias.entidades.SituacaoDocumentoFiscalReclamado;
 import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.CidadaoService;
@@ -763,17 +762,6 @@ public class CidadaoController extends BaseController {
         return resposta;
     }
 
-
-    @RequestMapping("meuPlacar")
-    public @ResponseBody Map<String, Object> meuPlacar() throws ParseException {
-    	PessoaParticipante cidadao = getCidadaoLogado();
-        Map<String, Object> resposta = new HashMap<String, Object>();
-        resposta.put("numeroDeNotas", cidadaoService.numeroDeNotasPorCpf(cidadao.getGenPessoaFisica().getCpf()));
-        resposta.put("pontosProximoSorteio", sorteioService.pontuacaoSemSorteio(cidadao.getId()));
-        resposta.put("totalPremiacaoMeuPlacar", "Em breve.");
-        return resposta;
-    }
-
     @RequestMapping("geraCartao")
     public @ResponseBody HttpServletResponse geraCartao(HttpServletResponse response) throws IOException {
     	
@@ -835,7 +823,7 @@ public class CidadaoController extends BaseController {
         try{
             sorteio = sorteioService.sorteioPorId(idSorteio);
         }catch (Exception e){
-            throw new NFGException("Ops, parece que esse sorteio n&#225;o existe. Tente novamente.",new ModelAndView("cidadao/telainicial"));
+            throw new NFGException("Ops, parece que esse sorteio não existe. Tente novamente.",new ModelAndView("cidadao/telainicial"));
         }
 
         try{
