@@ -1,8 +1,10 @@
 package gov.to.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.hibernate.Criteria;
@@ -12,12 +14,20 @@ import org.hibernate.criterion.Restrictions;
 
 import gov.goias.entidades.Mensagem;
 import gov.goias.service.PaginacaoDTO;
+import gov.to.dominio.DestinatarioEnum;
+import gov.to.dominio.SituacaoMensagem;
+import gov.to.entidade.MensagemSefazToLegal;
 import gov.to.entidade.MensagemVisualizadaCidadaoToLegal;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.filtro.FiltroMensagemVisuCidadaoToLegalDTO;
 import gov.to.persistencia.ConsultasDaoJpa;
 
 @Stateless
 public class MensagemVisuCidadaoToLegalServiceImpl extends ConsultasDaoJpa<MensagemVisualizadaCidadaoToLegal> implements MensagemVisuCidadaoToLegalService{
+	
+	
+	@EJB
+	private GenericService<MensagemSefazToLegal, Long> servicoMensagemSefazToLegal;
 	
 	@Override
 	public List<MensagemVisualizadaCidadaoToLegal> pesquisar(FiltroMensagemVisuCidadaoToLegalDTO filtro, String... hbInitialize) {
@@ -81,6 +91,21 @@ public class MensagemVisuCidadaoToLegalServiceImpl extends ConsultasDaoJpa<Mensa
 		pg.setList(list);
 		
 		return pg;
+	}
+	
+	@Override
+	public void cadastrarMensagem(Date dataLeitura, String titulo, String mensagem, String cpf, String cnpj) {
+		
+		MensagemSefazToLegal mensagemSefaz = new MensagemSefazToLegal();
+		
+		mensagemSefaz.setDataEnvio(new Date());
+		mensagemSefaz.setDestinatario(DestinatarioEnum.CIDADAO);
+		mensagemSefaz.setMensagem(mensagem);
+		mensagemSefaz.setSituacao(SituacaoMensagem.ENVIADA);
+		mensagemSefaz.setTitulo(titulo);
+		mensagemSefaz.setNomeAdmLogado(cnpj);
+		
+		servicoMensagemSefazToLegal.salvar(mensagemSefaz);
 	}
 	
 	private static int calcPagFim(Integer page, Integer max) {
