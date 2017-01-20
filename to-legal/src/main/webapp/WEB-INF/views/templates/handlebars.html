@@ -718,6 +718,14 @@
                 {{/each}}
                 </tbody>
 
+				<tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        {{paginate pagination}}
+                    </td>
+                </tr>
+                </tfoot>
+
                 {{else}}
                 	<th class="centralizado">Nenhuma nota importada.</th>
                 {{/if}}

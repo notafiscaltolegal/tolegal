@@ -19,7 +19,7 @@ public interface CidadaoService {
 
 	boolean usuarioPremiado(Integer id);
 
-	List<DTOMinhasNotas> documentosFiscaisPorCpf(String cpfFiltro, Date dataInicial, Date dataFinal, Integer max, Integer page);
+	PaginacaoDTO<DTOMinhasNotas> documentosFiscaisPorCpf(String cpfFiltro, Date dataInicial, Date dataFinal, Integer max, Integer page);
 
 	PessoaParticipante pessoaParticipantePorCPF(String cpf);
 

@@ -13,7 +13,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import gov.goias.service.PaginacaoDTO;
 import gov.to.dominio.SituacaoPontuacaoNota;
+import gov.to.dto.PontuacaoDTO;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.filtro.FiltroPontuacaoBonusToLegal;
@@ -98,7 +100,7 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 	}
 
 	@Override
-	public List<Map<String, Object>> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page) {
+	public PaginacaoDTO<PontuacaoDTO> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page) {
 		
 		FiltroPontuacaoToLegal filtro = new FiltroPontuacaoToLegal();
 		
@@ -107,25 +109,49 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 		
 		List<PontuacaoToLegal> resultList = this.pesquisar(filtro, "notaFiscalToLegal");
 		
-        List<Map<String, Object>> listOfMapResults = new ArrayList<>();
+		PaginacaoDTO<PontuacaoDTO> pag = new PaginacaoDTO<>();
+		
+		pag.setCount(resultList.size());
+		
+        List<PontuacaoDTO> listPontuacaoDTO = new ArrayList<>();
         
-        for(PontuacaoToLegal pontuacao : resultList) {
-        	
-            Map<String, Object> mapResults = new HashMap<>();
+        int inicio = calcInicio(page, max);
+	    int fim = calcPagFim(page, max);
+        
+	    for (int i=inicio; i <= fim; i++){
+			
+	    	 PontuacaoDTO pontDTO = new PontuacaoDTO();
+			
+			if (i == resultList.size()){
+				break;
+			}
+			
+			PontuacaoToLegal pontuacao = resultList.get(i);
+			
+			pontDTO.setCnpj(pontuacao.getNotaFiscalToLegal().getCnpj());
+			pontDTO.setEstabelecimento(pontuacao.getNotaFiscalToLegal().getRazaoSocial());
+			pontDTO.setNumero(pontuacao.getNotaFiscalToLegal().getNumNota());
+			pontDTO.setEmissao(pontuacao.getNotaFiscalToLegal().getDataEmissao());
+			pontDTO.setRegistro("");
+			pontDTO.setValor(pontuacao.getNotaFiscalToLegal().getValor());
+			pontDTO.setQtdePontos(pontuacao.getQntPonto());
             
-            mapResults.put("cnpj", pontuacao.getNotaFiscalToLegal().getCnpj());
-            mapResults.put("estabelecimento", pontuacao.getNotaFiscalToLegal().getRazaoSocial());
-            mapResults.put("numero", pontuacao.getNotaFiscalToLegal().getNumNota());
-            mapResults.put("emissao", pontuacao.getNotaFiscalToLegal().getDataEmissao());
-            mapResults.put("registro", "");
-            mapResults.put("valor", pontuacao.getNotaFiscalToLegal().getValor());
-            mapResults.put("qtdePontos", pontuacao.getQntPonto());
-            mapResults.put("status", "");
-            mapResults.put("detalhe", "") ;
-            listOfMapResults.add(mapResults);
+            listPontuacaoDTO.add(pontDTO);
         }
+	    
+	    pag.setList(listPontuacaoDTO);
         
-		return listOfMapResults;
+		return pag;
+	}
+	
+	private static int calcPagFim(Integer page, Integer max) {
+		
+		return (calcInicio(page, max) + max) -1;
+	}
+
+	private static int calcInicio(Integer page, Integer max) {
+		
+		return (page * max);
 	}
 
 	@Override

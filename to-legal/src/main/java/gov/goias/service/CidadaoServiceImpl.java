@@ -18,6 +18,7 @@ import gov.goias.exceptions.NFGException;
 import gov.goias.util.Encrypter;
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.dominio.SituacaoUsuario;
+import gov.to.dto.PontuacaoDTO;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.ContribuinteToLegal;
 import gov.to.entidade.EnderecoToLegal;
@@ -27,6 +28,7 @@ import gov.to.entidade.PessoaFisicaToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.entidade.UsuarioToLegal;
+import gov.to.filtro.FiltroContribuinteToLegal;
 import gov.to.filtro.FiltroNotaEmpresaToLegal;
 import gov.to.filtro.FiltroNotaFiscalToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
@@ -73,7 +75,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 	private NotaEmpresaService notaEmpresaService;
 	
 	@Autowired
-	private GenericService<ContribuinteToLegal, Long> genericServiceContribuinte;
+	private GenericService<ContribuinteToLegal, String> genericServiceContribuinte;
 	
 	public PessoaParticipanteDTO consultaWebSeviceReceita(String cpf){
 		
@@ -231,7 +233,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 		
 		for (NotaEmpresaToLegal nto : listNotaEmpresa){
 			
-			ContribuinteToLegal contribuinte = genericServiceContribuinte.getById(ContribuinteToLegal.class, nto.getId());
+			ContribuinteToLegal contribuinte = genericServiceContribuinte.getById(ContribuinteToLegal.class, FiltroContribuinteToLegal.inscricaoEstadualFormat(Integer.valueOf(nto.getInscricaoEstadual())));
 			
 			DTOMinhasNotas dto = new DTOMinhasNotas();
 			PontuacaoToLegal pontuacao = pontuacaoPorIdNotaEmpresa(listNotaToLegalPontuada, nto.getId());
@@ -301,6 +303,16 @@ public class CidadaoServiceImpl implements CidadaoService{
 		return list;
 	}
 	
+	private static int calcPagFim(Integer page, Integer max) {
+		
+		return (calcInicio(page, max) + max) -1;
+	}
+
+	private static int calcInicio(Integer page, Integer max) {
+		
+		return (page * max);
+	}
+	
 	private PontuacaoToLegal pontuacaoPorIdNotaEmpresa(List<PontuacaoToLegal> listNotaToLegalPontuada, Long idNotaEmpresa) {
 
 		if (listNotaToLegalPontuada == null){
@@ -309,7 +321,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 		
 		for (PontuacaoToLegal pontuacao : listNotaToLegalPontuada){
 			
-			if (pontuacao.getNotaFiscalEmpresaToLegal().getId().equals(idNotaEmpresa)){
+			if (pontuacao.getNotaFiscalEmpresaToLegal() != null && pontuacao.getNotaFiscalEmpresaToLegal().getId().equals(idNotaEmpresa)){
 				return pontuacao;
 			}
 		}
@@ -325,7 +337,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 		
 		for (PontuacaoToLegal pontuacao : listNotaToLegalPontuada){
 			
-			if (pontuacao.getNotaFiscalToLegal().getId().equals(idNota)){
+			if (pontuacao.getNotaFiscalToLegal() != null && pontuacao.getNotaFiscalToLegal().getId().equals(idNota)){
 				return pontuacao;
 			}
 		}
@@ -369,7 +381,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 	}
 
 	@Override
-	public List<DTOMinhasNotas> documentosFiscaisPorCpf(String cpfFiltro, Date dataInicial, Date dataFinal, Integer max, Integer page) {
+	public PaginacaoDTO<DTOMinhasNotas> documentosFiscaisPorCpf(String cpfFiltro, Date dataInicial, Date dataFinal, Integer max, Integer page) {
 		
 		DataFiltroBetween dataFiltro = new DataFiltroBetween();
 		
@@ -390,7 +402,34 @@ public class CidadaoServiceImpl implements CidadaoService{
 		
 		Integer ultimoSorteio = sorteioToLegalService.ultimoSorteio();
 		
-		return converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada,ultimoSorteio);
+		List<DTOMinhasNotas> list = converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada,ultimoSorteio);
+		
+		list.addAll(concerteNotaEmpresaParaDTO(cpfFiltro,listNotaToLegalPontuada,ultimoSorteio));
+		
+		int inicio = calcInicio(page, max);
+	    int fim = calcPagFim(page, max);
+	    
+	    List<DTOMinhasNotas> listPg = new ArrayList<>();
+        
+	    for (int i=inicio; i <= fim; i++){
+			
+	    	 PontuacaoDTO pontDTO = new PontuacaoDTO();
+			
+			if (i == list.size()){
+				break;
+			}
+			
+			DTOMinhasNotas nota = list.get(i);
+			
+			listPg.add(nota);
+	    }
+	    
+	    PaginacaoDTO<DTOMinhasNotas> pg = new PaginacaoDTO<>();
+	    
+	    pg.setCount(list.size());
+	    pg.setList(listPg);
+		
+		return pg;
 	}
 	
 	@Override

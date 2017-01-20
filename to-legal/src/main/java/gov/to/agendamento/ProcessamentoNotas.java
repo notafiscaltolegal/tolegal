@@ -185,14 +185,17 @@ public class ProcessamentoNotas implements Job {
 	private void processamentoNotas(SorteioToLegal sorteioToLegal) {
     	
     	StringBuilder sql = new StringBuilder();
-    	String dataInicioSorteio = "01/01/2016";
-    	String dataFimSorteio = "08/11/2016";
-    	String listChaveAcessoJaProcessadas = listarTodasChavesAcessoJaProcessadas(dataInicioSorteio, dataFimSorteio);
+    	String dataInicioSorteio = null;
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+		dataInicioSorteio = sdf.format(sorteioToLegal.getDataInicioSorteio());
+    	
+    	String listChaveAcessoJaProcessadas = listarTodasChavesAcessoJaProcessadas(dataInicioSorteio);
     	
     	sql.append(" select n.xnfeid AS id, XNFENNF AS numNota,XNFEEXNOME AS razaoSocial, XNFEDEMI AS dataEmissao, XNFETVNF AS valor, resultp.vlrp AS valorProdCfop, XNFEDCPF AS cpf, XNFEECNPJ AS cnpj from SIATDESV.nfexml n, ");
     	sql.append(" (SELECT sum(pnfevprod) as vlrp, xnfeid FROM SIATDESV.nfexmlpr GROUP BY xnfeid) resultp ");
     	sql.append(" WHERE n.xnfeid = resultp.xnfeid ");
-        sql.append(" AND n.XNFEDEMI >= to_date('"+dataInicioSorteio+"','dd/mm/yyyy') AND n.XNFEDEMI <= to_date('"+dataFimSorteio+"','dd/mm/yyyy') ");
+        sql.append(" AND n.XNFEDEMI >= to_date('"+dataInicioSorteio+"','dd/mm/yyyy') ");
         
         if (!listChaveAcessoJaProcessadas.isEmpty()){
         	 sql.append(" AND n.xnfeid not in ("+listChaveAcessoJaProcessadas+") ");
@@ -263,20 +266,18 @@ public class ProcessamentoNotas implements Job {
         }
 	}
 
-	private String listarTodasChavesAcessoJaProcessadas(String dataInicioSorteio, String dataFimSorteio) {
+	private String listarTodasChavesAcessoJaProcessadas(String dataInicioSorteio) {
 		
 		Date dataInicio = null;
-		Date dataFim = null;
 		
 		try {
 			SimpleDateFormat sd = new SimpleDateFormat("dd/mm/yyyy");
 			dataInicio = sd.parse(dataInicioSorteio);
-			dataFim = sd.parse(dataFimSorteio);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		
-		List<String> chavesAcesso = notaFiscalService.chaveAcessoPorDataEmissao(dataInicio, dataFim);
+		List<String> chavesAcesso = notaFiscalService.chaveAcessoPorDataEmissao(dataInicio);
 		
 		return formataLista(chavesAcesso);
 	}

@@ -29,5 +29,5 @@ public interface NotaFiscalToLegalService {
 
 	int totalNotasPorCpf(String cpf, Integer idSorteio);
 
-	List<String> chaveAcessoPorDataEmissao(Date dataInicio, Date dataFim);
+	List<String> chaveAcessoPorDataEmissao(Date dataInicio);
 }

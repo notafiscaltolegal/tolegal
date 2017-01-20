@@ -56,6 +56,7 @@ import gov.goias.util.ImageUtils;
 import gov.goias.util.TextUtils;
 import gov.goias.util.UtilReflexao;
 import gov.sefaz.util.Base64;
+import gov.to.dto.PontuacaoDTO;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.EnderecoToLegal;
 import gov.to.entidade.MunicipioToLegal;
@@ -721,12 +722,12 @@ public class CidadaoController extends BaseController {
     @RequestMapping("listarNotasCidadao/{page}")
     public @ResponseBody Map<String, Object> listarNotasCidadao(@PathVariable(value = "page") Integer page, String cpfFiltro, BindException bind) throws ParseException {
 
-    	List<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro);
-
-        Map<String, Object> resposta = new HashMap<String, Object>();
-        resposta.put("minhasNotas", docsFiscais);
+//    	List<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro);
+//
+//        Map<String, Object> resposta = new HashMap<String, Object>();
+//        resposta.put("minhasNotas", docsFiscais);
         
-        return resposta;
+        return listarNotasCidadaoEmDetalhe(page, cpfFiltro, null, null, bind);
     }
 
     @RequestMapping("viewMinhasNotasEmDetalhe")
@@ -748,16 +749,15 @@ public class CidadaoController extends BaseController {
         Date dataInicial = referenciaInicial != null && referenciaInicial.length() > 0 ? simpleDateFormat.parse(referenciaInicial) : null;
         Date dataFinal = referenciaFinal != null && referenciaFinal.length() > 0 ? simpleDateFormat.parse(referenciaFinal) : null;
 
-        List<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro, dataInicial, dataFinal, max, page);
+        PaginacaoDTO<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro, dataInicial, dataFinal, max, page);
 
-        Integer count = docsFiscais.size();
 
-        pagination.put("total", count);
+        pagination.put("total", docsFiscais.getCount());
         pagination.put("page", ++page);
         pagination.put("max", max);
 
         resposta.put("pagination", pagination);
-        resposta.put("minhasNotas", docsFiscais);
+        resposta.put("minhasNotas", docsFiscais.getList());
 
         return resposta;
     }
@@ -895,23 +895,19 @@ public class CidadaoController extends BaseController {
 
     @RequestMapping("listarPontosDasNotas/{page}")
     public @ResponseBody Map<String, Object> listarPontosDasNotas(@PathVariable(value = "page") Integer page, Integer idSorteio, BindException bind) throws UnsupportedEncodingException {
-    	 Integer max = 7;
-         Integer count = 0;
+    	 Integer max = 10;
          String cpf = getCidadaoLogado().getGenPessoaFisica().getCpf();
 
-         List<Map<String, Object>> dadosPontuacaoNotas = pontuacaoToLegalService.consultaPontuacaoDocsFiscaisPorSorteio(idSorteio, cpf, max, page);
-         if (dadosPontuacaoNotas.size()>0){
-             count =  dadosPontuacaoNotas.size();
-         }
-
+         PaginacaoDTO<PontuacaoDTO> dadosPontuacaoNotas = pontuacaoToLegalService.consultaPontuacaoDocsFiscaisPorSorteio(idSorteio, cpf, max, page);
+         
          Map<String, Object> resposta = new HashMap<String, Object>();
          Map<String, Object> pagination = new HashMap<String, Object>();
 
-         pagination.put("total", count);
+         pagination.put("total", dadosPontuacaoNotas.getCount());
          pagination.put("page", ++page);
          pagination.put("max", max);
 
-         resposta.put("dadosPontuacaoNotas", dadosPontuacaoNotas);
+         resposta.put("dadosPontuacaoNotas", dadosPontuacaoNotas.getList());
          resposta.put("pagination", pagination);
 
          return resposta;

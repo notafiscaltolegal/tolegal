@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.ejb.Local;
 
+import gov.goias.service.PaginacaoDTO;
+import gov.to.dto.PontuacaoDTO;
 import gov.to.entidade.PontuacaoToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
 
@@ -31,7 +33,7 @@ public interface PontuacaoToLegalService {
 	
 	int totalNotasSorteioPorCpf(String cpf, Integer idSorteio);
 
-	List<Map<String, Object>> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page);
+	PaginacaoDTO<PontuacaoDTO> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page);
 
 	List<Map<String, Object>> pontuacaoBonus(Integer idSorteio, String cpf, Integer max, Integer page);
 

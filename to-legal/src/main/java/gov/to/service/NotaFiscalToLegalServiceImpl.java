@@ -54,14 +54,13 @@ public class NotaFiscalToLegalServiceImpl implements NotaFiscalToLegalService{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> chaveAcessoPorDataEmissao(Date dataInicio, Date dataFim) {
+	public List<String> chaveAcessoPorDataEmissao(Date dataInicio) {
 		
 		SimpleDateFormat sp = new SimpleDateFormat("dd/mm/yyyy");
 		
 		String dtInicio = sp.format(dataInicio);
-		String dtFim = sp.format(dataFim);
 		
-		Query qr = reposiroty.getSession().createSQLQuery("SELECT chave_acesso FROM TB_NOTA_LEGAL WHERE data_emissao >= to_date('"+dtInicio+"','dd/mm/yyyy') AND data_emissao <= to_date('"+dtFim+"','dd/mm/yyyy') ");
+		Query qr = reposiroty.getSession().createSQLQuery("SELECT chave_acesso FROM TB_NOTA_LEGAL WHERE data_emissao >= to_date('"+dtInicio+"','dd/mm/yyyy') ");
 		
 		qr.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		
