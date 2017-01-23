@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
 import gov.goias.entidades.RegraSorteio;
@@ -33,10 +34,15 @@ public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> i
 	@EJB
 	private PontuacaoToLegalService pontuacaoToLegalService;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<RegraSorteio> listRegraSorteioDivulgaResultado() {
 		
-		List<SorteioToLegal> listSorteio = genericPersistence.listarTodos(SorteioToLegal.class);
+		Criteria criteria = getSession().createCriteria(SorteioToLegal.class);
+		
+		criteria.addOrder(Order.desc("numeroSorteio"));
+		
+		List<SorteioToLegal> listSorteio = (List<SorteioToLegal>)criteria.list();
 		List<RegraSorteio> list = new ArrayList<>();
 		
 		for (SorteioToLegal stl : listSorteio){

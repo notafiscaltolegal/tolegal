@@ -393,18 +393,23 @@ public class CidadaoServiceImpl implements CidadaoService{
 		filtro.setCpf(cpfFiltro);
 		filtro.setDataFiltro(dataFiltro);
 		
-		FiltroPontuacaoToLegal filtroPontuacao = new FiltroPontuacaoToLegal();
-		filtroPontuacao.setCpf(cpfFiltro);
-		filtroPontuacao.setDataFiltro(dataFiltro);
+		FiltroPontuacaoToLegal filtroPontuacaoEmpresa = new FiltroPontuacaoToLegal();
+		filtroPontuacaoEmpresa.setCpfEmpresa(cpfFiltro);
+		filtroPontuacaoEmpresa.setDataFiltro(dataFiltro);
+		
+		FiltroPontuacaoToLegal filtroPontuacaoNota = new FiltroPontuacaoToLegal();
+		filtroPontuacaoNota.setCpf(cpfFiltro);
+		filtroPontuacaoNota.setDataFiltro(dataFiltro);
 		
 		List<NotaFiscalToLegal> listNotaToLegal = notaFiscalToLegalService.pesquisar(filtro);
-		List<PontuacaoToLegal> listNotaToLegalPontuada = pontuacaoToLegalService.pesquisar(filtroPontuacao,"notaFiscalToLegal","sorteioToLegal");
+		List<PontuacaoToLegal> listNotaToLegalPontuada = pontuacaoToLegalService.pesquisar(filtroPontuacaoNota,"notaFiscalToLegal","sorteioToLegal");
+		List<PontuacaoToLegal> listNotaToLegalEmpresaPontuada = pontuacaoToLegalService.pesquisar(filtroPontuacaoEmpresa,"sorteioToLegal","notaFiscalEmpresaToLegal");
 		
 		Integer ultimoSorteio = sorteioToLegalService.ultimoSorteio();
 		
 		List<DTOMinhasNotas> list = converteParaDtoNota(listNotaToLegal, listNotaToLegalPontuada,ultimoSorteio);
 		
-		list.addAll(concerteNotaEmpresaParaDTO(cpfFiltro,listNotaToLegalPontuada,ultimoSorteio));
+		list.addAll(concerteNotaEmpresaParaDTO(cpfFiltro,listNotaToLegalEmpresaPontuada,ultimoSorteio));
 		
 		int inicio = calcInicio(page, max);
 	    int fim = calcPagFim(page, max);
@@ -412,8 +417,6 @@ public class CidadaoServiceImpl implements CidadaoService{
 	    List<DTOMinhasNotas> listPg = new ArrayList<>();
         
 	    for (int i=inicio; i <= fim; i++){
-			
-	    	 PontuacaoDTO pontDTO = new PontuacaoDTO();
 			
 			if (i == list.size()){
 				break;

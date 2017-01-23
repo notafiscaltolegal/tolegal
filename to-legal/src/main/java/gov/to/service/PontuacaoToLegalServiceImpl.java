@@ -16,11 +16,14 @@ import org.hibernate.criterion.Restrictions;
 import gov.goias.service.PaginacaoDTO;
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.dto.PontuacaoDTO;
+import gov.to.entidade.ContribuinteToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
+import gov.to.filtro.FiltroContribuinteToLegal;
 import gov.to.filtro.FiltroPontuacaoBonusToLegal;
 import gov.to.filtro.FiltroPontuacaoToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
+import gov.to.persistencia.GenericPersistence;
 
 @Stateless
 public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
@@ -30,6 +33,9 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 	
 	@EJB
 	private ConsultasDaoJpa<PontuacaoBonusToLegal> reposirotyPontuacaoBonus;
+	
+	@EJB
+	private GenericPersistence<ContribuinteToLegal, String> persistenceContribuinte;
 	
 	@Override
 	public List<PontuacaoToLegal> pesquisar(FiltroPontuacaoToLegal filtro, String... hbInitialize) {
@@ -57,7 +63,21 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 			soma = BigInteger.ZERO.longValue();
 		}
 		
-		return soma.intValue() + totalBonus(cpf, idSorteio);
+		Criteria criteriaNotaEmpresa = reposiroty.getSession().createCriteria(PontuacaoToLegal.class);
+		
+		Long somaNotaEmpresa = (Long) criteriaNotaEmpresa
+				.setProjection(Projections.sum("qntPonto"))
+				.createAlias("sorteioToLegal", "sorteioToLegal")
+				.createAlias("notaFiscalEmpresaToLegal", "notaFiscalEmpresaToLegal")
+				.add(Restrictions.eq("notaFiscalEmpresaToLegal.cpfDestinatario", cpf)) 
+				.add(Restrictions.eq("sorteioToLegal.id", idSorteio.longValue())) 
+				.uniqueResult();
+		
+		if (somaNotaEmpresa == null){
+			somaNotaEmpresa = BigInteger.ZERO.longValue();
+		}
+		
+		return soma.intValue() + somaNotaEmpresa.intValue() + totalBonus(cpf, idSorteio);
 	}
 	
 	private int totalBonus(String cpf, Integer idSorteio) {
@@ -103,11 +123,17 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 	public PaginacaoDTO<PontuacaoDTO> consultaPontuacaoDocsFiscaisPorSorteio(Integer idSorteio, String cpf, Integer max, Integer page) {
 		
 		FiltroPontuacaoToLegal filtro = new FiltroPontuacaoToLegal();
-		
 		filtro.setCpf(cpf);
 		filtro.setIdSorteio(idSorteio.longValue());
 		
+		FiltroPontuacaoToLegal filtroNotaEmpresa = new FiltroPontuacaoToLegal();
+		filtroNotaEmpresa.setCpfEmpresa(cpf);
+		filtroNotaEmpresa.setIdSorteio(idSorteio.longValue());
+		
 		List<PontuacaoToLegal> resultList = this.pesquisar(filtro, "notaFiscalToLegal");
+		List<PontuacaoToLegal> resultListNotaEmpresa = this.pesquisar(filtroNotaEmpresa, "notaFiscalEmpresaToLegal");
+		
+		resultList.addAll(resultListNotaEmpresa);
 		
 		PaginacaoDTO<PontuacaoDTO> pag = new PaginacaoDTO<>();
 		
@@ -128,12 +154,26 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 			
 			PontuacaoToLegal pontuacao = resultList.get(i);
 			
-			pontDTO.setCnpj(pontuacao.getNotaFiscalToLegal().getCnpj());
-			pontDTO.setEstabelecimento(pontuacao.getNotaFiscalToLegal().getRazaoSocial());
-			pontDTO.setNumero(pontuacao.getNotaFiscalToLegal().getNumNota());
-			pontDTO.setEmissao(pontuacao.getNotaFiscalToLegal().getDataEmissao());
+			if (pontuacao.getNotaFiscalToLegal() != null){
+				pontDTO.setCnpj(pontuacao.getNotaFiscalToLegal().getCnpj());
+				pontDTO.setEstabelecimento(pontuacao.getNotaFiscalToLegal().getRazaoSocial());
+				pontDTO.setNumero(pontuacao.getNotaFiscalToLegal().getNumNota());
+				pontDTO.setEmissao(pontuacao.getNotaFiscalToLegal().getDataEmissao());
+				pontDTO.setValor(pontuacao.getNotaFiscalToLegal().getValor());
+			}
+			
+			if (pontuacao.getNotaFiscalEmpresaToLegal()!= null){
+				
+				ContribuinteToLegal contribuinte = persistenceContribuinte.getById(ContribuinteToLegal.class, FiltroContribuinteToLegal.inscricaoEstadualFormat(Integer.valueOf(pontuacao.getNotaFiscalEmpresaToLegal().getInscricaoEstadual())));
+				
+				pontDTO.setCnpj(contribuinte.getCnpj());
+				pontDTO.setEstabelecimento(contribuinte.getRazaoSocial());
+				pontDTO.setNumero(pontuacao.getNotaFiscalEmpresaToLegal().getNumeroDocumento());
+				pontDTO.setEmissao(pontuacao.getNotaFiscalEmpresaToLegal().getDataEmissao());
+				pontDTO.setValor(pontuacao.getNotaFiscalEmpresaToLegal().getValor());
+			}
+			
 			pontDTO.setRegistro("");
-			pontDTO.setValor(pontuacao.getNotaFiscalToLegal().getValor());
 			pontDTO.setQtdePontos(pontuacao.getQntPonto());
             
             listPontuacaoDTO.add(pontDTO);

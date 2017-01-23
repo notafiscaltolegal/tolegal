@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.quartz.Job;
@@ -185,12 +186,9 @@ public class ProcessamentoNotas implements Job {
 	private void processamentoNotas(SorteioToLegal sorteioToLegal) {
     	
     	StringBuilder sql = new StringBuilder();
-    	String dataInicioSorteio = null;
+    	String dataInicioSorteio = DateFormatUtils.format(sorteioToLegal.getDataInicioSorteio(), "dd/MM/yyyy");
     	
-    	SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-		dataInicioSorteio = sdf.format(sorteioToLegal.getDataInicioSorteio());
-    	
-    	String listChaveAcessoJaProcessadas = listarTodasChavesAcessoJaProcessadas(dataInicioSorteio);
+    	String listChaveAcessoJaProcessadas = listarTodasChavesAcessoJaProcessadas(sorteioToLegal.getDataInicioSorteio());
     	
     	sql.append(" select n.xnfeid AS id, XNFENNF AS numNota,XNFEEXNOME AS razaoSocial, XNFEDEMI AS dataEmissao, XNFETVNF AS valor, resultp.vlrp AS valorProdCfop, XNFEDCPF AS cpf, XNFEECNPJ AS cnpj from SIATDESV.nfexml n, ");
     	sql.append(" (SELECT sum(pnfevprod) as vlrp, xnfeid FROM SIATDESV.nfexmlpr GROUP BY xnfeid) resultp ");
@@ -246,11 +244,9 @@ public class ProcessamentoNotas implements Job {
 		
 		int i = 1;
 		
-		List<String> cpfsBloqueados = bloqueioCpfToLegalService.cpfsBloqueados();
-        
         for (NotaFiscalToLegal nota : results){
         	
-        	if (cpfsBloqueados != null && cpfsBloqueados.contains(nota.getCpf())){
+        	if (cpfBloqueado(nota.getCpf())){
         		System.out.println("#CPF BLOQUEADO# CPF:"+nota.getCpf()+" Data:"+new Date());
         		continue;
         	}
@@ -266,18 +262,9 @@ public class ProcessamentoNotas implements Job {
         }
 	}
 
-	private String listarTodasChavesAcessoJaProcessadas(String dataInicioSorteio) {
+	private String listarTodasChavesAcessoJaProcessadas(Date dataInicioSorteio) {
 		
-		Date dataInicio = null;
-		
-		try {
-			SimpleDateFormat sd = new SimpleDateFormat("dd/mm/yyyy");
-			dataInicio = sd.parse(dataInicioSorteio);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		List<String> chavesAcesso = notaFiscalService.chaveAcessoPorDataEmissao(dataInicio);
+		List<String> chavesAcesso = notaFiscalService.chaveAcessoPorDataEmissao(dataInicioSorteio);
 		
 		return formataLista(chavesAcesso);
 	}
@@ -319,11 +306,9 @@ public class ProcessamentoNotas implements Job {
 		filtroNotaEmpresa.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO);
 		List<NotaEmpresaToLegal> listNotaEmpresa = notaEmpresaService.pesquisar(filtroNotaEmpresa);
 		
-		List<String> cpfsBloqueados = bloqueioCpfToLegalService.cpfsBloqueados();
-		
 		for (NotaEmpresaToLegal nota : listNotaEmpresa){
 			
-			if (cpfsBloqueados != null && cpfsBloqueados.contains(nota.getCpfDestinatario())){
+			if (cpfBloqueado(nota.getCpfDestinatario())){
 				continue;
 			}
 			
@@ -336,6 +321,24 @@ public class ProcessamentoNotas implements Job {
 			nota.setSituacaoPontuacaoNota(SituacaoPontuacaoNota.PONTUADO);
 			notaEmpresaPersistence.merge(nota);
 		}
+	}
+
+	private boolean cpfBloqueado(String cpf) {
+		
+		List<String> cpfsBloqueados = formatCPF(bloqueioCpfToLegalService.cpfsBloqueados());
+		
+		return cpfsBloqueados != null && cpfsBloqueados.contains(cpf);
+	}
+
+	private List<String> formatCPF(List<String> cpfsBloqueados) {
+		
+		List<String> list = new ArrayList<>();
+		
+		for(String cpf : cpfsBloqueados){
+			list.add(cpf.replaceAll("[^0-9]", ""));
+		}
+		
+		return list;
 	}
 
 	private void processaNotaLegalParaGerarPontuacao(SorteioToLegal sorteioToLegal) {

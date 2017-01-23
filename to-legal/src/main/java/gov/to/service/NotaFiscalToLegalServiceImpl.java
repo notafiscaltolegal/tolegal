@@ -1,6 +1,6 @@
 package gov.to.service;
 
-import java.text.SimpleDateFormat;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
@@ -49,16 +50,33 @@ public class NotaFiscalToLegalServiceImpl implements NotaFiscalToLegalService{
 				.add(Restrictions.eq("notaFiscalToLegal.cpf", cpf)) 
 				.uniqueResult();
 		
-		return count.intValue();
+		Criteria criteriaNotaEmpresa = reposiroty.getSession().createCriteria(PontuacaoToLegal.class);
+		
+		Long countNotaEmpresa = (Long) criteriaNotaEmpresa
+				.setProjection(Projections.count("id"))
+				.createAlias("sorteioToLegal", "sorteioToLegal")
+				.createAlias("notaFiscalEmpresaToLegal", "notaFiscalEmpresaToLegal")
+				.add(Restrictions.eq("sorteioToLegal.id", Long.valueOf(idSorteio))) 
+				.add(Restrictions.eq("notaFiscalEmpresaToLegal.cpfDestinatario", cpf)) 
+				.uniqueResult();
+		
+		if (count == null){
+			count = BigInteger.ZERO.longValue();
+		}
+		
+		if (countNotaEmpresa == null){
+			countNotaEmpresa = BigInteger.ZERO.longValue();
+		}
+		
+		
+		return count.intValue() + countNotaEmpresa.intValue();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> chaveAcessoPorDataEmissao(Date dataInicio) {
 		
-		SimpleDateFormat sp = new SimpleDateFormat("dd/mm/yyyy");
-		
-		String dtInicio = sp.format(dataInicio);
+		String dtInicio = DateFormatUtils.format(dataInicio, "dd/MM/yyyy");
 		
 		Query qr = reposiroty.getSession().createSQLQuery("SELECT chave_acesso FROM TB_NOTA_LEGAL WHERE data_emissao >= to_date('"+dtInicio+"','dd/mm/yyyy') ");
 		

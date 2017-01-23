@@ -144,6 +144,15 @@ public class ConsultasDaoJpa<T> extends AbstractModel{
 			Field field = UtilReflexao.getCampoComAnotacao(filtroDTO.getClass(), EntityProperty.class, propriedade);
 
 			if (field != null && valor != null) {
+				
+				if (valor instanceof DataFiltroBetween){
+					
+					DataFiltroBetween dt = (DataFiltroBetween) valor;
+					
+					if (dt.getDataInicio() == null || dt.getDataFim() == null){
+						continue;
+					}
+				}
 
 				String join = field.getAnnotation(EntityProperty.class).value();
 				boolean isPesquisaExata = field.getAnnotation(EntityProperty.class).pesquisaExata();
