@@ -59,11 +59,13 @@ import gov.sefaz.util.Base64;
 import gov.to.dto.PontuacaoDTO;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.EnderecoToLegal;
+import gov.to.entidade.GanhadorSorteioToLegal;
 import gov.to.entidade.MunicipioToLegal;
 import gov.to.entidade.UsuarioToLegal;
 import gov.to.goias.DocumentoFiscalReclamadoToLegal;
 import gov.to.goias.ReclamacaoLogDTO;
 import gov.to.service.BilheteToLegalService;
+import gov.to.service.GanhadorToLegalService;
 import gov.to.service.GenericService;
 import gov.to.service.PontuacaoToLegalService;
 import gov.to.service.ReclamacaoLogToLegalService;
@@ -110,6 +112,9 @@ public class CidadaoController extends BaseController {
 	
 	@Autowired
 	private UsuarioToLegalService usuarioToLegalService;
+	
+	@Autowired
+	private GanhadorToLegalService ganhadorToLegalService;
 	
 	@Autowired
 	private GenericService<MunicipioToLegal, Long> genericMunicipioService;
@@ -709,12 +714,15 @@ public class CidadaoController extends BaseController {
     }
 
     @RequestMapping("listarPremiacao/{page}")
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public
-    @ResponseBody
-    Map<String, Object> listarPremiacao(@PathVariable(value = "page") Integer page) throws ParseException {
-        Integer max = 5;
+    public @ResponseBody Map<String, Object> listarPremiacao(@PathVariable(value = "page") Integer page, Integer idSorteio, BindException bind) throws ParseException {
         Map<String, Object> resposta = new HashMap<String, Object>();
+        
+        PessoaParticipante cidadaoLogado = getCidadaoLogado();
+        
+        List<GanhadorSorteioToLegal> ganhador = ganhadorToLegalService.ganhadorPorSorteio(idSorteio, cidadaoLogado.getGenPessoaFisica().getCpf());
+        
+        resposta.put("resultadoGanhadorSorteio", ganhador);
+        
         return resposta;
     }
 
@@ -846,8 +854,11 @@ public class CidadaoController extends BaseController {
     carregaDadosDaPremiacao(Integer idSorteio){
     	Map<String, Object> resposta = new HashMap<>();
         PessoaParticipante cidadaoLogado = getCidadaoLogado();
-
-        resposta.put("isUsuarioPremiado", cidadaoService.usuarioPremiado(cidadaoLogado.getId()));
+        
+        List<GanhadorSorteioToLegal> ganhador = ganhadorToLegalService.ganhadorPorSorteio(idSorteio, cidadaoLogado.getGenPessoaFisica().getCpf());
+        
+        resposta.put("isUsuarioPremiado", !ganhador.isEmpty());
+        
         return resposta;
     }
 

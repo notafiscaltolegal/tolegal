@@ -1,6 +1,7 @@
 package gov.to.service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -44,27 +45,22 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 	@Override
 	public Integer qntMensagemNaoLidaCidadao(String cpf) {
 		
-		List<Long> listMensagensCidadao = mensagemVisuCidadaoService.ids(cpf);
-		List<Long> listMensagemCidadaoSefaz = idsCidadao();
+		atualizaMensagemCidadaoComSefaz(cpf);
 		
-		if (listMensagemCidadaoSefaz == null || listMensagemCidadaoSefaz.isEmpty()){
+		Long qnt = mensagemVisuCidadaoService.qntMensagemAguardandoLeitura(cpf);
+		
+		if (qnt == null || qnt == BigInteger.ZERO.intValue()){
 			return null;
 		}
 		
-		if (listMensagensCidadao == null || listMensagensCidadao.isEmpty()){
-			return listMensagemCidadaoSefaz.size();
-		}
-		
-		if ((listMensagemCidadaoSefaz.size() - listMensagensCidadao.size()) == BigInteger.ZERO.intValue()){
-			return null;
-		}
-		
-		return listMensagemCidadaoSefaz.size() - listMensagensCidadao.size();
+		return qnt.intValue();
 	}
 	
-	public List<Long> idsCidadao() {
+	public void atualizaMensagemCidadaoComSefaz(String cpf) {
 		
 		Criteria criteria = getSession().createCriteria(MensagemSefazToLegal.class);
+		
+		Criteria criteriaCidadao = getSession().createCriteria(MensagemVisualizadaCidadaoToLegal.class);
 		
 		@SuppressWarnings("unchecked")
 		List<Long> ids = (List<Long>) criteria
@@ -73,12 +69,45 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				.add(Restrictions.eq("destinatario", DestinatarioEnum.CIDADAO))
 				.list();
 		
-		return ids;
+		if (ids.isEmpty()){
+			return;
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<MensagemVisualizadaCidadaoToLegal> idsMsgCidadao = (List<MensagemVisualizadaCidadaoToLegal>) criteriaCidadao
+				.createAlias("msgSefazToLegal", "msgSefazToLegal")
+				.add(Restrictions.in("msgSefazToLegal.id", ids))
+				.list();
+		
+		List<Long> idsCidadao = new ArrayList<>();
+		
+		for (MensagemVisualizadaCidadaoToLegal msgCidadao : idsMsgCidadao){
+			idsCidadao.add(msgCidadao.getId());
+		}
+		
+		for (Long idMsgSefaz : ids){
+			
+			if (!idsCidadao.contains(idMsgSefaz)){
+				
+				MensagemVisualizadaCidadaoToLegal msg = new MensagemVisualizadaCidadaoToLegal();
+				MensagemSefazToLegal msgSefaz = serviceSefazMsg.getById(MensagemSefazToLegal.class, idMsgSefaz);
+				
+				msg.setCpf(cpf);
+				msg.setDataLeitura(msgSefaz.getDataEnvio());
+				msg.setMensagem(msgSefaz.getMensagem());
+				msg.setTitulo(msgSefaz.getTitulo());
+				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
+				
+				serviceCidadaoMsg.salvar(msg);
+			}
+		}
 	}
 	
-	private List<Long> idsEmpresa() {
+	public void atualizaMensagemEmpresaComSefaz(String inscricaoEstadual) {
 		
 		Criteria criteria = getSession().createCriteria(MensagemSefazToLegal.class);
+		
+		Criteria criteriaCidadao = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
 		
 		@SuppressWarnings("unchecked")
 		List<Long> ids = (List<Long>) criteria
@@ -87,83 +116,87 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				.add(Restrictions.eq("destinatario", DestinatarioEnum.EMPRESA))
 				.list();
 		
-		return ids;
-	}
-
-	@Override
-	public void gravarLeituraDasMensagens(String cpf) {
-		
-		List<Long> listMensagensCidadao = mensagemVisuCidadaoService.ids(cpf);
-		List<Long> listMensagemCidadaoSefaz = idsCidadao();
-		
-		if (listMensagemCidadaoSefaz == null || listMensagemCidadaoSefaz.isEmpty()){
+		if (ids.isEmpty()){
 			return;
 		}
 		
-		for (Long id : listMensagemCidadaoSefaz){
+		@SuppressWarnings("unchecked")
+		List<MensagemVisualizadaEmpresaToLegal> idsMsgEmpresa = (List<MensagemVisualizadaEmpresaToLegal>) criteriaCidadao
+				.createAlias("msgSefazToLegal", "msgSefazToLegal")
+				.add(Restrictions.in("msgSefazToLegal.id", ids))
+				.list();
+		
+		List<Long> idsEmpresa = new ArrayList<>();
+		
+		for (MensagemVisualizadaEmpresaToLegal msgCidadao : idsMsgEmpresa){
+			idsEmpresa.add(msgCidadao.getId());
+		}
+		
+		for (Long idMsgSefaz : ids){
 			
-			if (listMensagensCidadao != null && !listMensagensCidadao.contains(id)){
+			if (!idsEmpresa.contains(idMsgSefaz)){
 				
-				MensagemVisualizadaCidadaoToLegal msg = new MensagemVisualizadaCidadaoToLegal();
-				MensagemSefazToLegal msgSefaz = serviceSefazMsg.getById(MensagemSefazToLegal.class, id);
+				MensagemVisualizadaEmpresaToLegal msg = new MensagemVisualizadaEmpresaToLegal();
+				MensagemSefazToLegal msgSefaz = serviceSefazMsg.getById(MensagemSefazToLegal.class, idMsgSefaz);
 				
-				msg.setId(id);
-				msg.setCpf(cpf);
+				msg.setInscricaoEstadual(inscricaoEstadual);
 				msg.setDataLeitura(msgSefaz.getDataEnvio());
 				msg.setMensagem(msgSefaz.getMensagem());
 				msg.setTitulo(msgSefaz.getTitulo());
+				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
 				
-				serviceCidadaoMsg.salvar(msg);
+				this.serviceEmpresaMsg.salvar(msg);
 			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void gravarLeituraDasMensagens(String cpf) {
+		
+		Criteria criteria = getSession().createCriteria(MensagemVisualizadaCidadaoToLegal.class);
+		
+		List<MensagemVisualizadaCidadaoToLegal> msgs = (List<MensagemVisualizadaCidadaoToLegal>) criteria
+				.add(Restrictions.eq("situacao", SituacaoMensagem.AGUARDANDO_LEITURA))
+				.list();
+		
+		for (MensagemVisualizadaCidadaoToLegal msg : msgs){
+			
+			msg.setSituacao(SituacaoMensagem.LIDA);
+			
+			this.serviceCidadaoMsg.merge(msg);
 		}
 	}
 
 	@Override
 	public Integer qntMensagemNaoLidaEmpresa(String inscricaoEstadual) {
 		
-		List<Long> listMensagensEmpresa = mensagemVisuEmpresaToLegalService.ids(inscricaoEstadual);
-		List<Long> listMensagemEmpresaSefaz = idsEmpresa();
+		atualizaMensagemEmpresaComSefaz(inscricaoEstadual);
 		
-		if (listMensagemEmpresaSefaz == null || listMensagemEmpresaSefaz.isEmpty()){
+		Long qnt = mensagemVisuEmpresaToLegalService.qntMensagemAguardandoLeitura(inscricaoEstadual);
+		
+		if (qnt == null || qnt == BigInteger.ZERO.intValue()){
 			return null;
 		}
 		
-		if (listMensagensEmpresa == null || listMensagensEmpresa.isEmpty()){
-			return listMensagemEmpresaSefaz.size();
-		}
-		
-		if ((listMensagemEmpresaSefaz.size() - listMensagensEmpresa.size()) == BigInteger.ZERO.intValue()){
-			return null;
-		}
-		
-		return listMensagemEmpresaSefaz.size() - listMensagensEmpresa.size();
+		return qnt.intValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void gravarLeituraDasMensagensEmpresa(String inscricaoEstadual) {
 		
-		List<Long> listMensagensEmpresa = mensagemVisuEmpresaToLegalService.ids(inscricaoEstadual);
-		List<Long> listMensagemEmpresaSefaz = idsEmpresa();
+		Criteria criteria = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
 		
-		if (listMensagemEmpresaSefaz == null || listMensagemEmpresaSefaz.isEmpty()){
-			return;
-		}
+		List<MensagemVisualizadaEmpresaToLegal> msgs = (List<MensagemVisualizadaEmpresaToLegal>) criteria
+				.add(Restrictions.eq("situacao", SituacaoMensagem.AGUARDANDO_LEITURA))
+				.list();
 		
-		for (Long id : listMensagemEmpresaSefaz){
+		for (MensagemVisualizadaEmpresaToLegal msg : msgs){
 			
-			if (listMensagensEmpresa != null && !listMensagensEmpresa.contains(id)){
-				
-				MensagemVisualizadaEmpresaToLegal msg = new MensagemVisualizadaEmpresaToLegal();
-				MensagemSefazToLegal msgSefaz = serviceSefazMsg.getById(MensagemSefazToLegal.class, id);
-				
-				msg.setId(id);
-				msg.setInscricaoEstadual(inscricaoEstadual);
-				msg.setDataLeitura(msgSefaz.getDataEnvio());
-				msg.setMensagem(msgSefaz.getMensagem());
-				msg.setTitulo(msgSefaz.getTitulo());
-				
-				serviceEmpresaMsg.salvar(msg);
-			}
+			msg.setSituacao(SituacaoMensagem.LIDA);
+			
+			this.serviceEmpresaMsg.merge(msg);
 		}
 	}
 }

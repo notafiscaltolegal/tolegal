@@ -4,9 +4,11 @@ public enum SituacaoMensagem {
 
 	ENVIADA("Enviada"),
 	
-	AGENDADA("Agendada"),
+	LIDA("Lida"),
 	
-	AGUARDANDO_ENVIO("Aguardando Envio");
+	AGUARDANDO_ENVIO("Aguardando Envio"), 
+	
+	AGUARDANDO_LEITURA("Aguardando Leitura");
 	
 	private String descricao;
 	

@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 
 import gov.goias.entidades.Mensagem;
 import gov.goias.service.PaginacaoDTO;
+import gov.to.dominio.SituacaoMensagem;
 import gov.to.entidade.MensagemVisualizadaEmpresaToLegal;
 import gov.to.filtro.FiltroMensagemVisuEmpresaToLegalDTO;
 import gov.to.persistencia.ConsultasDaoJpa;
@@ -22,20 +23,6 @@ public class MensagemVisuEmpresaToLegalServiceImpl extends ConsultasDaoJpa<Mensa
 	@Override
 	public List<MensagemVisualizadaEmpresaToLegal> pesquisar(FiltroMensagemVisuEmpresaToLegalDTO filtro, String... hbInitialize) {
 		return filtrarPesquisa(filtro, MensagemVisualizadaEmpresaToLegal.class, hbInitialize);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Long> ids(String inscricaoEstadual) {
-		
-		Criteria criteria = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
-		
-		List<Long> ids = (List<Long>) criteria
-				.setProjection(Projections.property("id"))
-				.add(Restrictions.eq("inscricaoEstadual", inscricaoEstadual))
-				.list();
-		
-		return ids;
 	}
 
 	@Override
@@ -91,5 +78,19 @@ public class MensagemVisuEmpresaToLegalServiceImpl extends ConsultasDaoJpa<Mensa
 	private static int calcInicio(Integer page, Integer max) {
 		
 		return (page * max);
+	}
+
+	@Override
+	public Long qntMensagemAguardandoLeitura(String inscricaoEstadual) {
+		
+		Criteria criteria = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
+		
+		Long ids = (Long) criteria
+				.setProjection(Projections.count("id"))
+				.add(Restrictions.eq("inscricaoEstadual", inscricaoEstadual))
+				.add(Restrictions.eq("situacao", SituacaoMensagem.AGUARDANDO_LEITURA))
+				.uniqueResult();
+		
+		return ids;
 	}
 }

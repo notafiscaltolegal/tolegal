@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 
 import gov.goias.entidades.Mensagem;
 import gov.goias.service.PaginacaoDTO;
+import gov.to.dominio.SituacaoMensagem;
 import gov.to.entidade.MensagemVisualizadaCidadaoToLegal;
 import gov.to.filtro.FiltroMensagemVisuCidadaoToLegalDTO;
 import gov.to.persistencia.ConsultasDaoJpa;
@@ -24,16 +25,16 @@ public class MensagemVisuCidadaoToLegalServiceImpl extends ConsultasDaoJpa<Mensa
 		return filtrarPesquisa(filtro, MensagemVisualizadaCidadaoToLegal.class, hbInitialize);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Long> ids(String cpf) {
+	public Long qntMensagemAguardandoLeitura(String cpf) {
 		
 		Criteria criteria = getSession().createCriteria(MensagemVisualizadaCidadaoToLegal.class);
 		
-		List<Long> ids = (List<Long>) criteria
-				.setProjection(Projections.property("id"))
+		Long ids = (Long) criteria
+				.setProjection(Projections.count("id"))
 				.add(Restrictions.eq("cpf", cpf))
-				.list();
+				.add(Restrictions.eq("situacao", SituacaoMensagem.AGUARDANDO_LEITURA))
+				.uniqueResult();
 		
 		return ids;
 	}
