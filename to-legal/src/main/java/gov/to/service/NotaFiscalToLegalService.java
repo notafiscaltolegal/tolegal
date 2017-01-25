@@ -27,7 +27,7 @@ public interface NotaFiscalToLegalService {
 
 	NotaFiscalToLegal primeiroRegistro(FiltroNotaFiscalToLegal filtro, String...propriedadesHbInitialize);
 
-	int totalNotasPorCpf(String cpf);
+	int totalNotasPorCpf(String cpf, Integer idSorteio);
 
-	List<String> chaveAcessoPorDataEmissao(Date dataInicio, Date dataFim);
+	List<String> chaveAcessoPorDataEmissao(Date dataInicio);
 }

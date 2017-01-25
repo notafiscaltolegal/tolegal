@@ -218,26 +218,78 @@ public class BilheteToLegalServiceImpl extends ConsultasDaoJpa<BilheteToLegal> i
 	}
 
 	@Override
-	public void processaBilhetePorPontuacao(SorteioToLegal sorteioToLegal, PontuacaoToLegal pontuacao) {
+	public void processaBilhetePorPontuacao(SorteioToLegal sorteioToLegal, String cpf, Integer totalPonto) {
 			
-		Integer qntBilhetes = pontuacao.getQntPonto() / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
+		Integer qntBilhetes = totalPonto / SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_POR_BILHETE);
+		
+		SituacaoBilhete situacao = SituacaoBilhete.VALIDO;
+		
+		Long totalBilhetesNoSorteio = totalBilhetes(sorteioToLegal);
+		
+		FiltroBilheteToLegal filtroDTO = new FiltroBilheteToLegal();
+		filtroDTO.setSituacaoBilhete(SituacaoBilhete.AGUARDANDO_PROXIMO_SORTEIO);
+		List<BilheteToLegal> listBilhete = super.filtrarPesquisa(filtroDTO, BilheteToLegal.class);
+		
+		for (int i=BigInteger.ZERO.intValue(); i < listBilhete.size(); i++){
+			
+			Long totalBilhetesPermitidos = totalBilhetesNoSorteio + i;
+			
+			if (totalBilhetesPermitidos < sorteioToLegal.getMaxBilhete() ){
+				
+				BilheteToLegal bilheteToLegal = listBilhete.get(i);
+				
+				bilheteToLegal.setSorteioToLegal(sorteioToLegal);
+				
+				bilhetePersistence.merge(bilheteToLegal);
+			}
+		}
 		
 		for (int i=BigInteger.ZERO.intValue(); i < qntBilhetes; i++){
 			
-			BilheteToLegal bilheteToLegal = new BilheteToLegal();
-			bilheteToLegal.setSorteioToLegal(sorteioToLegal);
-			bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
-			bilheteToLegal.setStBilhete(SituacaoBilhete.VALIDO);
-			bilheteToLegal.setCpf(pontuacao.getNotaFiscalToLegal().getCpf());
-			bilheteToLegal.setPontuacaoToLegal(pontuacao);
+			Long totalBilhetesPermitidos = totalBilhetesNoSorteio + i;
 			
-			bilhetePersistence.salvar(bilheteToLegal);
+			if (totalBilhetesPermitidos > sorteioToLegal.getMaxBilhete() ){
+				
+				situacao = SituacaoBilhete.AGUARDANDO_PROXIMO_SORTEIO;
+				
+				BilheteToLegal bilheteToLegal = new BilheteToLegal();
+//				bilheteToLegal.setSorteioToLegal(sorteioToLegal);
+				bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
+				bilheteToLegal.setStBilhete(situacao);
+				bilheteToLegal.setCpf(cpf);
+				
+				bilhetePersistence.salvar(bilheteToLegal);
+				
+			}else{
+				
+				BilheteToLegal bilheteToLegal = new BilheteToLegal();
+				bilheteToLegal.setSorteioToLegal(sorteioToLegal);
+				bilheteToLegal.setNumeroSeqBilhete(geraNumeroBilhete());
+				bilheteToLegal.setStBilhete(situacao);
+				bilheteToLegal.setCpf(cpf);
+				
+				bilhetePersistence.salvar(bilheteToLegal);
+			}
 		}
-		
-		pontuacao.setSituacaoPontuacao(SituacaoPontuacaoNota.PONTUADO);
-		pontuacaoPersistence.merge(pontuacao);
 	}
 	
+	private Long totalBilhetes(SorteioToLegal sorteioToLegal) {
+		
+		Criteria criteria = getSession().createCriteria(BilheteToLegal.class);
+		
+		criteria.setProjection(Projections.count("id"));
+		criteria.createAlias("sorteioToLegal", "sorteioToLegal");
+		criteria.add(Restrictions.eq("sorteioToLegal.id", sorteioToLegal.getId()));
+		
+		Long count = (Long)criteria.uniqueResult();
+		
+		if (count == null){
+			return BigInteger.ZERO.longValue();
+		}
+		
+		return count;
+	}
+
 	@Override
 	public void processaBilhetePorPontuacaoBonus(SorteioToLegal sorteioToLegal, PontuacaoBonusToLegal pontuacaoBonus) {
 			

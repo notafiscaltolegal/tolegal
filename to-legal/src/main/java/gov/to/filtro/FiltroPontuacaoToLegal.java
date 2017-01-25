@@ -9,6 +9,9 @@ public class FiltroPontuacaoToLegal implements Filtro{
 	@EntityProperty("notaFiscalToLegal.cpf")
 	private String cpf;
 	
+	@EntityProperty("notaFiscalEmpresaToLegal.cpfDestinatario")
+	private String cpfEmpresa;
+	
 	@EntityProperty("notaFiscalToLegal.dataEmissao")
 	private DataFiltroBetween dataFiltro;
 	
@@ -59,5 +62,13 @@ public class FiltroPontuacaoToLegal implements Filtro{
 
 	public void setIdNotaEmpresa(Long idNotaEmpresa) {
 		this.idNotaEmpresa = idNotaEmpresa;
+	}
+
+	public String getCpfEmpresa() {
+		return cpfEmpresa;
+	}
+
+	public void setCpfEmpresa(String cpfEmpresa) {
+		this.cpfEmpresa = cpfEmpresa;
 	}
 }

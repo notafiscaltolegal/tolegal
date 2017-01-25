@@ -1,11 +1,13 @@
 package gov.to.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Local;
 
 import gov.goias.service.PaginacaoDTO;
 import gov.to.entidade.NotaEmpresaToLegal;
+import gov.to.filtro.FiltroNotaEmpresaToLegal;
 import gov.to.goias.DocumentoFiscalDigitadoToLegal;
 
 /**
@@ -41,5 +43,7 @@ public interface NotaEmpresaService {
 	void excluir(NotaEmpresaToLegal nota);
 
 	NotaEmpresaToLegal buscarNotaEmpresaToLegalPorId(Integer idDocumentoFiscalDigital);
+
+	List<NotaEmpresaToLegal> pesquisar(FiltroNotaEmpresaToLegal filtroNotaEmpresa);
 	
 }

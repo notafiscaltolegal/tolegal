@@ -4,15 +4,20 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import gov.to.dominio.SituacaoMensagem;
 import gov.to.persistencia.EntidadeBasica;
 
 @Entity
@@ -25,6 +30,8 @@ public class MensagemVisualizadaEmpresaToLegal extends EntidadeBasica{
 	private static final long serialVersionUID = -213797317396640166L;
 
 	@Id
+	@GeneratedValue(generator = "seq_msg_empresa", strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "seq_msg_empresa", sequenceName = "seq_msg_empresa",allocationSize=1)
 	@Column(name = "id_msg_visu_empresa")
 	private Long id;
 	
@@ -40,6 +47,14 @@ public class MensagemVisualizadaEmpresaToLegal extends EntidadeBasica{
 	
 	@Column(name="inscricao_estadual")
 	private String inscricaoEstadual;
+	
+	@Column(name="situacao")
+	@Enumerated(EnumType.STRING)
+	private SituacaoMensagem situacao;
+	
+	@ManyToOne
+	@JoinColumn(name="id_msg_sefaz",referencedColumnName="id_msg_sefaz")
+	private MensagemSefazToLegal msgSefazToLegal;
 	
 	@Transient
 	public String getDataLeituraFormat() {
@@ -92,5 +107,21 @@ public class MensagemVisualizadaEmpresaToLegal extends EntidadeBasica{
 
 	public void setInscricaoEstadual(String inscricaoEstadual) {
 		this.inscricaoEstadual = inscricaoEstadual;
+	}
+
+	public SituacaoMensagem getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(SituacaoMensagem situacao) {
+		this.situacao = situacao;
+	}
+
+	public MensagemSefazToLegal getMsgSefazToLegal() {
+		return msgSefazToLegal;
+	}
+
+	public void setMsgSefazToLegal(MensagemSefazToLegal msgSefazToLegal) {
+		this.msgSefazToLegal = msgSefazToLegal;
 	}
 }

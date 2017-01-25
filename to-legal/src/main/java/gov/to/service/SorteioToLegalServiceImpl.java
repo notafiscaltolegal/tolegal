@@ -1,18 +1,23 @@
 package gov.to.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+
 import gov.goias.entidades.RegraSorteio;
 import gov.goias.service.SorteioCidadaoDTO;
+import gov.to.dominio.SituacaoSorteio;
 import gov.to.entidade.SorteioToLegal;
 import gov.to.filtro.FiltroSorteioToLegal;
 import gov.to.persistencia.ConsultasDaoJpa;
 import gov.to.persistencia.GenericPersistence;
-import gov.to.properties.SorteioProperties;
 
 @Stateless
 public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> implements SorteioToLegalService{
@@ -29,13 +34,22 @@ public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> i
 	@EJB
 	private PontuacaoToLegalService pontuacaoToLegalService;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<RegraSorteio> listRegraSorteioDivulgaResultado() {
 		
-		List<SorteioToLegal> listSorteio = genericPersistence.listarTodos(SorteioToLegal.class);
+		Criteria criteria = getSession().createCriteria(SorteioToLegal.class);
+		
+		criteria.addOrder(Order.desc("numeroSorteio"));
+		
+		List<SorteioToLegal> listSorteio = (List<SorteioToLegal>)criteria.list();
 		List<RegraSorteio> list = new ArrayList<>();
 		
 		for (SorteioToLegal stl : listSorteio){
+			
+			if (SituacaoSorteio.INATIVO.equals(stl.getSituacao())){
+				continue;
+			}
 			
 			RegraSorteio rs = new RegraSorteio();
 			
@@ -56,7 +70,7 @@ public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> i
 		RegraSorteio regraSorteio = regraSorteioPorIdSorteioToLegal(idSorteio);
 		
 		sorteioDTO.setTotalBilhetes(bilheteService.totalBilheteSorteioPorCpf(cpf, idSorteio));
-		sorteioDTO.setTotalDocs(notaFiscalToLegalService.totalNotasPorCpf(cpf));
+		sorteioDTO.setTotalDocs(notaFiscalToLegalService.totalNotasPorCpf(cpf,idSorteio));
 		sorteioDTO.setTotalPontos(pontuacaoToLegalService.totalPontosSorteioPorCpf(cpf, idSorteio));
 		sorteioDTO.setSorteio(regraSorteio);
 		
@@ -84,8 +98,17 @@ public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> i
 	}
 
 	@Override
-	public Integer pontuacaoSemSorteio(Integer id) {
-		return 12222221;
+	public Integer ultimoSorteio() {
+		Criteria criteria = getSession().createCriteria(SorteioToLegal.class);
+		
+		Integer max = (Integer) criteria
+				.setProjection(Projections.max("numeroSorteio"))
+				.uniqueResult();
+		
+		if (max == null)
+			max = BigInteger.ZERO.intValue();
+		
+		return max;
 	}
 
 	@Override
@@ -96,7 +119,11 @@ public class SorteioToLegalServiceImpl extends ConsultasDaoJpa<SorteioToLegal> i
 	@Override
 	public SorteioToLegal sorteioAtual() {
 
-		int numSorteio = SorteioProperties.getValue(SorteioProperties.NUMERO_SORTEIO);
+		int numSorteio = this.ultimoSorteio();
+		
+		if (numSorteio == BigInteger.ZERO.intValue()){
+			return null;
+		}
 		
 		FiltroSorteioToLegal filtro = new FiltroSorteioToLegal();
 		

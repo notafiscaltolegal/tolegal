@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import gov.to.dominio.SerieEnum;
+import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.dominio.TipoDocumentoEnum;
 import gov.to.persistencia.EntidadeBasica;
 
@@ -58,13 +59,15 @@ public class NotaEmpresaToLegal extends EntidadeBasica{
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "serie")
-	private SerieEnum serie;	
-	
+	private SerieEnum serie;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "situacao")
+	private SituacaoPontuacaoNota situacaoPontuacaoNota;	
 	
 	public NotaEmpresaToLegal (){
-		//this.situacaoPontuacaoNota = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
+		this.situacaoPontuacaoNota = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
 	}
-	
 	
 	public Long getId() {
 		return id;
@@ -138,5 +141,12 @@ public class NotaEmpresaToLegal extends EntidadeBasica{
 		this.serie = serie;
 	}
 
-	
+	public SituacaoPontuacaoNota getSituacaoPontuacaoNota() {
+		return situacaoPontuacaoNota;
+	}
+
+
+	public void setSituacaoPontuacaoNota(SituacaoPontuacaoNota situacaoPontuacaoNota) {
+		this.situacaoPontuacaoNota = situacaoPontuacaoNota;
+	}
 }

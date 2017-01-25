@@ -1,11 +1,8 @@
 package gov.to.service;
 
-import java.util.List;
-
 import javax.ejb.Local;
 
 import gov.goias.service.PaginacaoDTO;
-import gov.to.entidade.ReclamacaoLogToLegal;
 import gov.to.goias.ReclamacaoLogDTO;
 
 /**

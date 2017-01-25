@@ -40,7 +40,6 @@ import gov.goias.entidades.ComplSituacaoReclamacao;
 import gov.goias.entidades.GENPessoaFisica;
 import gov.goias.entidades.PessoaParticipante;
 import gov.goias.entidades.RegraSorteio;
-import gov.goias.entidades.SituacaoDocumentoFiscalReclamado;
 import gov.goias.entidades.enums.TipoPerfilCadastroReclamacao;
 import gov.goias.exceptions.NFGException;
 import gov.goias.service.CidadaoService;
@@ -57,13 +56,16 @@ import gov.goias.util.ImageUtils;
 import gov.goias.util.TextUtils;
 import gov.goias.util.UtilReflexao;
 import gov.sefaz.util.Base64;
+import gov.to.dto.PontuacaoDTO;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.EnderecoToLegal;
+import gov.to.entidade.GanhadorSorteioToLegal;
 import gov.to.entidade.MunicipioToLegal;
 import gov.to.entidade.UsuarioToLegal;
 import gov.to.goias.DocumentoFiscalReclamadoToLegal;
 import gov.to.goias.ReclamacaoLogDTO;
 import gov.to.service.BilheteToLegalService;
+import gov.to.service.GanhadorToLegalService;
 import gov.to.service.GenericService;
 import gov.to.service.PontuacaoToLegalService;
 import gov.to.service.ReclamacaoLogToLegalService;
@@ -110,6 +112,9 @@ public class CidadaoController extends BaseController {
 	
 	@Autowired
 	private UsuarioToLegalService usuarioToLegalService;
+	
+	@Autowired
+	private GanhadorToLegalService ganhadorToLegalService;
 	
 	@Autowired
 	private GenericService<MunicipioToLegal, Long> genericMunicipioService;
@@ -709,12 +714,15 @@ public class CidadaoController extends BaseController {
     }
 
     @RequestMapping("listarPremiacao/{page}")
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public
-    @ResponseBody
-    Map<String, Object> listarPremiacao(@PathVariable(value = "page") Integer page) throws ParseException {
-        Integer max = 5;
+    public @ResponseBody Map<String, Object> listarPremiacao(@PathVariable(value = "page") Integer page, Integer idSorteio, BindException bind) throws ParseException {
         Map<String, Object> resposta = new HashMap<String, Object>();
+        
+        PessoaParticipante cidadaoLogado = getCidadaoLogado();
+        
+        List<GanhadorSorteioToLegal> ganhador = ganhadorToLegalService.ganhadorPorSorteio(idSorteio, cidadaoLogado.getGenPessoaFisica().getCpf());
+        
+        resposta.put("resultadoGanhadorSorteio", ganhador);
+        
         return resposta;
     }
 
@@ -722,12 +730,12 @@ public class CidadaoController extends BaseController {
     @RequestMapping("listarNotasCidadao/{page}")
     public @ResponseBody Map<String, Object> listarNotasCidadao(@PathVariable(value = "page") Integer page, String cpfFiltro, BindException bind) throws ParseException {
 
-    	List<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro);
-
-        Map<String, Object> resposta = new HashMap<String, Object>();
-        resposta.put("minhasNotas", docsFiscais);
+//    	List<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro);
+//
+//        Map<String, Object> resposta = new HashMap<String, Object>();
+//        resposta.put("minhasNotas", docsFiscais);
         
-        return resposta;
+        return listarNotasCidadaoEmDetalhe(page, cpfFiltro, null, null, bind);
     }
 
     @RequestMapping("viewMinhasNotasEmDetalhe")
@@ -749,28 +757,16 @@ public class CidadaoController extends BaseController {
         Date dataInicial = referenciaInicial != null && referenciaInicial.length() > 0 ? simpleDateFormat.parse(referenciaInicial) : null;
         Date dataFinal = referenciaFinal != null && referenciaFinal.length() > 0 ? simpleDateFormat.parse(referenciaFinal) : null;
 
-        List<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro, dataInicial, dataFinal, max, page);
+        PaginacaoDTO<DTOMinhasNotas> docsFiscais = cidadaoService.documentosFiscaisPorCpf(cpfFiltro, dataInicial, dataFinal, max, page);
 
-        Integer count = docsFiscais.size();
 
-        pagination.put("total", count);
+        pagination.put("total", docsFiscais.getCount());
         pagination.put("page", ++page);
         pagination.put("max", max);
 
         resposta.put("pagination", pagination);
-        resposta.put("minhasNotas", docsFiscais);
+        resposta.put("minhasNotas", docsFiscais.getList());
 
-        return resposta;
-    }
-
-
-    @RequestMapping("meuPlacar")
-    public @ResponseBody Map<String, Object> meuPlacar() throws ParseException {
-    	PessoaParticipante cidadao = getCidadaoLogado();
-        Map<String, Object> resposta = new HashMap<String, Object>();
-        resposta.put("numeroDeNotas", cidadaoService.numeroDeNotasPorCpf(cidadao.getGenPessoaFisica().getCpf()));
-        resposta.put("pontosProximoSorteio", sorteioService.pontuacaoSemSorteio(cidadao.getId()));
-        resposta.put("totalPremiacaoMeuPlacar", "Em breve.");
         return resposta;
     }
 
@@ -835,7 +831,7 @@ public class CidadaoController extends BaseController {
         try{
             sorteio = sorteioService.sorteioPorId(idSorteio);
         }catch (Exception e){
-            throw new NFGException("Ops, parece que esse sorteio n&#225;o existe. Tente novamente.",new ModelAndView("cidadao/telainicial"));
+            throw new NFGException("Ops, parece que esse sorteio não existe. Tente novamente.",new ModelAndView("cidadao/telainicial"));
         }
 
         try{
@@ -858,8 +854,11 @@ public class CidadaoController extends BaseController {
     carregaDadosDaPremiacao(Integer idSorteio){
     	Map<String, Object> resposta = new HashMap<>();
         PessoaParticipante cidadaoLogado = getCidadaoLogado();
-
-        resposta.put("isUsuarioPremiado", cidadaoService.usuarioPremiado(cidadaoLogado.getId()));
+        
+        List<GanhadorSorteioToLegal> ganhador = ganhadorToLegalService.ganhadorPorSorteio(idSorteio, cidadaoLogado.getGenPessoaFisica().getCpf());
+        
+        resposta.put("isUsuarioPremiado", !ganhador.isEmpty());
+        
         return resposta;
     }
 
@@ -907,23 +906,19 @@ public class CidadaoController extends BaseController {
 
     @RequestMapping("listarPontosDasNotas/{page}")
     public @ResponseBody Map<String, Object> listarPontosDasNotas(@PathVariable(value = "page") Integer page, Integer idSorteio, BindException bind) throws UnsupportedEncodingException {
-    	 Integer max = 7;
-         Integer count = 0;
+    	 Integer max = 10;
          String cpf = getCidadaoLogado().getGenPessoaFisica().getCpf();
 
-         List<Map<String, Object>> dadosPontuacaoNotas = pontuacaoToLegalService.consultaPontuacaoDocsFiscaisPorSorteio(idSorteio, cpf, max, page);
-         if (dadosPontuacaoNotas.size()>0){
-             count =  dadosPontuacaoNotas.size();
-         }
-
+         PaginacaoDTO<PontuacaoDTO> dadosPontuacaoNotas = pontuacaoToLegalService.consultaPontuacaoDocsFiscaisPorSorteio(idSorteio, cpf, max, page);
+         
          Map<String, Object> resposta = new HashMap<String, Object>();
          Map<String, Object> pagination = new HashMap<String, Object>();
 
-         pagination.put("total", count);
+         pagination.put("total", dadosPontuacaoNotas.getCount());
          pagination.put("page", ++page);
          pagination.put("max", max);
 
-         resposta.put("dadosPontuacaoNotas", dadosPontuacaoNotas);
+         resposta.put("dadosPontuacaoNotas", dadosPontuacaoNotas.getList());
          resposta.put("pagination", pagination);
 
          return resposta;

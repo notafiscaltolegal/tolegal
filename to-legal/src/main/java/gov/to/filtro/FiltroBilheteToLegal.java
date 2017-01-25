@@ -1,5 +1,6 @@
 package gov.to.filtro;
 
+import gov.to.dominio.SituacaoBilhete;
 import gov.to.persistencia.EntityProperty;
 
 public class FiltroBilheteToLegal implements Filtro{
@@ -9,6 +10,9 @@ public class FiltroBilheteToLegal implements Filtro{
 	
 	@EntityProperty("sorteioToLegal.id")
 	private Long idSorteio;
+	
+	@EntityProperty("stBilhete")
+	private SituacaoBilhete situacaoBilhete;
 
 	public String getCpf() {
 		return cpf;
@@ -24,5 +28,13 @@ public class FiltroBilheteToLegal implements Filtro{
 
 	public void setIdSorteio(Long idSorteio) {
 		this.idSorteio = idSorteio;
+	}
+
+	public SituacaoBilhete getSituacaoBilhete() {
+		return situacaoBilhete;
+	}
+
+	public void setSituacaoBilhete(SituacaoBilhete situacaoBilhete) {
+		this.situacaoBilhete = situacaoBilhete;
 	}
 }

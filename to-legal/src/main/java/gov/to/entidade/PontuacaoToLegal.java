@@ -60,11 +60,24 @@ public class PontuacaoToLegal extends EntidadeBasica{
 		this.situacaoPontuacao = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
 	}
 	
+	public PontuacaoToLegal(NotaEmpresaToLegal nota) {
+		
+		this.notaFiscalEmpresaToLegal = nota;
+		this.situacaoPontuacao = SituacaoPontuacaoNota.AGUARDANDO_PROCESSAMENTO;
+	}
+
 	@PrePersist
 	public void calcPontuacao(){
 		
 		final int VALOR_MAXIMO_PONTUACAO_POR_NOTA = SorteioProperties.getValue(SorteioProperties.QNT_MAXIMA_PONTOS_POR_DOCUMENTO);
 		final int VALOR_MINIMO_PONTUACAO_POR_NOTA = SorteioProperties.getValue(SorteioProperties.QNT_MINIMA_PONTOS_POR_DOCUMENTO);
+		
+		pontuaNotaLegal(VALOR_MAXIMO_PONTUACAO_POR_NOTA, VALOR_MINIMO_PONTUACAO_POR_NOTA);
+		
+		pontuaNotaEmpresa(VALOR_MAXIMO_PONTUACAO_POR_NOTA, VALOR_MINIMO_PONTUACAO_POR_NOTA);
+	}
+
+	private void pontuaNotaLegal(final int VALOR_MAXIMO_PONTUACAO_POR_NOTA, final int VALOR_MINIMO_PONTUACAO_POR_NOTA) {
 		
 		if (notaFiscalToLegal != null && notaFiscalToLegal.getValor() != null){
 			
@@ -75,6 +88,21 @@ public class PontuacaoToLegal extends EntidadeBasica{
 			}else if (notaFiscalToLegal.getValor() > VALOR_MINIMO_PONTUACAO_POR_NOTA){
 				
 				this.qntPonto = notaFiscalToLegal.getValor().intValue();
+			}
+		}
+	}
+
+	private void pontuaNotaEmpresa(final int VALOR_MAXIMO_PONTUACAO_POR_NOTA, final int VALOR_MINIMO_PONTUACAO_POR_NOTA) {
+		
+		if (notaFiscalEmpresaToLegal != null && notaFiscalEmpresaToLegal.getValor() != null){
+			
+			if (notaFiscalEmpresaToLegal.getValor() > VALOR_MAXIMO_PONTUACAO_POR_NOTA){
+				
+				this.qntPonto = VALOR_MAXIMO_PONTUACAO_POR_NOTA;
+				
+			}else if (notaFiscalEmpresaToLegal.getValor() > VALOR_MINIMO_PONTUACAO_POR_NOTA){
+				
+				this.qntPonto = notaFiscalEmpresaToLegal.getValor().intValue();
 			}
 		}
 	}

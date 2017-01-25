@@ -26,8 +26,8 @@ public interface MensagemVisuEmpresaToLegalService {
 	 */
 	List<MensagemVisualizadaEmpresaToLegal> pesquisar(FiltroMensagemVisuEmpresaToLegalDTO filtroDoc, String...strings);
 
-	List<Long> ids(String inscricaoEstadual);
-
 	PaginacaoDTO<Mensagem> findMensagensCaixaDeEntrada(Integer max, Integer page, String inscricaoEstadual);
+
+	Long qntMensagemAguardandoLeitura(String inscricaoEstadual);
 
 }

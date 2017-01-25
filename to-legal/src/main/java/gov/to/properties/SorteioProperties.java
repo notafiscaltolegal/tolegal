@@ -8,7 +8,6 @@ public class SorteioProperties {
 
 	private static final String ARQUIVO_CONFIGURACAO = "/sorteio.properties";
 	
-	public static final String NUMERO_SORTEIO = "numero_sorteio";
 	public static final String QNT_MAXIMA_PONTOS = "qnt_max_pont";
 	public static final String QNT_MAXIMA_PONTOS_POR_DOCUMENTO = "qnt_max_pont_por_documento";
 	public static final String QNT_MINIMA_PONTOS_POR_DOCUMENTO = "qnt_min_pont_por_documento";
