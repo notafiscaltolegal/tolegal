@@ -810,6 +810,10 @@ public class CidadaoController extends BaseController {
 
         RegraSorteio sorteio = sorteioService.sorteioPorId(idSorteio);
         totalDePontos = pontuacaoToLegalService.totalNotasSorteioPorCpf(cpf,idSorteio);
+        
+        if (bilhetesCidadao.isEmpty()){
+        	bilhetesCidadao = null;
+        }
 
         ModelAndView modelAndView = new ModelAndView("cidadao/bilhetes");
         modelAndView.addObject("sorteio", sorteio);
