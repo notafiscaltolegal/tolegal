@@ -77,12 +77,13 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		List<MensagemVisualizadaCidadaoToLegal> idsMsgCidadao = (List<MensagemVisualizadaCidadaoToLegal>) criteriaCidadao
 				.createAlias("msgSefazToLegal", "msgSefazToLegal")
 				.add(Restrictions.in("msgSefazToLegal.id", ids))
+				.add(Restrictions.eq("cpf", cpf))
 				.list();
 		
 		List<Long> idsCidadao = new ArrayList<>();
 		
 		for (MensagemVisualizadaCidadaoToLegal msgCidadao : idsMsgCidadao){
-			idsCidadao.add(msgCidadao.getId());
+			idsCidadao.add(msgCidadao.getMsgSefazToLegal().getId());
 		}
 		
 		for (Long idMsgSefaz : ids){
@@ -97,6 +98,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				msg.setMensagem(msgSefaz.getMensagem());
 				msg.setTitulo(msgSefaz.getTitulo());
 				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
+				msg.setMsgSefazToLegal(msgSefaz);
 				
 				serviceCidadaoMsg.salvar(msg);
 			}
@@ -124,12 +126,13 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		List<MensagemVisualizadaEmpresaToLegal> idsMsgEmpresa = (List<MensagemVisualizadaEmpresaToLegal>) criteriaCidadao
 				.createAlias("msgSefazToLegal", "msgSefazToLegal")
 				.add(Restrictions.in("msgSefazToLegal.id", ids))
+				.add(Restrictions.eq("inscricaoEstadual", inscricaoEstadual))
 				.list();
 		
 		List<Long> idsEmpresa = new ArrayList<>();
 		
 		for (MensagemVisualizadaEmpresaToLegal msgCidadao : idsMsgEmpresa){
-			idsEmpresa.add(msgCidadao.getId());
+			idsEmpresa.add(msgCidadao.getMsgSefazToLegal().getId());
 		}
 		
 		for (Long idMsgSefaz : ids){
@@ -144,6 +147,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				msg.setMensagem(msgSefaz.getMensagem());
 				msg.setTitulo(msgSefaz.getTitulo());
 				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
+				msg.setMsgSefazToLegal(msgSefaz);
 				
 				this.serviceEmpresaMsg.salvar(msg);
 			}
