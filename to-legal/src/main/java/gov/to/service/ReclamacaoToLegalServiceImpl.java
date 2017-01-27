@@ -58,12 +58,12 @@ public class ReclamacaoToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoToLe
 //		 ReclamacaoToLegal reclamacao =
 //		 servicoReclamacao.getById(ReclamacaoToLegal.class,
 //		 Long.valueOf(idReclamacao),"listLogReclamacao");
-		ReclamacaoToLegal reclamacao = servicoReclamacao.getById(ReclamacaoToLegal.class, Long.valueOf(idReclamacao));
+		ReclamacaoToLegal reclamacao = servicoReclamacao.getById(ReclamacaoToLegal.class, Long.valueOf(idReclamacao), "usuarioToLegal", "usuarioToLegal.pessoaFisica");
 
 		paginacaoDTO.setDataDocumentoFiscal(reclamacao.getDataEmissaoDocFiscal());
 		paginacaoDTO.setDataReclamacao(reclamacao.getDataCadastro());
 		paginacaoDTO.setId(reclamacao.getId().intValue());
-
+        paginacaoDTO.setCpf(reclamacao.getUsuarioToLegal().getPessoaFisica().getCpf());
 		ContribuinteToLegal contribuinte = serviceContribuinte
 				.findByInscricaoEstadual(Integer.valueOf(reclamacao.getInscricaoEstadual()));
 
@@ -84,7 +84,7 @@ public class ReclamacaoToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoToLe
 		paginacaoDTO.setRazaoSocial(contribuinte.getRazaoSocial());
 		// paginacaoDTO.setReclamacaoResolvida("N");
 		// deletar
-		// paginacaoDTO.setStatusAndamentoStr(reclamacao.getStatusReclamacao().getLabel());
+		 paginacaoDTO.setStatusAndamentoStr(reclamacao.getStatusReclamacao().getLabel());
 		// paginacaoDTO.setTipoDocumentoFiscal(reclamacao.getTipoDocFiscal().getLabel());
 		paginacaoDTO.setDescUltimaSituacao(reclamacao.getStatusReclamacao().getLabel());
 		// paginacaoDTO.setTipoExtensao(1);

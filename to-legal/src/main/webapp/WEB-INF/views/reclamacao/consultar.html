@@ -37,29 +37,114 @@
         <div class="row">&nbsp;</div>
 
         <div class="container" id="containerComplemento" style="display: none;">
-            <form>
-                <input type="hidden" id="inputIdReclamacao"/>
-                <div class="form-group">
-                    <label>Complementar:</label>
-                    <textarea id="descricaoComplemento" class="form-control" maxlength="200" rows="5"></textarea>
-                </div>
 
-                <label>*Status:</label>
-                <select class="form-control"  id="selectAcoesDisponiveisEmpresa" title="Selecione o status.">
-                    <option >Selecione</option>
-                    <option th:each="stdisp : ${statusDisponiveis}" th:value="${stdisp.codigo}" th:text="${stdisp.tipoSituacaoAcao}"></option>
-                </select>
+			<form>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">Dados da Reclama&ccedil;&atilde;o:
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-10">
+								<label>N&uacute;mero da reclama&ccedil;&atilde;o:</label>
+								<p style="display: inline-block" id="numReclamacao" />
+								
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<label>Data da reclama&ccedil;&atilde;o:</label>
+								<p style="display: inline-block" id="dataReclamacaoStr2" />
+ 							
+ 								
+ 								<!--  <p style="display: inline-block" th:text="${dataReclamacaoStr}" /> -->
+							</div>
+						</div>
+						<!--<div class="row">&nbsp;</div>-->
+						<!--<hr/>-->
+						<div class="row">
+							<div class="col-md-10">
+								<label>N&uacute;mero do documento fiscal:</label>
+								<p style="display: inline-block" id="numeroDocumento2" />
+<!-- 								<p style="display: inline-block" th:text="${reclamacao.numero}" /> -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<label>Empresa:</label>
+								<p style="display: inline-block" id="nomeFantasia2" />
+<!-- 								<p style="display: inline-block" -->
+<!-- 									th:text="${reclamacao.numeroCnpjEmpresa}" class="textCnpj" /> -->
+
+<!-- 								<p style="display: inline-block" th:if="${nomeFantasia}" -->
+<!-- 									th:text="${'- '+nomeFantasia}" /> -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<label>Data de emiss&atilde;o do documento:</label>
+								<p style="display: inline-block" id="dataEmissaoDocumento2" />
+<!-- 								<p style="display: inline-block" th:text="${dataEmissaoStr}" /> -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<label>Valor do documento:</label>
+								<p style="display: inline-block" id="valorDocumento2" />
+<!-- 								<p style="display: inline-block" th:text="${reclamacao.valor}" -->
+<!-- 									class="textMoney" /> -->
+							</div>
+						</div>
+						<!--<div class="row">&nbsp;</div>-->
+						<!--<hr/>-->
+						<div class="row">
+							<div class="col-md-10">
+								<label>Motivo da reclama&ccedil;&atilde;o:</label>
+								<p style="display: inline-block" id="motivoReclamacao2" />
+<!-- 								<p style="display: inline-block"			th:text="${reclamacao.motivoReclamacao}" /> -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<label>Atual situa&ccedil;&atilde;o da
+									reclama&ccedil;&atilde;o:</label>
+									<p style="display: inline-block" id="situacaoAtual2" />
+<!-- 								<p style="display: inline-block"							th:text="${reclamacao.descUltimaSituacao}" /> -->
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" id="inputIdReclamacao" />
+				
+				
+				<div class="form-group">
+					<label>Complementar:</label>
+					<textarea id="descricaoComplemento" class="form-control"
+						maxlength="200" rows="5"></textarea>
+				</div>
+
+				<label>*Status:</label> <select class="form-control"
+					id="selectAcoesDisponiveisEmpresa" title="Selecione o status.">
+					<option>Selecione</option>
+					<option th:each="stdisp : ${statusDisponiveis}"
+						th:value="${stdisp.codigo}" th:text="${stdisp.tipoSituacaoAcao}"></option>
+				</select>
 
 
-                <div class="row">&nbsp;</div>
+				<div class="row">&nbsp;</div>
 
-                <button id="btnComplemento" type="submit" class="btn btn-primary">Incluir Complemento</button>
+				<button id="btnComplemento" type="submit" class="btn btn-primary">Incluir Complemento</button>
 
-                <div class="row">&nbsp;</div>
-                <label>*Campo Obrigat&oacute;rio</label>
-            </form>
-        </div>
+				<div class="row">&nbsp;</div>
+				<label>*Campo Obrigat&oacute;rio</label>
+			</form>
+		</div>
     </div>
+    
+    
+
 
     <!-- Modal Padrao-->
     <div class="modal fade" id="modalHome" tabindex="-1" role="dialog" aria-labelledby="modalHomeTitle" aria-hidden="true">

@@ -1,5 +1,6 @@
 package gov.to.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -29,5 +30,7 @@ public interface MensagemVisuCidadaoToLegalService {
 	Long qntMensagemAguardandoLeitura(String cpf);
 
 	PaginacaoDTO<Mensagem> findMensagensCaixaDeEntrada(Integer max, Integer page, String cpf);
+	
+	void cadastrarMensagem(Date dataLeitura, String titulo, String mensagem, String cpf, String cnpj);
 
 }

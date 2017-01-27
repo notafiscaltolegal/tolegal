@@ -54,6 +54,8 @@ public class DocumentoFiscalReclamadoToLegal {
 	private String descUltimaSituacao;
 
 	private Integer codgUltimaSituacao;
+	
+	private String cpf;
 
 	public Integer getId() {
 		return id;
@@ -222,5 +224,12 @@ public class DocumentoFiscalReclamadoToLegal {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 }
