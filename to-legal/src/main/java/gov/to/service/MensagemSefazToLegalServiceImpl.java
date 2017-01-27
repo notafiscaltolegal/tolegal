@@ -82,7 +82,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		List<Long> idsCidadao = new ArrayList<>();
 		
 		for (MensagemVisualizadaCidadaoToLegal msgCidadao : idsMsgCidadao){
-			idsCidadao.add(msgCidadao.getId());
+			idsCidadao.add(msgCidadao.getMsgSefazToLegal().getId());
 		}
 		
 		for (Long idMsgSefaz : ids){
@@ -97,6 +97,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				msg.setMensagem(msgSefaz.getMensagem());
 				msg.setTitulo(msgSefaz.getTitulo());
 				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
+				msg.setMsgSefazToLegal(msgSefaz);
 				
 				serviceCidadaoMsg.salvar(msg);
 			}
@@ -128,8 +129,8 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		
 		List<Long> idsEmpresa = new ArrayList<>();
 		
-		for (MensagemVisualizadaEmpresaToLegal msgCidadao : idsMsgEmpresa){
-			idsEmpresa.add(msgCidadao.getId());
+		for (MensagemVisualizadaEmpresaToLegal msgEmpresa : idsMsgEmpresa){
+			idsEmpresa.add(msgEmpresa.getMsgSefazToLegal().getId());
 		}
 		
 		for (Long idMsgSefaz : ids){
@@ -144,6 +145,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				msg.setMensagem(msgSefaz.getMensagem());
 				msg.setTitulo(msgSefaz.getTitulo());
 				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
+				msg.setMsgSefazToLegal(msgSefaz);
 				
 				this.serviceEmpresaMsg.salvar(msg);
 			}
@@ -157,6 +159,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		Criteria criteria = getSession().createCriteria(MensagemVisualizadaCidadaoToLegal.class);
 		
 		List<MensagemVisualizadaCidadaoToLegal> msgs = (List<MensagemVisualizadaCidadaoToLegal>) criteria
+				.add(Restrictions.eq("cpf", cpf))
 				.add(Restrictions.eq("situacao", SituacaoMensagem.AGUARDANDO_LEITURA))
 				.list();
 		
@@ -189,6 +192,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		Criteria criteria = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
 		
 		List<MensagemVisualizadaEmpresaToLegal> msgs = (List<MensagemVisualizadaEmpresaToLegal>) criteria
+				.add(Restrictions.eq("inscricaoEstadual", inscricaoEstadual))
 				.add(Restrictions.eq("situacao", SituacaoMensagem.AGUARDANDO_LEITURA))
 				.list();
 		
