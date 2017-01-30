@@ -22,16 +22,20 @@ DROP TABLE tb_reclamacao_log
 DROP TABLE tb_bloqueio_cpf
 DROP TABLE tb_msg_empresa
 DROP TABLE tb_msg_visu_empresa
-DROP SEQUENCE seq_reclamacao RESTRICT
+DROP TABLE tb_embaralhamento
+DROP TABLE tb_ganhador_sorteio
+DROP SEQUENCE seq_usr_to_legl RESTRICT
 DROP SEQUENCE seq_sorteio RESTRICT
+DROP SEQUENCE seq_pont_nota RESTRICT
+DROP SEQUENCE seq_bloqueio_cpf RESTRICT
+DROP SEQUENCE seq_msg_visu_empresa RESTRICT
+DROP SEQUENCE seq_bilhete RESTRICT
+DROP SEQUENCE seq_reclamacao RESTRICT
 DROP SEQUENCE seq_endereco RESTRICT
 DROP SEQUENCE seq_pont_bonus RESTRICT
-DROP SEQUENCE seq_msg_empresa RESTRICT
-DROP SEQUENCE seq_bilhete RESTRICT
-DROP SEQUENCE seq_msg_visu_empresa RESTRICT
 DROP SEQUENCE seq_pes_fisica RESTRICT
-DROP SEQUENCE seq_bloqueio_cpf RESTRICT
+DROP SEQUENCE seq_embaralhamento RESTRICT
 DROP SEQUENCE seq_reclamacao_log RESTRICT
-DROP SEQUENCE seq_pont_nota RESTRICT
-DROP SEQUENCE seq_usr_to_legl RESTRICT
+DROP SEQUENCE seq_ganhador_sorteio RESTRICT
 DROP SEQUENCE seq_sort_cidadao RESTRICT
+DROP SEQUENCE seq_msg_empresa RESTRICT

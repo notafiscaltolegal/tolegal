@@ -23,6 +23,8 @@
 		<class>entidade.BloqueioCpfToLegal</class>
 		<class>entidade.MensagemEmpresaToLegal</class>
 		<class>entidade.MensagemVisualizadaEmpresaToLegal</class>
+		<class>entidade.EmbaralhaToLegal</class>
+		<class>entidade.GanhadorSorteioToLegal</class>
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
