@@ -148,35 +148,43 @@ public class PontuacaoToLegalServiceImpl implements PontuacaoToLegalService{
 			
 	    	 PontuacaoDTO pontDTO = new PontuacaoDTO();
 			
-			if (i == resultList.size()){
+			if (i >= resultList.size()){
 				break;
 			}
 			
-			PontuacaoToLegal pontuacao = resultList.get(i);
-			
-			if (pontuacao.getNotaFiscalToLegal() != null){
-				pontDTO.setCnpj(pontuacao.getNotaFiscalToLegal().getCnpj());
-				pontDTO.setEstabelecimento(pontuacao.getNotaFiscalToLegal().getRazaoSocial());
-				pontDTO.setNumero(pontuacao.getNotaFiscalToLegal().getNumNota());
-				pontDTO.setEmissao(pontuacao.getNotaFiscalToLegal().getDataEmissao());
-				pontDTO.setValor(pontuacao.getNotaFiscalToLegal().getValor());
-			}
-			
-			if (pontuacao.getNotaFiscalEmpresaToLegal()!= null){
+			try{
 				
-				ContribuinteToLegal contribuinte = persistenceContribuinte.getById(ContribuinteToLegal.class, FiltroContribuinteToLegal.inscricaoEstadualFormat(Integer.valueOf(pontuacao.getNotaFiscalEmpresaToLegal().getInscricaoEstadual())));
+				PontuacaoToLegal pontuacao = resultList.get(i);
 				
-				pontDTO.setCnpj(contribuinte.getCnpj());
-				pontDTO.setEstabelecimento(contribuinte.getRazaoSocial());
-				pontDTO.setNumero(pontuacao.getNotaFiscalEmpresaToLegal().getNumeroDocumento());
-				pontDTO.setEmissao(pontuacao.getNotaFiscalEmpresaToLegal().getDataEmissao());
-				pontDTO.setValor(pontuacao.getNotaFiscalEmpresaToLegal().getValor());
+				if (pontuacao.getNotaFiscalToLegal() != null){
+					pontDTO.setCnpj(pontuacao.getNotaFiscalToLegal().getCnpj());
+					pontDTO.setEstabelecimento(pontuacao.getNotaFiscalToLegal().getRazaoSocial());
+					pontDTO.setNumero(pontuacao.getNotaFiscalToLegal().getNumNota());
+					pontDTO.setEmissao(pontuacao.getNotaFiscalToLegal().getDataEmissao());
+					pontDTO.setValor(pontuacao.getNotaFiscalToLegal().getValor());
+				}
+				
+				if (pontuacao.getNotaFiscalEmpresaToLegal()!= null){
+					
+					ContribuinteToLegal contribuinte = persistenceContribuinte.getById(ContribuinteToLegal.class, FiltroContribuinteToLegal.inscricaoEstadualFormat(Integer.valueOf(pontuacao.getNotaFiscalEmpresaToLegal().getInscricaoEstadual())));
+					
+					pontDTO.setCnpj(contribuinte.getCnpj());
+					pontDTO.setEstabelecimento(contribuinte.getRazaoSocial());
+					pontDTO.setNumero(pontuacao.getNotaFiscalEmpresaToLegal().getNumeroDocumento());
+					pontDTO.setEmissao(pontuacao.getNotaFiscalEmpresaToLegal().getDataEmissao());
+					pontDTO.setValor(pontuacao.getNotaFiscalEmpresaToLegal().getValor());
+				}
+				
+				pontDTO.setRegistro("");
+				pontDTO.setQtdePontos(pontuacao.getQntPonto());
+	            
+	            listPontuacaoDTO.add(pontDTO);
+	            
+			}catch(IndexOutOfBoundsException ex){
+				
+				ex.printStackTrace();
+				break;
 			}
-			
-			pontDTO.setRegistro("");
-			pontDTO.setQtdePontos(pontuacao.getQntPonto());
-            
-            listPontuacaoDTO.add(pontDTO);
         }
 	    
 	    pag.setList(listPontuacaoDTO);
