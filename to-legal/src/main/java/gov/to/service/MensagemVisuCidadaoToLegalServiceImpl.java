@@ -1,8 +1,10 @@
 package gov.to.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.hibernate.Criteria;
@@ -14,11 +16,15 @@ import gov.goias.entidades.Mensagem;
 import gov.goias.service.PaginacaoDTO;
 import gov.to.dominio.SituacaoMensagem;
 import gov.to.entidade.MensagemVisualizadaCidadaoToLegal;
+import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.filtro.FiltroMensagemVisuCidadaoToLegalDTO;
 import gov.to.persistencia.ConsultasDaoJpa;
 
 @Stateless
 public class MensagemVisuCidadaoToLegalServiceImpl extends ConsultasDaoJpa<MensagemVisualizadaCidadaoToLegal> implements MensagemVisuCidadaoToLegalService{
+	
+	@EJB
+	private GenericService<MensagemVisualizadaCidadaoToLegal, Long> servicoMensagem;
 	
 	@Override
 	public List<MensagemVisualizadaCidadaoToLegal> pesquisar(FiltroMensagemVisuCidadaoToLegalDTO filtro, String... hbInitialize) {
@@ -92,5 +98,17 @@ public class MensagemVisuCidadaoToLegalServiceImpl extends ConsultasDaoJpa<Mensa
 	private static int calcInicio(Integer page, Integer max) {
 		
 		return (page * max);
+	}
+
+	@Override
+	public void cadastrarMensagem(Date dataLeitura, String titulo, String mensagem, String cpf, String cnpj) {		
+		MensagemVisualizadaCidadaoToLegal msg=new MensagemVisualizadaCidadaoToLegal();
+	    msg.setCpf(cpf);
+	    msg.setMensagem(mensagem);
+	    msg.setTitulo(titulo);
+	    msg.setDataLeitura(dataLeitura);
+	    msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
+	    
+		servicoMensagem.salvar(msg);
 	}
 }

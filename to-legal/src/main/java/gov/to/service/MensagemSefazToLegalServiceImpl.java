@@ -77,6 +77,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		List<MensagemVisualizadaCidadaoToLegal> idsMsgCidadao = (List<MensagemVisualizadaCidadaoToLegal>) criteriaCidadao
 				.createAlias("msgSefazToLegal", "msgSefazToLegal")
 				.add(Restrictions.in("msgSefazToLegal.id", ids))
+				.add(Restrictions.eq("cpf", cpf))
 				.list();
 		
 		List<Long> idsCidadao = new ArrayList<>();
@@ -125,6 +126,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		List<MensagemVisualizadaEmpresaToLegal> idsMsgEmpresa = (List<MensagemVisualizadaEmpresaToLegal>) criteriaCidadao
 				.createAlias("msgSefazToLegal", "msgSefazToLegal")
 				.add(Restrictions.in("msgSefazToLegal.id", ids))
+				.add(Restrictions.eq("inscricaoEstadual", inscricaoEstadual))
 				.list();
 		
 		List<Long> idsEmpresa = new ArrayList<>();

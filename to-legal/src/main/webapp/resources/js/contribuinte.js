@@ -35,6 +35,7 @@ function Contribuinte(options) {
     });
 }
 
+
 Contribuinte.prototype.initListar = function() {
     var me = this;
 //    me.pagination = new NFGPagination({
@@ -194,6 +195,7 @@ Contribuinte.prototype.initDatePicker = function($campo, dataLimite) {
 Contribuinte.prototype.apliqueMaskFilter = function() {
     $(".inputInscricao").mask("99.999.999-9");
 };
+
 
 Contribuinte.prototype.apliqueMask = function() {
     //mask cnpj

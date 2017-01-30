@@ -139,6 +139,25 @@ Reclamacao.prototype.mostrarComplemento = function(data){
                     $.each(response.statusDisponiveis, function() {
                         select.append($("<option />").val(this.codigo).text(this.tipoSituacaoAcao));
                     });
+                    
+                    $.ajax({
+                        url: enderecoSite + data.urlBase + "verReclamacaoDetalhe/"+idReclamacao,
+                        data:{
+                            idReclamacao: idReclamacao
+                        },
+                        type: 'POST',
+                        success: function(response) {
+                           
+                        	$("#numReclamacao").html(response.reclamacao.id);
+                        	$("#dataReclamacaoStr2").html(response.dataReclamacaoStr);
+                        	$("#numeroDocumento2").html(response.reclamacao.numero);
+                        	$("#nomeFantasia2").html(response.reclamacao.nomeFantasiaEmpresa);
+                        	$("#dataEmissaoDocumento2").html(response.dataEmissaoStr);
+                        	$("#valorDocumento2").html(response.reclamacao.valor);
+                        	$("#motivoReclamacao2").html(response.reclamacao.motivoReclamacao);
+                        	$("#situacaoAtual2").html(response.reclamacao.statusAndamentoStr);
+                        }
+                    });
                 }else{
                     $("#containerComplemento").css('display', 'none');
                 }
