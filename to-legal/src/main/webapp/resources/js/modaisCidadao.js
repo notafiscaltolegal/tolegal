@@ -773,8 +773,9 @@ ModaisCidadao.prototype.eventoReclamacaoDetalhe = function(idReclamacao){
         bloqueioDeTela("#divPaineisTelaInicial");
         setTimeout(function () {
             $("#modalHome").modal('show');
-            $("#divPaineisTelaInicial").unblock();
         }, 1000);
+        
+        $("#divPaineisTelaInicial").unblock();
 }
 
 ModaisCidadao.prototype.inicializaEnderecoAtualizaPerfil = function(){
