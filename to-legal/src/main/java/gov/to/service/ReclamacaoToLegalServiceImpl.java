@@ -87,6 +87,7 @@ public class ReclamacaoToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoToLe
 		 paginacaoDTO.setStatusAndamentoStr(reclamacao.getStatusReclamacao().getLabel());
 		// paginacaoDTO.setTipoDocumentoFiscal(reclamacao.getTipoDocFiscal().getLabel());
 		paginacaoDTO.setDescUltimaSituacao(reclamacao.getStatusReclamacao().getLabel());
+		paginacaoDTO.setCodgUltimaSituacao(reclamacao.getStatusReclamacao().getCodigo());
 		// paginacaoDTO.setTipoExtensao(1);
 		paginacaoDTO.setValor(reclamacao.getValorDocFiscal());
 		;

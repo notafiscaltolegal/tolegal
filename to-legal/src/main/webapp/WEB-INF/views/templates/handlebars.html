@@ -1214,11 +1214,12 @@
                     <th>N&uacute;mero</th>
                     <th>Doc.Fiscal</th>
                     <th style="text-align: right">Valor</th>
+					<th></th>
                     <th title="Passe o mouse sobre a empresa para ver a descri&ccedil;&atilde;o completa do estabelecimento."><a>Empresa(?)</a></th>
                     <th>Dt.Reclama&ccedil;&atilde;o</th>
                     <th title="Passe o mouse sobre a situa&ccedil;&atilde;o para ver a descri&ccedil;&atilde;o completa."><a>Situa&ccedil;&atilde;o(?)</a></th>
                     <th>Abrir detalhes</th>
-                    <th></th>
+					<th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -1226,7 +1227,7 @@
                 <tr >
                     <td >{{id}}</td>
                     <td >{{numero}}</td>
-                    <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
+                    <td colspan="2" style="text-align: right" >{{maskMoneyVirgula valor}}</td>
                     <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Raz&atilde;o Social: {{razaoSocial}}"><div class="truncText" style="width: 100px;">{{razaoSocial}}</div></td>
                     <td>{{prettifyDate dataReclamacao}}</td>
                     <td title="{{statusAndamentoStr}}"><div style="width: 150px;" class="truncText">{{statusAndamentoStr}}</div></td>
@@ -1342,6 +1343,7 @@
                     <th>N&uacute;mero</th>
                     <th>Doc.Fiscal</th>
                     <th style="text-align: right">Valor</th>
+					<th></th>
                     <th title="Passe o mouse sobre a empresa para ver a descri&ccedil;&atilde;o completa do estabelecimento."><a>Empresa(?)</a></th>
                     <th>Dt.Reclama&ccedil;&atilde;o</th>
                     <th title="Passe o mouse sobre a situa&ccedil;&atilde;o para ver a descri&ccedil;&atilde;o completa."><a>Situa&ccedil;&atilde;o(?)</a></th>
@@ -1354,7 +1356,7 @@
                 <tr >
                     <td >{{id}}</td>
                     <td >{{numero}}</td>
-                    <td style="text-align: right">{{maskMoneyVirgula valor}}</td>
+                    <td colspan="2" style="text-align: left">{{maskMoneyVirgula valor}}</td>
                     <td title="CNPJ: {{maskCnpj numeroCnpjEmpresa}}. Raz&atilde;o Social: {{razaoSocial}}"><div class="truncText" style="width: 100px;">{{razaoSocial}}</div></td>
                     <td>{{prettifyDate dataReclamacao}}</td>
                     <td title="{{statusAndamentoStr}}"><div style="width: 150px;" class="truncText">{{statusAndamentoStr}}</div></td>

@@ -6,7 +6,7 @@ public class ReclamacaoLogDTO {
 
 	private String perfilDescricao;
 
-	private Date dataCadastroSituacao;
+	private String dataCadastroSituacao;
 
 	private String complSituacaoReclamacao;
 
@@ -18,11 +18,11 @@ public class ReclamacaoLogDTO {
 		this.perfilDescricao = perfilDescricao;
 	}
 
-	public Date getDataCadastroSituacao() {
+	public String getDataCadastroSituacao() {
 		return dataCadastroSituacao;
 	}
 
-	public void setDataCadastroSituacao(Date dataCadastroSituacao) {
+	public void setDataCadastroSituacao(String dataCadastroSituacao) {
 		this.dataCadastroSituacao = dataCadastroSituacao;
 	}
 

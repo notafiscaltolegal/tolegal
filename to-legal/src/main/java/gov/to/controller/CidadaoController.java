@@ -907,6 +907,57 @@ public class CidadaoController extends BaseController {
 
         return resposta;
     }
+    
+    @RequestMapping("verReclamacaoDetalhe/{idReclamacao}")
+    public ModelAndView verReclamacaoDetalhe(@PathVariable("idReclamacao") Integer idReclamacao){
+    	ModelAndView modelAndView;
+        modelAndView = new ModelAndView("cidadao/reclamacaoDetalhe");
+
+        DocumentoFiscalReclamadoToLegal reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
+
+        List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CIDADAO,reclamacao);
+        
+        PaginacaoDTO<ReclamacaoLogDTO> reclamacoesPaginate = reclamacaoLogToLegalService.logReclamacaoPorIdReclamacao(idReclamacao, 0, 1000);
+
+        Map<String, Object> pagination = new HashMap<String, Object>();
+
+        pagination.put("total", reclamacoesPaginate.getCount());
+        pagination.put("page", 1);
+        pagination.put("max", 1000);
+
+        //resposta.put("cidadao", cidadao);
+        modelAndView.addObject("situacoesReclamacao", reclamacoesPaginate.getList());
+        modelAndView.addObject("pagination", pagination);
+
+        modelAndView.addObject("reclamacao", reclamacao);
+        modelAndView.addObject("statusDisponiveis", statusDisponiveis);
+        modelAndView.addObject("nomeFantasia", reclamacao.getNomeFantasiaEmpresa());
+        modelAndView.addObject("dataEmissaoStr", simpleDateFormat.format(reclamacao.getDataDocumentoFiscal()));
+        modelAndView.addObject("dataReclamacaoStr", simpleDateFormat.format(reclamacao.getDataReclamacao()));
+
+        return modelAndView;
+    }
+
+	@RequestMapping("listarAndamentoReclamacao/{page}")
+    public @ResponseBody Map<String, Object> listarAndamentoReclamacao(@PathVariable(value = "page") Integer page, Integer idReclamacao,BindException bind) throws ParseException {
+    	Integer max = 5;
+
+    	 //PessoaParticipante cidadao = getCidadaoLogado();
+        PaginacaoDTO<ReclamacaoLogDTO> reclamacoesPaginate = reclamacaoLogToLegalService.logReclamacaoPorIdReclamacao(idReclamacao, page, max);
+
+        Map<String, Object> resposta = new HashMap<String, Object>();
+        Map<String, Object> pagination = new HashMap<String, Object>();
+
+        pagination.put("total", reclamacoesPaginate.getCount());
+        pagination.put("page", ++page);
+        pagination.put("max", max);
+
+        //resposta.put("cidadao", cidadao);
+        resposta.put("situacoesReclamacao", reclamacoesPaginate.getList());
+        resposta.put("pagination", pagination);
+
+        return resposta;
+    }
 
     @RequestMapping("listarPontosDasNotas/{page}")
     public @ResponseBody Map<String, Object> listarPontosDasNotas(@PathVariable(value = "page") Integer page, Integer idSorteio, BindException bind) throws UnsupportedEncodingException {
@@ -1067,46 +1118,7 @@ public class CidadaoController extends BaseController {
 		return retorno;
 	}
 
-    @RequestMapping("verReclamacaoDetalhe/{idReclamacao}")
-    public ModelAndView verReclamacaoDetalhe(@PathVariable("idReclamacao") Integer idReclamacao){
-    	ModelAndView modelAndView;
-        modelAndView = new ModelAndView("cidadao/reclamacaoDetalhe");
-
-        DocumentoFiscalReclamadoToLegal reclamacao = reclamacaoService.reclamacaoPorId(idReclamacao);
-
-        List<ComplSituacaoReclamacao> statusDisponiveis = reclamacaoService.acoesDisponiveisDeReclamacaoParaOPerfil(TipoPerfilCadastroReclamacao.CIDADAO,reclamacao);
-
-        modelAndView.addObject("reclamacao", reclamacao);
-        modelAndView.addObject("statusDisponiveis", statusDisponiveis);
-        modelAndView.addObject("nomeFantasia", reclamacao.getNomeFantasiaEmpresa());
-        modelAndView.addObject("dataEmissaoStr", simpleDateFormat.format(reclamacao.getDataDocumentoFiscal()));
-        modelAndView.addObject("dataReclamacaoStr", simpleDateFormat.format(reclamacao.getDataReclamacao()));
-        
-        
-
-        return modelAndView;
-    }
-
-	@RequestMapping("listarAndamentoReclamacao/{page}")
-    public @ResponseBody Map<String, Object> listarAndamentoReclamacao(@PathVariable(value = "page") Integer page, Integer idReclamacao,BindException bind) throws ParseException {
-    	Integer max = 5;
-
-    	 //PessoaParticipante cidadao = getCidadaoLogado();
-        PaginacaoDTO<ReclamacaoLogDTO> reclamacoesPaginate = reclamacaoLogToLegalService.logReclamacaoPorIdReclamacao(idReclamacao, page, max);
-
-        Map<String, Object> resposta = new HashMap<String, Object>();
-        Map<String, Object> pagination = new HashMap<String, Object>();
-
-        pagination.put("total", reclamacoesPaginate.getCount());
-        pagination.put("page", ++page);
-        pagination.put("max", max);
-
-        //resposta.put("cidadao", cidadao);
-        resposta.put("situacoesReclamacao", reclamacoesPaginate.getList());
-        resposta.put("pagination", pagination);
-
-        return resposta;
-    }
+    
 
 	@RequestMapping("buscarEmpresaPorIe")
 	public @ResponseBody Map buscarEmpresaPorIe(Integer inscricao) {

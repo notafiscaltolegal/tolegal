@@ -29,7 +29,7 @@ function ModaisCidadao(options) {
     me.selecionaTipoResgate();
     me.selecionaBanco();
     me.calculaValoresResgate();
-    me.eventoReclamacaoDetalhe();
+    me.modalAndamentoReclamacao();
     
     $(".datepicker").each(function() {
         me.initDatePicker($(this));
@@ -118,6 +118,8 @@ ModaisCidadao.prototype.trocaModalBilhetesParaPontuacao = function() {
     $("body").off("click", '#linkBilhetesParaPontuacao');
     $("body").on('click', '#linkBilhetesParaPontuacao',function (e) {
         $("#modalHome").modal('hide');
+        
+        window.location.hash = "";
         me.carregaTelaPontos();
     });
 }
@@ -130,11 +132,31 @@ ModaisCidadao.prototype.modalDetalhamentoBilehtes = function() {
     });
 }
 
+ModaisCidadao.prototype.modalAndamentoReclamacao = function() {
+    
+    var me = this;
+    var idReclamacaoLink = null;
+    $("body").on("click", ".abrirReclamacaoLink", function(e) {
+        idReclamacaoLink = $(this).parent().find('.idReclamacaoLink').html().trim();
+
+        if(idReclamacaoLink==null || idReclamacaoLink.length==0){
+            nfgMensagens.show(ALERT_TYPES.ERROR,"Erro na visualizaç&#225;o da reclamaç&#225;o. Tente de novo posteriormente.");
+            return;
+        }
+        
+        me.eventoReclamacaoDetalhe(idReclamacaoLink);
+        
+    });
+    
+   
+}
+
 ModaisCidadao.prototype.trocaModalPontuacaoParaBilhetes = function() {
     var me = this;
     $("#linkPontuacaoParaBilhetes").off('click');
     $("#linkPontuacaoParaBilhetes").click(function (e) {
         $("#modalHome").modal('hide');
+        window.location.hash = "";
         me.carregaTelaBilhetes();
     });
 }
@@ -599,28 +621,22 @@ ModaisCidadao.prototype.listarNotasCidadaoEmDetalhe = function() {
     me.pagination.init(page);
 }
 
-ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(idReclamacao){
+ModaisCidadao.prototype.carregaGridAndamentoReclamacao = function(){
     
-    var me = this;
+	var me = this;
     me.pagination = new NFGPagination({
-	url : enderecoSite + "/cidadao/listarAndamentoReclamacao",
-	containerSelector : "#containerAndamentoReclamacao",
-	templateSelector : "#tabelaAndamentoReclamacao",
-	formFilterSelector : "#formAndamentoReclamacao",
-	btnFilterSelector : "#btnAndamentoReclamacao",
-	beforeLoad : function(data) {
-		if (data) {
-			data.idReclamacao = idReclamacao;
-		}
-	},
-	afterLoad : function(data) {
-
-		if (data) {
-			data.idReclamacao = idReclamacao;
-		}
-	}
-});
- var hash = window.location.hash.replace("#","");
+        url: enderecoSite + "/cidadao/listarAndamentoReclamacao",
+        containerSelector: "#containerAndamentoReclamacao",
+        templateSelector: "#tabelaAndamentoReclamacao",
+        formFilterSelector: "#formAndamentoReclamacao",
+        btnFilterSelector: "#btnAndamentoReclamacao",
+        beforeLoad: function(data) {
+            if(data){
+                data.idReclamacao = $("#idReclamacao").val();
+            }
+        }
+    });
+    var hash = window.location.hash.replace("#","");
     var page = parseInt(hash) ? parseInt(hash) : 1;
     me.pagination.init(page);
 }
@@ -691,6 +707,39 @@ ModaisCidadao.prototype.carregaPaginacaoPontuacao= function(me, tipo,element){
     me.pagination.init(page);
 }
 
+ModaisCidadao.prototype.carregaPaginacaoAndamentoReclamacao= function(me, tipo,element){
+	
+    me.pagination = new NFGPagination({
+        url: enderecoSite + "/cidadao/listarAndamentoReclamacao",
+        containerSelector: "#container"+tipo,
+        templateSelector: "#tabela"+tipo,
+        formFilterSelector: "#formPontuacao",
+        beforeLoad: function(data) {
+            $(element).block({
+                message: '<img src="/to-legal/images/loading.gif" width="80px;"/>',
+                css: {
+                    backgroundColor: 'transparent', color: 'transparent', border: '1'
+                },
+                overlayCSS:  {
+                    backgroundColor: '#000',
+                    opacity:         0.2,
+                    cursor:          'wait'
+                }
+            });
+            if(data){
+                data.idReclamacao = me.idReclamacao;
+            }
+        },
+        afterLoad: function(data,response) {
+            $(element).unblock();
+            return response;
+        }
+    });
+    var hash = window.location.hash.replace("#","");
+    var page = parseInt(hash) ? parseInt(hash) : 1;
+    me.pagination.init(page);
+}
+
 ModaisCidadao.prototype.inicializaDadosBancarios = function(me){
     if($("#nome").val()!=null){
 
@@ -709,35 +758,23 @@ ModaisCidadao.prototype.inicializaDadosBancarios = function(me){
 
 }
 
-ModaisCidadao.prototype.eventoReclamacaoDetalhe = function(){
+ModaisCidadao.prototype.eventoReclamacaoDetalhe = function(idReclamacao){
     var me = this;
-    $("body").on("click", ".abrirReclamacaoLink", function(e) {
-        var idReclamacaoLink = $(this).parent().find('.idReclamacaoLink').html().trim();
-
-        if(idReclamacaoLink==null || idReclamacaoLink.length==0){
-            nfgMensagens.show(ALERT_TYPES.ERROR,"Erro na visualizaç&#225;o da reclamaç&#225;o. Tente de novo posteriormente.");
-            return;
-        }
-
-        $("#modalHomeBody").load('verReclamacaoDetalhe/'+idReclamacaoLink,
+        
+    $("#modalHomeBody").load('verReclamacaoDetalhe/'+idReclamacao,
             function( response, status, xhr ) {
                 if ( status == "error" ) {
                     window.location.replace(enderecoSite+"/cidadao/login");
                 }
             }
         );
-        $("#modalHomeTitle").html('Reclamaç&#225;o em detalhe');
-        $(".modal-dialog").attr("class","modal-dialog modal-lg"); //modal largo
+        $("#modalHomeTitle").html('Reclamação em detalhe');
+        $(".modal-dialog").attr("class","modal-dialog modal-lg"); 
         bloqueioDeTela("#divPaineisTelaInicial");
-        me.carregaGridAndamentoReclamacao(idReclamacaoLink);
-        $("#modalHome").modal('show');
-//        setTimeout(function () {
-//            
-//            
-//            me.cidadao.resetaElementosAcaoReclamacao();
-//            $("#divPaineisTelaInicial").unblock();
-//        }, 1000);
-    });
+        setTimeout(function () {
+            $("#modalHome").modal('show');
+            $("#divPaineisTelaInicial").unblock();
+        }, 1000);
 }
 
 ModaisCidadao.prototype.inicializaEnderecoAtualizaPerfil = function(){

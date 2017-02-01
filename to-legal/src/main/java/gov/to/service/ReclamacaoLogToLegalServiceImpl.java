@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import gov.goias.service.PaginacaoDTO;
 import gov.to.entidade.ReclamacaoLogToLegal;
 import gov.to.filtro.FiltroReclamacaoLogToLegal;
@@ -47,7 +49,7 @@ public class ReclamacaoLogToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoL
 			ReclamacaoLogToLegal rec = list.get(i);
 
 			dto.setPerfilDescricao(rec.getPerfilGeral().getLabel());
-			dto.setDataCadastroSituacao(rec.getDataReclamacao());
+			dto.setDataCadastroSituacao(DateFormatUtils.format(rec.getDataReclamacao(),"dd/MM/yyyy"));
 			dto.setComplSituacaoReclamacao(rec.getStatusReclamacao().getLabel());
 			listsDocs.add(dto);
 

@@ -164,6 +164,10 @@ function Cidadao(options) {
 		new ModaisCidadao({
 			cidadao : me
 		});
+	} else if (options.nomeTela == 'reclamacaoDetalhe') {
+		new ModaisCidadao({
+			cidadao : me
+		});
 	}
 
 	document.onkeydown = function(e) {
@@ -1705,8 +1709,8 @@ Cidadao.prototype.resetaElementosAcaoReclamacao = function() {
 	$("#selectNovoStatusReclamacao").val("-1");
 
 	var codgSituacao = $("#codgSituacaoReclamacao").val();
-	if (codgSituacao == 15) {
-		$("#painelAcoesCidadaoReclamacao").css('display', 'none');
+	if (codgSituacao == 2 || codgSituacao == 3 || codgSituacao == 5) {
+		$("#painelAcoesCidadaoReclamacao").html("");
 	} else {
 		$("#painelAcoesCidadaoReclamacao").css('display', 'block');
 	}
