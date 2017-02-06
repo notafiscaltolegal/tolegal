@@ -19,6 +19,7 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.entidade.BilheteToLegal;
@@ -90,6 +91,8 @@ public class ProcessamentoNotas implements Job {
 	
 	@Override
 	public void execute(JobExecutionContext jbContext) throws JobExecutionException {
+		
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		
 		initLookup(jbContext.getJobDetail().getJobDataMap());
 		
