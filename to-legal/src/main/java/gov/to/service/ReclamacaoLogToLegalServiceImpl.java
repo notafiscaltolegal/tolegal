@@ -1,13 +1,19 @@
 package gov.to.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import gov.goias.service.PaginacaoDTO;
+import gov.to.dominio.PerfilGeralEnum;
+import gov.to.dominio.ReclamacaoStatusEnum;
 import gov.to.entidade.ReclamacaoLogToLegal;
 import gov.to.filtro.FiltroReclamacaoLogToLegal;
 import gov.to.goias.ReclamacaoLogDTO;
@@ -16,6 +22,10 @@ import gov.to.persistencia.ConsultasDaoJpa;
 @Stateless
 public class ReclamacaoLogToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoLogToLegal>
 		implements ReclamacaoLogToLegalService {
+	
+	@Autowired
+	private GenericService<ReclamacaoLogToLegal, Long> reclamacaoLogToLegalService;
+	
 
 	@Override
 	public PaginacaoDTO<ReclamacaoLogDTO> logReclamacaoPorIdReclamacao(Integer idReclamacao, Integer page,
@@ -58,6 +68,20 @@ public class ReclamacaoLogToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoL
 		paginacaoDTO.setList(listsDocs);
 
 		return paginacaoDTO;
+	}
+	
+	@Override
+	public void cadastrarLog() {		
+		ReclamacaoLogToLegal log=new ReclamacaoLogToLegal();
+		Date d = new Date();
+		//Calendar cal = new GregorianCalendar();				
+		log.setDataReclamacao(d);
+	    log.setStatusReclamacao(ReclamacaoStatusEnum.EMPRESA_NO_PRAZO);
+	    //log.setReclamacaoToLegal(reclamacaoToLegal);
+	    log.setPerfilGeral(PerfilGeralEnum.CIDADAO);
+		
+		reclamacaoLogToLegalService.salvar(log);
+		
 	}
 
 	private static int calcPagFim(Integer page, Integer max) {

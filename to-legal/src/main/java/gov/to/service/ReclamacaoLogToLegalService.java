@@ -23,5 +23,6 @@ public interface ReclamacaoLogToLegalService {
 	 * @return
 	 */
 	PaginacaoDTO<ReclamacaoLogDTO> logReclamacaoPorIdReclamacao(Integer idReclamacao, Integer page, Integer max) ;
+	void cadastrarLog();
 	
 }

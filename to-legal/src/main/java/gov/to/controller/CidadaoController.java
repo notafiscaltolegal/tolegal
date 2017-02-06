@@ -1076,7 +1076,7 @@ public class CidadaoController extends BaseController {
     	try{   		
     		
     		reclamacaoToLegalService.cadastraNovaReclamacao(tipoDocFiscalReclamacao, codgMotivo, dataEmissaoDocFiscal, numeroReclamacao, iEReclamacao, valorReclamacao, fileReclamacao, cidadao,dataDentroDoPrazo, problemaEmpresaReclamacao);
-    		
+    		reclamacaoLogToLegalService.cadastrarLog();
     		setSuccessMessage("A sua reclamação foi registrada com sucesso e a empresa será notificada. Acompanhe o processo pelo painel Minhas Reclamações.");
             retorno.put("sucesso",Boolean.TRUE);
     	}catch (NFGException nx)
