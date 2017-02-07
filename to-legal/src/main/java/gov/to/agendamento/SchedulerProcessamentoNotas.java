@@ -109,7 +109,7 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 			.newTrigger()
 			.withSchedule(
 				SimpleScheduleBuilder.simpleSchedule()
-					.withIntervalInSeconds(60).repeatForever())
+					.withIntervalInSeconds(10).repeatForever())
 			.build();
 		
 		Scheduler scheduler;

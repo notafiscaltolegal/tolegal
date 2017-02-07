@@ -3,6 +3,7 @@ package gov.to.agendamento;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -203,7 +204,7 @@ public class ProcessamentoNotas implements Job {
     	String cfopsDisponiveis = listarTodosOsCfopsLiberadosParaPontuacao();
     	
     	sql.append(" select n.xnfeid AS id, XNFENNF AS numNota,XNFEEXNOME AS razaoSocial, XNFEDEMI AS dataEmissao, XNFETVNF AS valor, resultp.vlrp AS valorProdCfop, XNFEDCPF AS cpf, XNFEECNPJ AS cnpj from SIATDESV.nfexml n, ");
-    	sql.append(" (SELECT sum(pnfevprod) as vlrp, xnfeid, PNFECFOP FROM SIATDESV.nfexmlpr GROUP BY ROLLUP(xnfeid, PNFECFOP) ) resultp ");
+    	sql.append(" (SELECT sum(pnfevprod) as vlrp, xnfeid FROM SIATDESV.nfexmlpr GROUP BY xnfeid ) resultp ");
     	sql.append(" WHERE n.xnfeid = resultp.xnfeid ");
         sql.append(" AND n.XNFEDEMI >= to_date('"+dataInicioSorteio+"','dd/mm/yyyy') ");
         
@@ -242,7 +243,11 @@ public class ProcessamentoNotas implements Job {
 			
 			try {
 				SimpleDateFormat sd = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-				nota.setDataEmissao(sd.parse(map.get(propDataEmissao).toString()));
+				
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(sd.parse(map.get(propDataEmissao).toString()));
+				calendar.add(Calendar.MONTH, calendar.get(Calendar.MONTH) +1);
+				nota.setDataEmissao(calendar.getTime());
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
