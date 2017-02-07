@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import gov.to.persistencia.EntidadeBasica;
 
 @Entity
-@Table(name = "tb_nfcdcf")
+@Table(name = "nfcdcf")
 public class CfopSefaz extends EntidadeBasica{
 	
 	/**
