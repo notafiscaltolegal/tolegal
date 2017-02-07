@@ -26,7 +26,7 @@ public class CfopToLegal extends EntidadeBasica{
 
 	@Id
 	@Column(name = "id_cfop")
-	private Long id;
+	private String id;
 	
 	@Column(name="descricao")
 	private String descricao;
@@ -74,11 +74,11 @@ public class CfopToLegal extends EntidadeBasica{
 		return dataFormat;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

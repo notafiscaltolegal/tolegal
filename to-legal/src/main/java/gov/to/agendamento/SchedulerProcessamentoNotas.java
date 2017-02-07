@@ -16,6 +16,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 import gov.to.entidade.BilheteToLegal;
+import gov.to.entidade.CfopToLegal;
 import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
@@ -76,6 +77,9 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 	
 	@EJB
 	private GenericPersistence<NotaEmpresaToLegal, Long> notaEmpresaToLegalPersistence;
+	
+	@EJB
+	private GenericPersistence<CfopToLegal, String> cfopToLegalPersistence;
 
 	@PostConstruct
 	public void inicio(){
@@ -99,6 +103,7 @@ public class SchedulerProcessamentoNotas extends AbstractModel {
 		jobDataMap.put(ProcessamentoNotas.BLOQUEIO_CPF_SERVICE, bloqueioCpfService);
 		jobDataMap.put(ProcessamentoNotas.NOTA_EMPRESA_SERVICE, notaEmpresaService);
 		jobDataMap.put(ProcessamentoNotas.NOTA_EMPRESA_PERSISTENCE, notaEmpresaToLegalPersistence);
+		jobDataMap.put(ProcessamentoNotas.CFOP_PERSISTENCE, cfopToLegalPersistence);
 		
 		Trigger trigger = TriggerBuilder
 			.newTrigger()

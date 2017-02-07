@@ -23,6 +23,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.entidade.BilheteToLegal;
+import gov.to.entidade.CfopToLegal;
 import gov.to.entidade.NotaEmpresaToLegal;
 import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
@@ -58,6 +59,7 @@ public class ProcessamentoNotas implements Job {
 	public static final String BLOQUEIO_CPF_SERVICE = "bloqueioCpfService";
 	public static final String NOTA_EMPRESA_SERVICE = "notaEmpresaService";
 	public static final String NOTA_EMPRESA_PERSISTENCE = "notaEmpresaPersistence";
+	public static final String CFOP_PERSISTENCE = "cfopPersistence";
 	
 	private Session session;
     
@@ -88,6 +90,8 @@ public class ProcessamentoNotas implements Job {
 	private NotaEmpresaService notaEmpresaService;
 	
 	private GenericPersistence<NotaEmpresaToLegal, Long> notaEmpresaPersistence;
+	
+	private GenericPersistence<CfopToLegal, Long> cfopPersistence;
 	
 	@Override
 	public void execute(JobExecutionContext jbContext) throws JobExecutionException {
@@ -127,6 +131,10 @@ public class ProcessamentoNotas implements Job {
 			if (!session.isOpen()) {
 				session = session.getSessionFactory().openSession();
 			}
+    	}
+    	
+    	if (cfopPersistence == null){
+    		cfopPersistence = (GenericPersistence<CfopToLegal, Long>) jobDataMap.get(CFOP_PERSISTENCE);
     	}
     	
     	if (notaEmpresaPersistence == null){
@@ -192,15 +200,20 @@ public class ProcessamentoNotas implements Job {
     	String dataInicioSorteio = DateFormatUtils.format(sorteioToLegal.getDataInicioSorteio(), "dd/MM/yyyy");
     	
     	String listChaveAcessoJaProcessadas = listarTodasChavesAcessoJaProcessadas(sorteioToLegal.getDataInicioSorteio());
+    	String cfopsDisponiveis = listarTodosOsCfopsLiberadosParaPontuacao();
     	
     	sql.append(" select n.xnfeid AS id, XNFENNF AS numNota,XNFEEXNOME AS razaoSocial, XNFEDEMI AS dataEmissao, XNFETVNF AS valor, resultp.vlrp AS valorProdCfop, XNFEDCPF AS cpf, XNFEECNPJ AS cnpj from SIATDESV.nfexml n, ");
-    	sql.append(" (SELECT sum(pnfevprod) as vlrp, xnfeid FROM SIATDESV.nfexmlpr GROUP BY xnfeid) resultp ");
+    	sql.append(" (SELECT sum(pnfevprod) as vlrp, xnfeid, PNFECFOP FROM SIATDESV.nfexmlpr GROUP BY ROLLUP(xnfeid, PNFECFOP) ) resultp ");
     	sql.append(" WHERE n.xnfeid = resultp.xnfeid ");
         sql.append(" AND n.XNFEDEMI >= to_date('"+dataInicioSorteio+"','dd/mm/yyyy') ");
         
         if (!listChaveAcessoJaProcessadas.isEmpty()){
         	 sql.append(" AND n.xnfeid not in ("+listChaveAcessoJaProcessadas+") ");
         }
+
+		if (!cfopsDisponiveis.isEmpty()) {
+			sql.append(" AND resultp.PNFECFOP in (" + cfopsDisponiveis + ") ");
+		}
         
         org.hibernate.Query query = getSession().createSQLQuery(sql.toString());
         
@@ -265,6 +278,19 @@ public class ProcessamentoNotas implements Job {
         }
 	}
 
+	private String listarTodosOsCfopsLiberadosParaPontuacao() {
+		
+		List<CfopToLegal> list = cfopPersistence.listarTodos(CfopToLegal.class);
+		
+		List<String> listAformat = new ArrayList<>();
+		
+		for (CfopToLegal cfop : list){
+			listAformat.add(cfop.getId().replaceAll("[^0-9]", StringUtils.EMPTY));
+		}
+		
+		return formataLista(listAformat);
+	}
+	
 	private String listarTodasChavesAcessoJaProcessadas(Date dataInicioSorteio) {
 		
 		List<String> chavesAcesso = notaFiscalService.chaveAcessoPorDataEmissao(dataInicioSorteio);
