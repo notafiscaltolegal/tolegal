@@ -18,7 +18,6 @@ import gov.goias.exceptions.NFGException;
 import gov.goias.util.Encrypter;
 import gov.to.dominio.SituacaoPontuacaoNota;
 import gov.to.dominio.SituacaoUsuario;
-import gov.to.dto.PontuacaoDTO;
 import gov.to.dto.RespostaReceitaFederalDTO;
 import gov.to.entidade.ContribuinteToLegal;
 import gov.to.entidade.EnderecoToLegal;
@@ -27,6 +26,7 @@ import gov.to.entidade.NotaFiscalToLegal;
 import gov.to.entidade.PessoaFisicaToLegal;
 import gov.to.entidade.PontuacaoBonusToLegal;
 import gov.to.entidade.PontuacaoToLegal;
+import gov.to.entidade.SorteioToLegal;
 import gov.to.entidade.UsuarioToLegal;
 import gov.to.filtro.FiltroContribuinteToLegal;
 import gov.to.filtro.FiltroNotaEmpresaToLegal;
@@ -563,18 +563,24 @@ public class CidadaoServiceImpl implements CidadaoService{
 			
 			genericService.merge(usuario);
 			
-			PontuacaoBonusToLegal pontuacaoBonusCadastro = new PontuacaoBonusToLegal();
-			final String DESCRICAO_PONTUACAO_CADASTRO = "CADASTRO TO LEGAL";
+			SorteioToLegal sorteio = sorteioToLegalService.sorteioAtual();
 			
-			pontuacaoBonusCadastro.setDescricao(DESCRICAO_PONTUACAO_CADASTRO);
-			pontuacaoBonusCadastro.setQntPonto(SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_BONUS_CADASTRO));
-			pontuacaoBonusCadastro.setCpf(cpf);
-			pontuacaoBonusCadastro.setDataPontuacao(new Date());
-			pontuacaoBonusCadastro.setSorteio(sorteioToLegalService.sorteioAtual());
-			
-			genericServicePontuacaoBonus.salvar(pontuacaoBonusCadastro);
-			
-			bilheteToLegalService.processaBilheteBonusPontuacao(cpf);
+			if (sorteio != null && sorteio.getId() == null){
+				
+				PontuacaoBonusToLegal pontuacaoBonusCadastro = new PontuacaoBonusToLegal();
+				final String DESCRICAO_PONTUACAO_CADASTRO = "CADASTRO TO LEGAL";
+				
+				pontuacaoBonusCadastro.setDescricao(DESCRICAO_PONTUACAO_CADASTRO);
+				pontuacaoBonusCadastro.setQntPonto(SorteioProperties.getValue(SorteioProperties.QNT_PONTOS_BONUS_CADASTRO));
+				pontuacaoBonusCadastro.setCpf(cpf);
+				pontuacaoBonusCadastro.setDataPontuacao(new Date());
+				pontuacaoBonusCadastro.setSorteio(sorteio);
+				
+				genericServicePontuacaoBonus.salvar(pontuacaoBonusCadastro);
+				
+				bilheteToLegalService.processaBilheteBonusPontuacao(cpf);
+				
+			}
 			
 		}else{
 			throw new NFGException("Usuário já ativo ou e-mail de ativação inválido.");

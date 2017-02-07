@@ -211,9 +211,9 @@ public class ProcessamentoNotas implements Job {
         	 sql.append(" AND n.xnfeid not in ("+listChaveAcessoJaProcessadas+") ");
         }
 
-		if (!cfopsDisponiveis.isEmpty()) {
-			sql.append(" AND resultp.PNFECFOP in (" + cfopsDisponiveis + ") ");
-		}
+//		if (!cfopsDisponiveis.isEmpty()) {
+//			sql.append(" AND resultp.PNFECFOP in (" + cfopsDisponiveis + ") ");
+//		}
         
         org.hibernate.Query query = getSession().createSQLQuery(sql.toString());
         
