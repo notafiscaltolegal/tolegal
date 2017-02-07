@@ -7,7 +7,7 @@
     <persistence-unit name="desenvolvimento" transaction-type="JTA">
     
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-    	<jta-data-source>java:jboss/datasources/tolegal</jta-data-source>
+    	<jta-data-source>java:jboss/datasources/TreinamentoDS</jta-data-source>
 		
 		<properties>
 
@@ -18,8 +18,8 @@
 		         
 		      <property name="hibernate.default_schema" value="siatdesv"/>
 		      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@srvdt-b:1521/dbdt"/>
-		      <property name="javax.persistence.jdbc.user" value="siatdesv"/>
-		      <property name="javax.persistence.jdbc.password" value="desenvolvimento"/>
+		      <property name="javax.persistence.jdbc.user" value="treina"/>
+		      <property name="javax.persistence.jdbc.password" value="treinamento"/>
 		      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
 		      <property name="hibernate.show_sql" value="true"/>
 		      <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
@@ -32,24 +32,3 @@
 		</properties>
     </persistence-unit>
 </persistence>
-
-<!-- <persistence -->
-<!--     version="2.1" -->
-<!--     xmlns="http://xmlns.jcp.org/xml/ns/persistence" -->
-<!--     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" -->
-<!--     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"> -->
-<!--     <persistence-unit name="desenvolvimento" transaction-type="JTA"> -->
-    
-<!-- 		<provider>org.hibernate.ejb.HibernatePersistence</provider> -->
-		
-<!-- 		<properties> -->
-<!-- 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" /> -->
-<!-- 			<property name="hibernate.transaction.flush_before_completion" value="true" /> -->
-<!-- 			<property name="hibernate.transaction.auto_close_session" value="true" /> -->
-<!-- 			<property name="hibernate.hbm2ddl.auto" value="create" /> -->
-<!-- 			<property name="hibernate.show_sql" value="true" /> -->
-<!-- 			<property name="hibernate.format_sql" value="true" /> -->
-<!-- 			<property name="hibernate.transaction.jta.platform"	value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" /> -->
-<!-- 		</properties> -->
-<!--     </persistence-unit> -->
-<!-- </persistence> -->
