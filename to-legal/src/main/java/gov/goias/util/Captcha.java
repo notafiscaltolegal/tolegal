@@ -20,7 +20,8 @@ public class Captcha {
 
     private static final Logger log = Logger.getLogger(Captcha.class);
 
-    private static final String PRIVATE_KEY_RECAPTCHA = "6LdalwwUAAAAANoCrg-15gokeYfejylG6MnhoRUk";
+    //private static final String PRIVATE_KEY_RECAPTCHA = "6LdalwwUAAAAANoCrg-15gokeYfejylG6MnhoRUk"; localhost
+    private static final String PRIVATE_KEY_RECAPTCHA = "6LfQwRQUAAAAAARolXQ1GfFq2c3ViIps2KwXyL6d"; //10.9.1.34
 
     public static boolean verificarAtivacaoCaptcha(String contadorSessao, HttpServletRequest request) {
         HttpSession session = request.getSession();

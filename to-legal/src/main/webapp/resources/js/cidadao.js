@@ -1220,9 +1220,11 @@ Cidadao.prototype.ativarCaptcha = function(div, container) {
 		lang : 'pt'
 	};
 
-	// PROD
-	Recaptcha.create("6LdalwwUAAAAAGv62TpI91iKF-oOWij_7m54SlSQ", container,
-			RecaptchaOptions);
+	
+	//Recaptcha.create("6LdalwwUAAAAAGv62TpI91iKF-oOWij_7m54SlSQ", container,
+		//	RecaptchaOptions); localhost
+	Recaptcha.create("6LfQwRQUAAAAAOe18A7moqYPzFhkxU-ZyBasg12S", container,
+				RecaptchaOptions); //10.9.1.34
 
 }
 
