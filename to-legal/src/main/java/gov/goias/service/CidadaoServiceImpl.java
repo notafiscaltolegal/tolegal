@@ -458,7 +458,7 @@ public class CidadaoServiceImpl implements CidadaoService{
 		
 		RespostaReceitaFederalDTO receita = new RespostaReceitaFederalDTO();
 		
-		receita.setNomePessoaFisica("Pedro Augusto de Oliveira");
+		receita.setNomePessoaFisica("Receita Federal");
 		
 		return receita;
 	}
