@@ -1,15 +1,13 @@
 package gov.to.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import gov.goias.service.PaginacaoDTO;
 import gov.to.dominio.PerfilGeralEnum;
@@ -23,7 +21,7 @@ import gov.to.persistencia.ConsultasDaoJpa;
 public class ReclamacaoLogToLegalServiceImpl extends ConsultasDaoJpa<ReclamacaoLogToLegal>
 		implements ReclamacaoLogToLegalService {
 	
-	@Autowired
+	@EJB
 	private GenericService<ReclamacaoLogToLegal, Long> reclamacaoLogToLegalService;
 	
 
