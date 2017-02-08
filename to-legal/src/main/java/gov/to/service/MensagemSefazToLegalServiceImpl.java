@@ -109,7 +109,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		
 		Criteria criteria = getSession().createCriteria(MensagemSefazToLegal.class);
 		
-		Criteria criteriaCidadao = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
+		Criteria criteriaEmpresa = getSession().createCriteria(MensagemVisualizadaEmpresaToLegal.class);
 		
 		@SuppressWarnings("unchecked")
 		List<Long> ids = (List<Long>) criteria
@@ -123,7 +123,7 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 		}
 		
 		@SuppressWarnings("unchecked")
-		List<MensagemVisualizadaEmpresaToLegal> idsMsgEmpresa = (List<MensagemVisualizadaEmpresaToLegal>) criteriaCidadao
+		List<MensagemVisualizadaEmpresaToLegal> idsMsgEmpresa = (List<MensagemVisualizadaEmpresaToLegal>) criteriaEmpresa
 				.createAlias("msgSefazToLegal", "msgSefazToLegal")
 				.add(Restrictions.in("msgSefazToLegal.id", ids))
 				.add(Restrictions.eq("inscricaoEstadual", inscricaoEstadual))
@@ -149,7 +149,13 @@ public class MensagemSefazToLegalServiceImpl extends ConsultasDaoJpa<MensagemSef
 				msg.setSituacao(SituacaoMensagem.AGUARDANDO_LEITURA);
 				msg.setMsgSefazToLegal(msgSefaz);
 				
-				this.serviceEmpresaMsg.salvar(msg);
+				try{
+					this.serviceEmpresaMsg.salvar(msg);
+				}catch(Exception ex){
+					//Erro de constraint
+					ex.printStackTrace();
+				}
+				
 			}
 		}
 	}

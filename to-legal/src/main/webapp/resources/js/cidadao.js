@@ -1506,14 +1506,6 @@ Cidadao.prototype.salvaNovaReclamacao = function() {
 							}
 						}
 
-						if ($('#fileReclamacao').val() == '') {
-
-							nfgMensagens.show(ALERT_TYPES.ERROR,
-									"Insira um anexo de documento.", true);
-							return;
-
-						}
-
 						var urlBusca = enderecoSite
 								+ "/cidadao/buscarEmpresaPorIe";
 						me.buscarEmpresaPorIe(urlBusca, iEReclamacao);
