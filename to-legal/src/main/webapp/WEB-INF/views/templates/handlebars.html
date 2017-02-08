@@ -323,11 +323,14 @@
                 </tr>
                 </thead>
                 <tbody>
+                
                 {{#each resultadoGanhadorSorteio}}
-					<td class="nome">{{nome}}</td>
+				<tr>
+                 	<td class="nome">{{nome}}</td>
                 	<td class="sorteioPremio">{{numeroSorteio}}</td>
                 	<td class="numeroBilhetePremio">{{numeroBilhete}}</td>
                 	<td class="cpf">{{cpf}}</td>
+                </tr>
                 {{/each}}
                 </tbody>
                 {{/if}}

@@ -1223,7 +1223,7 @@ Cidadao.prototype.ativarCaptcha = function(div, container) {
 	
 	//Recaptcha.create("6LdalwwUAAAAAGv62TpI91iKF-oOWij_7m54SlSQ", container,
 		//	RecaptchaOptions); localhost
-	Recaptcha.create("6LfQwRQUAAAAAOe18A7moqYPzFhkxU-ZyBasg12S", container,
+	Recaptcha.create("6Lc7xhQUAAAAABcGCxX1nQDoZN7jNZ5pAMlD-kDZ", container,
 				RecaptchaOptions); //10.9.1.34
 
 }
